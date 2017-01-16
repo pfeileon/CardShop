@@ -1,0 +1,24 @@
+// ********************
+// *** USER STORIES ***
+// ********************
+//
+//This json-file contains all the user stories of the project
+//
+{
+    "UserStories": [
+        {
+            "id": "sample01",
+            "userRole": "sampleRole1",
+            "function": "sampleFunction1",
+            "reason": "sampleReason1",
+            "text": "As sampleRole1 i want to sampleFunction1 because sampleReason1."
+        },
+        {
+            "id": "sample02",
+            "userRole": "sampleRole2",
+            "function": "sampleFunction2",
+            "reason": "sampleReason2",
+            "text": "As sampleRole2 i want to sampleFunction2 because sampleReason2."
+        }
+    ]
+}

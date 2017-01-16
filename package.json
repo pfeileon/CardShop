@@ -1,0 +1,25 @@
+{
+  "name": "typescript-seed",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node_modules/.bin/webpack-dev-server",
+    "build": "node_modules/.bin/webpack"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.0.0-beta.17",
+    "css-loader": "^0.26.1",
+    "file-loader": "^0.9.0",
+    "html-webpack-plugin": "v2.26.0",
+    "node-sass": "^4.1.1",
+    "sass-loader": "^4.1.1",
+    "style-loader": "^0.13.1",
+    "typescript": "^2.1.4",
+    "webpack": "v2.2.0-rc.3",
+    "webpack-dev-server": "v2.2.0-rc.0"
+  },
+  "dependencies": {
+    "bootstrap-sass": "^3.3.7"
+  }
+}
