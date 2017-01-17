@@ -1,9 +1,12 @@
+import { Customer } from './Customer'
+
 'use strict';
 
 /** Singleton class */
 export class ShoppingCart {
 
     //Properties
+    private customer: Customer;
     /** All items in the cart */
     public items: {}[];
     /** Singleton */

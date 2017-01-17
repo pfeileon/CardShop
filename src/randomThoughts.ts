@@ -15,7 +15,7 @@ class Renderer {
 class Utils { }
 class EventEmitter { }
 // 	non-static
-class Shop { }
+class CardShop { }
 class Deck { }
 class Collection { }
 

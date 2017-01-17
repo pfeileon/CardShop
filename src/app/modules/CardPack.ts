@@ -3,6 +3,7 @@ import { FetcherResource } from './FetcherResource';
 
 'use strict';
 
+/** Five Cards, randomly selected from a specific CardSet */
 export class CardPack {
 
     //Properties
@@ -10,6 +11,7 @@ export class CardPack {
     private cardPack: Card[];
 
     //Constructor
+    /** Creates an instance of a CardPack of a specific CardSet */
     constructor(setName: string) {
         this.setName = setName;
     }

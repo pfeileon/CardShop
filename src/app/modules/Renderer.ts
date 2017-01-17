@@ -1,11 +1,15 @@
 'use strict';
 
+/** static */
 export class Renderer {
 
-    static render(string: string): string {
-        if (string === 'Ahoi')
-            return 'Ein Pirat sagt: ' + string;
-        else
-            return 'Du sagst: ' + string;
+    /** Prevent instantiation */
+    private constructor() {
+        throw new Error("static class");
+    }
+
+    /** Renders content */
+    static render(content: string): string {
+        return this + ': ' + content;
     }
 }

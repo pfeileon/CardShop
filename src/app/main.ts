@@ -1,23 +1,25 @@
 import '../assets/styles/styles.scss';
-import { Shop } from './modules/Shop';
+import { CardShop } from './modules/CardShop';
 import { ShoppingCart } from './modules/ShoppingCart';
 import { FetcherResource } from './modules/FetcherResource';
 import { Card } from './modules/Card';
+import { InsertAllTemplates } from './modules/InsertAllTemplates';
 
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
-    let testString: string = 'Ahoi';
 
-    console.log('Test: ' + testString);
+    InsertAllTemplates();
 
-    console.log(new Shop(testString));
+    let testLog: string = CardShop.GetShop().startUp();
+    console.log(testLog);
 
-    console.log(new Shop(testString).startUp());
+    FetcherResource.getSingleCard('EX1_116')
+        .then(data => {
+            let testCardData = data;
+            console.log(testCardData);
 
-    let cardShop: Shop = new Shop(testString);
-    console.log(cardShop);
-    console.log(cardShop.startUp());
-
-    let testLog: string = cardShop.startUp();
+            let testCard: Card = (<any>Object).assign(new Card('EX1_116'), testCardData[0]);
+            console.log(`Card: "${testCard.name}" (${testCard.cardId}) from Set: "${testCard.cardSet}" has Mechanic: "${testCard.mechanics[0].name}"`);
+        });
 });

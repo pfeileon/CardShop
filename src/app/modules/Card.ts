@@ -1,17 +1,21 @@
-import { Rarity, CardType, CardClass, CardSet, Locale } from './Enums';
+//import { Rarity, CardType, CardClass, CardSet, Locale } from './Enums';
 
 'use strict';
 
+/** Class with all properties of a Hearthstone-Card */
 export class Card {
-    private cardId: string;
+    cardId: string;
+    name: string;
+    // cardSet: CardSet;
+    cardSet: string;
 
+    /** Creates an instance of a specific Card */
     constructor(cardId: string) {
         this.cardId = cardId;
     }
 
     private artist: string;
     private attack: number;
-    private cardSet: CardSet;
     private collectible: boolean;
     private cost: number;
     private flavor: string;
@@ -20,11 +24,14 @@ export class Card {
     private howToGetGold: string;
     private img: string;
     private imgGold: string;
-    private locale: Locale;
-    private mechanics: string[];
-    private name: string;
-    private playerClass: CardClass;
-    private rarity: Rarity;
+    // private locale: Locale;
+    private locale: string;
+    mechanics: {name:string}[];
+    // privateplayerClass: CardClass;
+    private playerClass: string;
+    // private rarity: Rarity;
+    private rarity: string;
     private text: string;
-    private type: CardType;
+    // private type: CardType;
+    private type: string;
 }
