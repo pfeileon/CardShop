@@ -12,13 +12,19 @@ export class Renderer {
         throw new Error("static class");
     }
 
-    /** Renders content */
-    static render(content: string): string {
-        return `${this}: ${content}`;
+    /** Returns content as string */
+    static render(content: any): any {
+        return `${content}`;
     }
 
-    /** Renders an <ul> with the passed array */
+    /** Inserts an <ul> with the passed array as <li>-elements */
     static insertList = (list: any[]): string => {
         return `<ul>${list.map(item => record(item)).join('')}</ul>`;
     };
+
+    /** Inserts a template after a specified element */
+    static insertTemplate(id: string, where: string, html: string): void {
+        let htmlCode: HTMLElement = document.getElementById(id);
+        htmlCode.insertAdjacentHTML(where, html);
+    }
 }

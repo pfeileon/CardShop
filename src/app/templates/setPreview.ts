@@ -1,9 +1,9 @@
-import {Renderer} from '../modules/Renderer'
+import { Renderer } from '../modules/Renderer'
 
 'use strict'
 
 /** Set Preview Template */
-export const setPreview: any = (data: {}) => {
+export const setPreview = (data: {}) => {
     return `<article>
 
     <header id="preview-head">

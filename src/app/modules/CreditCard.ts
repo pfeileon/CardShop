@@ -1,4 +1,4 @@
-import { LuhnAlgorithm } from './LuhnAlgorithm'
+import { Utils } from './Utils'
 
 'use strict';
 
@@ -28,6 +28,6 @@ export class CreditCard {
         }
 
         //true or false
-        return LuhnAlgorithm(cardNumber);
+        return Utils.luhnAlgorithm(cardNumber);
     }
 }

@@ -1,9 +1,9 @@
-import {Renderer} from '../modules/Renderer'
+import { Renderer } from '../modules/Renderer'
 
 'use strict'
 
 /** Start Page Template */
-export const startPage = (data: string[]) => {
+export const startPage = (data: {}) => {
     return `<article>
 
     <header id="start-head">
@@ -14,7 +14,7 @@ export const startPage = (data: string[]) => {
     <section id="start-filters">
         <h2>Select the Card Set:</h2>
         ${Renderer.insertList(data[Object.keys(data)[0]])}
-        <button id="preview-card-set">Preview Card Set</button>
+        <button id="preview-card-set-btn">Preview Card Set</button>
     </section>
 
     <section id="start-main">
