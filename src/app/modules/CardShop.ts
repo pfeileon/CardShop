@@ -13,27 +13,23 @@ export class CardShop {
     //Properties
     /** Chosen product */
     private item: {};
-    private message: string;
+    private content: any;
     private allCards: any;
 
     /** Singleton */
     private static shop: CardShop = new CardShop();
 
     //Methods
-    /** Initialize data */
-    private init(greet: string): void {
-        this.message = greet;
+    /** Initialize the app */
+    init(content: any): any {
+        this.content = content;
+        Renderer.render(content);
 
         FetcherService.query(config.url)
             .then(data => {
                 this.allCards = data;
                 console.log(this.allCards);
-            })
-    }
-
-    /** Generates the startup-view */
-    public startUp(): string {
-        return Renderer.render(this.message);
+            });        
     }
 
     /** Prevent further instances */
@@ -44,7 +40,6 @@ export class CardShop {
         }
 
         CardShop.shop = this;
-        CardShop.shop.init('TestInit');
     }
 
     /** Returns the ShoppingCart.cart Singleton */

@@ -1,9 +1,10 @@
-import {InsertTemplate} from './InsertTemplate'
+import * as config from '../config/config'
+import { Renderer } from './Renderer'
 import { startPage } from '../templates/startPage'
 import { setPreview } from '../templates/setPreview'
 
 /** Insert all templates */
 export function InsertAllTemplates(): void {
-    InsertTemplate('start-page', 'afterbegin', startPage)
-    InsertTemplate('set-preview', 'afterbegin', setPreview)
+    Renderer.insertTemplate('start-page', 'afterbegin', startPage(config.startPageData));
+    Renderer.insertTemplate('set-preview', 'afterbegin', setPreview(config.setPreviewData));
 }

@@ -19,7 +19,7 @@ export class FetcherResource {
 
     /** Returns card data of a cardSet from the hearthstoneAPI */
     static getCardSet(setName: string) {
-        let url = config.url + '/set/' + setName;
+        let url = config.url + '/sets/' + setName;
         return FetcherService.query(url);
 
     }
