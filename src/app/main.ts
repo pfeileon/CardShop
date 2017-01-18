@@ -11,6 +11,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     InsertAllTemplates();
 
+    //Select Card Set
+    let cardSetName: string;
+    let li: any = document.getElementById('start-filters').children[1].children;
+
+    for (let item of li) {
+        item.addEventListener('click', (e) => {
+            cardSetName = e.target.attributes[0].value;
+            //console.log(cardSetName);
+            document.getElementById('card-set-name').textContent = cardSetName;
+        });
+    }
+
+    //Preview Card Set
+    let previewCardSetBtn: any = document.getElementById('preview-card-set');
+    previewCardSetBtn.addEventListener('click', (e) => {
+        console.log(e);
+        FetcherResource.getCardSet(cardSetName)
+            .then(data => {
+                let cardSetData = data;
+                console.log(cardSetData);
+            })
+    });
+
+    //For testing purposes
     let testLog: string = CardShop.GetShop().startUp();
     console.log(testLog);
 
