@@ -1,45 +1,31 @@
-import { FetcherResource } from './FetcherResource';
+import * as config from '../config/config';
 
 'use strict';
 
 /** Generic type for callback functions */
-interface iCallback<T, TResult> {
+interface Callback<T, TResult> {
     (item?: T): TResult;
 }
 
 /** A collection of static utility functions */
 export class Utils {
 
-// TODO
-// clickElement here or in main.ts
+    // TODO
+    // clickElement here or in main.ts
 
     /** Click handler for HTMLElements */
-    static clickElement(element: HTMLElement, callback: iCallback<any, void>) {
+    static clickElement(element: HTMLElement, callback: Callback<any, void>): void {
         element.addEventListener('click', (e) => {
-            callback();
+            callback(e);
         });
     }
 
-    /** Selection of the CardSet on the StartPage */
-    static selectCardSet(cardSetName: string): void {
-        let ul: any = document.getElementById('start-filters').children[1].children;
-
+    /** Iterate an UL(HTMLCollection) and doStuff per LI */
+    static iterateUl(ul: any, doStuff: Callback<any, any>): void {
         for (let li of ul) {
-            li.addEventListener('click', (e) => {
-                cardSetName = e.target.attributes[0].value;
-                document.getElementById('card-set-name').textContent = cardSetName;
-                Utils.createHash(cardSetName);
-            });
+            doStuff(li);
         }
     }
-
-    static previewCardSet(): any {
-        FetcherResource.getCardSet(Utils.getHashValue('#', 1))
-            .then(data => {
-                let cardSetData = data;
-                console.log(cardSetData);
-            })
-    };
 
     /** Adds an encoded hash-value to the URL */
     static createHash(filters: string): void {
