@@ -1,19 +1,35 @@
 import '../assets/styles/styles.scss';
+import * as config from './config/config'
 import { CardShop } from './modules/CardShop';
-import { ShoppingCart } from './modules/ShoppingCart';
 import { FetcherResource } from './modules/FetcherResource';
 import { Card } from './modules/Card';
 import { InsertAllTemplates } from './modules/InsertAllTemplates';
+import { Utils } from './modules/Utils';
 
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    InsertAllTemplates();
+    //Render Application
+    CardShop.GetShop().init(InsertAllTemplates());
 
-    let testLog: string = CardShop.GetShop().startUp();
-    console.log(testLog);
+    // TODO
+    // clickElement here or in Utils.ts
 
+    //Select Card Set
+    Utils.selectCardSet(config.startPageData.cardSetName);
+    // Utils.clickElement(
+    //     document.getElementById(''),
+    //     Utils.selectCardSet
+    // );
+
+    //Preview Card Set
+    Utils.clickElement(
+        document.getElementById('preview-card-set-btn'),
+        Utils.previewCardSet
+    );
+
+    //For testing purposes
     FetcherResource.getSingleCard('EX1_116')
         .then(data => {
             let testCardData = data;
