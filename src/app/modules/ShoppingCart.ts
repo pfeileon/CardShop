@@ -2,38 +2,31 @@ import { Customer } from './Customer'
 
 'use strict';
 
-/** Singleton class */
+/** Instantiate only once! */
 export class ShoppingCart {
 
     //Properties
+    private static exists: boolean = false;
     private customer: Customer;
     /** All items in the cart */
     public items: {}[];
-    /** Singleton */
-    private static cart: ShoppingCart = new ShoppingCart();
 
     //Methods
     /** Adds an item to the cart */
     public AddToCart(item: {}) {
-        ShoppingCart.GetCart().items.push(item);
+        this.items.push(item);
     }
 
     /** Removes an item from the cart */
     public RemoveFromCart(i: number) {
-        ShoppingCart.GetCart().items.splice(i, 1);
+        this.items.splice(i, 1);
     }
 
-    /** Prevent further instances */
-    private constructor() {
-        if (ShoppingCart.cart) {
-            throw new Error('Singleton');
+    /** Prevents more than one instantiation */
+    constructor() {
+        if (ShoppingCart.exists) {
+            throw new Error("not more than one instance allowed");
         }
-
-        ShoppingCart.cart = this;
-    }
-
-    /** Returns the ShoppingCart.cart Singleton */
-    public static GetCart(): ShoppingCart {
-        return ShoppingCart.cart;
+        ShoppingCart.exists = true;
     }
 }

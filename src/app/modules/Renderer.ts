@@ -21,10 +21,4 @@ export class Renderer {
     static insertList = (list: any[]): string => {
         return `<ul>${list.map(item => record(item)).join('')}</ul>`;
     };
-
-    /** Inserts a template after a specified element */
-    static insertTemplate(id: string, where: string, html: string): void {
-        let htmlCode: HTMLElement = document.getElementById(id);
-        htmlCode.insertAdjacentHTML(where, html);
-    }
 }

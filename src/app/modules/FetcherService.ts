@@ -1,5 +1,5 @@
 declare const fetch;
-import { config } from '../config/config';
+import { api } from '../config/config';
 
 'use strict';
 
@@ -10,10 +10,11 @@ export class FetcherService {
     private constructor() {
         throw new Error('static class');
     }
+
     /** Returns all data from a hearthstoneAPI-endpoint */
     static query(url: string) {
         const init = {
-            headers: { 'X-Mashape-Authorization': config.mashApeKey },
+            headers: { 'X-Mashape-Authorization': api.mashApeKey },
             method: 'GET'
         };
 
