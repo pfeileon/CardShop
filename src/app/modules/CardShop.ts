@@ -5,17 +5,15 @@ import { FetcherResource } from './FetcherResource';
 
 'use strict';
 
-/** Singleton Class */
+/** Instantiate only once! */
 export class CardShop {
 
     //Properties
+    private static exists: boolean = false;
     /** Chosen product */
     private item: {};
     private content: any;
     private allCards: any;
-
-    /** Singleton */
-    private static shop: CardShop = new CardShop();
 
     //Methods
     /** Initialize the app */
@@ -50,18 +48,11 @@ export class CardShop {
             })
     };
 
-    /** Prevent further instances */
-    private constructor() {
-
-        if (CardShop.shop) {
-            throw new Error('Singleton');
+    /** Prevents more than one instantiation */
+    constructor() {
+        if (CardShop.exists) {
+            throw new Error("not more than one instance allowed");
         }
-
-        CardShop.shop = this;
-    }
-
-    /** Returns the ShoppingCart.cart Singleton */
-    public static GetShop(): CardShop {
-        return CardShop.shop;
+        CardShop.exists = true;
     }
 }

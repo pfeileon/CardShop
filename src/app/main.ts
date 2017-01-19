@@ -10,19 +10,21 @@ import { Utils } from './modules/Utils';
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    let shop: CardShop = new CardShop();
+
     //Render Application
-    CardShop.GetShop().init(InsertAllTemplates());
+    shop.init(InsertAllTemplates());
 
     // TODO
     // clickElement here or in Utils.ts
 
     //Select Card Set
-    CardShop.GetShop().iterateCardSet(CardShop.GetShop().selectCardSet);
+    shop.iterateCardSet(shop.selectCardSet);
 
     //Preview Card Set
     Utils.clickElement(
         document.getElementById('preview-card-set-btn'),
-        CardShop.GetShop().previewCardSet
+        shop.previewCardSet
     );
 
     //For testing purposes
