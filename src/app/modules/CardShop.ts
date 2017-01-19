@@ -2,6 +2,7 @@ import * as config from '../config/config';
 import { Utils } from './Utils'
 import { Renderer } from './Renderer';
 import { FetcherResource } from './FetcherResource';
+import { Templates } from '../templates/templates'
 
 'use strict';
 
@@ -17,9 +18,19 @@ export class CardShop {
 
     //Methods
     /** Initialize the app */
-    init(content: any): any {
-        this.content = content;
-        Renderer.render(content);
+    init(): void {
+        //Render App
+        this.content = Templates.InsertAllTemplates(Templates.templates);
+        Renderer.render(this.content);
+
+        //Select Card Set
+        this.iterateCardSet(this.selectCardSet);
+
+        //Preview Card Set
+        Utils.clickElement(
+            document.getElementById('preview-card-set-btn'),
+            this.previewCardSet
+        );
     }
 
     /** Iterate the CardSet-List on the StartPage and doStuff */
@@ -40,7 +51,7 @@ export class CardShop {
         document.getElementById('card-set-name').textContent = Utils.getHashValue('#', 1);
     }
 
-    previewCardSet(): any {
+    previewCardSet(param?: any): any {
         FetcherResource.getCardSet(config.setPreviewData.cardSetName)
             .then(data => {
                 let cardSetData = data;
