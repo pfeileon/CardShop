@@ -2,23 +2,21 @@ import { Utils } from '../modules/Utils'
 
 'use strict'
 
-interface iConfig {
+interface Config {
     url?: string;
     mashApeKey?: string;
-
     cardSets?: string[];
-
     cardSetName?: string;
     heroes?: string[];
     mana?: number[];
 }
 
-export const config: iConfig = {
+export const config: Config = {
     url: 'https://omgvamp-hearthstone-v1.p.mashape.com/cards',
     mashApeKey: 'aCMgPO6J9ZmshlRIBc6BEJBGXW5Zp13EcMsjsnWOEWLa1mIRqb'
 }
 
-export const startPageData: iConfig = {
+export const startPageData: Config = {
     cardSets: [
         'Classic',
         'The Grand Tournament',
@@ -27,8 +25,8 @@ export const startPageData: iConfig = {
     ]
 };
 
-export const setPreviewData: iConfig = {
-    cardSetName: `${Utils.getHashValue('#', 1) || 'Classic'}`,
+export const setPreviewData: Config = {
+    cardSetName: Utils.getHashValue('#', 1) || 'Classic',
     heroes: [
         'Druid',
         'Hunter',

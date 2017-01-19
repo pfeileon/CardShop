@@ -17,16 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // clickElement here or in Utils.ts
 
     //Select Card Set
-    Utils.selectCardSet(config.startPageData.cardSetName);
-    // Utils.clickElement(
-    //     document.getElementById(''),
-    //     Utils.selectCardSet
-    // );
+    CardShop.GetShop().iterateCardSet(CardShop.GetShop().selectCardSet);
 
     //Preview Card Set
     Utils.clickElement(
         document.getElementById('preview-card-set-btn'),
-        Utils.previewCardSet
+        CardShop.GetShop().previewCardSet
     );
 
     //For testing purposes
