@@ -1,4 +1,4 @@
-import * as config from '../config/config'
+import { config } from '../config/config'
 import { startPage } from './startPage'
 import { setPreview } from './setPreview'
 
@@ -17,12 +17,12 @@ export class Templates {
         {
             id: 'start-page',
             where: 'afterbegin',
-            html: startPage(config.startPageData)
+            html: startPage(config.data)
         },
         {
             id: 'set-preview',
             where: 'afterbegin',
-            html: setPreview(config.setPreviewData)
+            html: setPreview(config.data)
         }
     ];
 
