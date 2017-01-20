@@ -2,83 +2,59 @@ import { Utils } from '../modules/Utils'
 
 'use strict'
 
-
-// TODO:
-// GENERIC INTERFACE
-
-
+/** Generic interface for exported config constants */
 interface Config<S, T> {
-    api?: S;
-    data?: T;
-    url?: string;
-    mashApeKey?: string;
-    cardSets?: string[];
-    cardSetName?: string;
-    heroes?: string[];
-    mana?: number[];
+    api: S;
+    data: T;
 }
 
-interface Api {
+/** Interface for Config.api */
+interface HearthstoneAPI {
     url: string;
-    id: string;
+    mashApeKey: string;
 }
 
-const config: Config<Api, {}> = {
-    api: {
-        url: 'https://omgvamp-hearthstone-v1.p.mashape.com/cards',
-        id: 'aCMgPO6J9ZmshlRIBc6BEJBGXW5Zp13EcMsjsnWOEWLa1mIRqb'
+/** Interface for Config.data */
+interface HardcodedData {
+    startPageData: {
+        cardSets: string[];
     },
-    data: {
-        cardSets: [
-            'Classic',
-            'The Grand Tournament',
-            'Whispers of the Old Gods',
-            'Mean Streets of Gadgetzan'
-        ],
-        cardSetName: Utils.getHashValue('#', 1) || 'Classic',
-        heroes: [
-            'Druid',
-            'Hunter',
-            'Mage',
-            'Paladin',
-            'Priest',
-            'Rogue',
-            'Shaman',
-            'Warlock',
-            'Warrior',
-            'neutral'
-        ],
-        mana: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    setPreviewData: {
+        cardSetName: string;
+        heroes: string[],
+        mana: number[]
     }
 }
 
-export const api: Config<any,any> = {
-    url: 'https://omgvamp-hearthstone-v1.p.mashape.com/cards',
-    mashApeKey: 'aCMgPO6J9ZmshlRIBc6BEJBGXW5Zp13EcMsjsnWOEWLa1mIRqb'
-}
-
-export const startPageData: Config<any,any> = {
-    cardSets: [
-        'Classic',
-        'The Grand Tournament',
-        'Whispers of the Old Gods',
-        'Mean Streets of Gadgetzan'
-    ]
-}
-
-export const setPreviewData: Config<any,any> = {
-    cardSetName: Utils.getHashValue('#', 1) || 'Classic',
-    heroes: [
-        'Druid',
-        'Hunter',
-        'Mage',
-        'Paladin',
-        'Priest',
-        'Rogue',
-        'Shaman',
-        'Warlock',
-        'Warrior',
-        'neutral'
-    ],
-    mana: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+export const config: Config<HearthstoneAPI, HardcodedData> = {
+    api: {
+        url: 'https://omgvamp-hearthstone-v1.p.mashape.com/cards',
+        mashApeKey: 'aCMgPO6J9ZmshlRIBc6BEJBGXW5Zp13EcMsjsnWOEWLa1mIRqb'
+    },
+    data: {
+        startPageData: {
+            cardSets: [
+                'Classic',
+                'The Grand Tournament',
+                'Whispers of the Old Gods',
+                'Mean Streets of Gadgetzan'
+            ]
+        },
+        setPreviewData: {
+            cardSetName: Utils.getHashValue('#', 1) || 'Classic',
+            heroes: [
+                'Druid',
+                'Hunter',
+                'Mage',
+                'Paladin',
+                'Priest',
+                'Rogue',
+                'Shaman',
+                'Warlock',
+                'Warrior',
+                'neutral'
+            ],
+            mana: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        }
+    }
 }
