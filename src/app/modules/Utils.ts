@@ -4,7 +4,7 @@ import * as config from '../config/config';
 
 /** Generic type for callback functions */
 interface Callback<T, TResult> {
-    (item?: T): TResult;
+    (arg?: T): TResult;
 }
 
 /** A collection of static utility functions */
@@ -14,14 +14,14 @@ export class Utils {
     // clickElement here or in main.ts
 
     /** Click handler for HTMLElements */
-    static clickElement(element: HTMLElement, callback: Callback<any, void>): void {
+    static clickElement(element: HTMLElement, callback: Callback<MouseEvent, void>): void {
         element.addEventListener('click', (e) => {
             callback(e);
         });
     }
 
     /** Iterate an UL(HTMLCollection) and doStuff per LI */
-    static iterateUl(ul: any, doStuff: Callback<any, any>): void {
+    static iterateUl(ul: any, doStuff: Callback<HTMLElement, void>): void {
         for (let li of ul) {
             doStuff(li);
         }

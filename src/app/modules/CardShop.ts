@@ -1,8 +1,9 @@
-import * as config from '../config/config';
-import { Utils } from './Utils'
-import { Renderer } from './Renderer';
+import { config } from '../config/config';
+import { Utils } from './Utils';
+import { FetcherService } from './FetcherService';
 import { FetcherResource } from './FetcherResource';
-import { Templates } from '../templates/templates'
+import { Templates } from '../templates/templates';
+import { Renderer } from './Renderer';
 
 'use strict';
 
@@ -46,13 +47,13 @@ export class CardShop {
     /** Sets the hash-value according to the selected CardSet */
     static setCardSet(e: any): void {
         let cardSetName = e.target.attributes[0].value
-        config.setPreviewData.cardSetName = cardSetName;
+        config.data.setPreviewData.cardSetName = cardSetName;
         Utils.createHash(cardSetName);
         document.getElementById('card-set-name').textContent = Utils.getHashValue('#', 1);
     }
 
     previewCardSet(param?: any): any {
-        FetcherResource.getCardSet(config.setPreviewData.cardSetName)
+        FetcherResource.getCardSet(config.data.setPreviewData.cardSetName)
             .then(data => {
                 let cardSetData = data;
                 console.log(cardSetData);

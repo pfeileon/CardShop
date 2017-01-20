@@ -3,7 +3,7 @@ import { Renderer } from '../modules/Renderer'
 'use strict'
 
 /** Start Page Template */
-export const startPage = (data: {}) => {
+export const startPage = (data: { startPageData }) => {
     return `<article>
 
     <header id="start-head">
@@ -13,7 +13,7 @@ export const startPage = (data: {}) => {
 
     <section id="start-filters">
         <h2>Select the Card Set:</h2>
-        ${Renderer.insertList(data[Object.keys(data)[0]])}
+        ${Renderer.insertList(data.startPageData[Object.keys(data.startPageData)[0]])}
         <button id="preview-card-set-btn">Preview Card Set</button>
     </section>
 
