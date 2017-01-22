@@ -1,5 +1,3 @@
-import * as config from '../config/config';
-
 'use strict';
 
 /** Generic type for callback functions */
@@ -9,9 +7,6 @@ interface Callback<T, TResult> {
 
 /** A collection of static utility functions */
 export class Utils {
-
-    // TODO
-    // clickElement here or in main.ts
 
     /** Click handler for HTMLElements */
     static clickElement(element: HTMLElement, callback: Callback<MouseEvent, void>): void {

@@ -16,16 +16,10 @@ interface Init {
     cache?: string;
 }
 
-/** static */
 export class FetcherService {
 
-    /** Prevent instantiation */
-    private constructor() {
-        throw new Error('static class');
-    }
-
     /** Returns all data from a hearthstoneAPI-endpoint */
-    static query(url?: string, init?: Init, request?: Request): Promise<Init> {
+    query(url?: string, init?: Init, request?: Request): Promise<Init> {
         url = url || config.api.url;
 
         init = init || {

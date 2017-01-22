@@ -16,6 +16,7 @@ export class CardShop {
     private item: {};
     private content: any;
     private allCards: any;
+    private fResource: FetcherResource;
 
     //Methods
     /** Initialize the app */
@@ -41,11 +42,11 @@ export class CardShop {
 
     /** Selects the CardSet on the StartPage */
     selectCardSet(cardSet: any): void {
-        Utils.clickElement(cardSet, CardShop.setCardSet);
+        Utils.clickElement(cardSet, this.setCardSet);
     }
 
     /** Sets the hash-value according to the selected CardSet */
-    static setCardSet(e: any): void {
+    setCardSet(e: any): void {
         let cardSetName = e.target.attributes[0].value
         config.data.setPreviewData.cardSetName = cardSetName;
         Utils.createHash(cardSetName);
@@ -53,7 +54,7 @@ export class CardShop {
     }
 
     previewCardSet(param?: any): any {
-        FetcherResource.getCardSet(config.data.setPreviewData.cardSetName)
+        this.fResource.getCardSet(config.data.setPreviewData.cardSetName)
             .then(data => {
                 let cardSetData = data;
                 console.log(cardSetData);
@@ -61,10 +62,11 @@ export class CardShop {
     };
 
     /** Prevents more than one instantiation */
-    constructor() {
+    constructor(fResource: FetcherResource) {
         if (CardShop.exists) {
             throw new Error("not more than one instance allowed");
         }
+        this.fResource = fResource;
         CardShop.exists = true;
     }
 }
