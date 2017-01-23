@@ -35,6 +35,6 @@ export abstract class SinglePageApplication implements PseudoSingleton {
     abstract loadSpecifics(): void;
 
     existsCheck() {
-        SinglePageApplication.exists = Utils.existsCheck(SinglePageApplication.exists);
+        SinglePageApplication.exists = Utils.instanceCheck(SinglePageApplication.exists);
     }
 }

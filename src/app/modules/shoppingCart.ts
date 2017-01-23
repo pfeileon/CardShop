@@ -34,6 +34,6 @@ export class ShoppingCart implements PseudoSingleton {
     }
 
     existsCheck() {
-        ShoppingCart.exists = Utils.existsCheck(ShoppingCart.exists);
+        ShoppingCart.exists = Utils.instanceCheck(ShoppingCart.exists);
     }
 }

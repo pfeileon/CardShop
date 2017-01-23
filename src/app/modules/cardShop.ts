@@ -12,13 +12,13 @@ import { SinglePageApplication } from './singlePageApplication'
 export class CardShop extends SinglePageApplication {
 
     //Properties
-    /** Chosen product */
-    private item: {};
     protected content: any;
-    private allCards: any;
     protected fResource: FetchResource;
     protected tHandler: TemplateHandler;
     protected renderer: Renderer;
+    /** Chosen product */
+    private item: {};
+    private allCards: any;
 
     /** Warns after first instantiation */
     constructor(fResource: FetchResource, tHandler: TemplateHandler, renderer: Renderer) {
