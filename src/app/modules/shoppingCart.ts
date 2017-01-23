@@ -1,8 +1,10 @@
+import { PseudoSingleton } from '../types/types'
+import * as Utils from './utilities'
 import { Customer } from './customer'
 
 'use strict';
 
-export class ShoppingCart {
+export class ShoppingCart implements PseudoSingleton {
 
     //Properties
     private static exists: boolean = false;
@@ -13,10 +15,7 @@ export class ShoppingCart {
     //Constructor
     /** Warns after first instantiation */
     constructor() {
-        if (ShoppingCart.exists) {
-            console.log('Are you sure that you want another instance?');
-        }
-        ShoppingCart.exists = true;
+        this.existsCheck();
     }
 
     //Methods
@@ -32,5 +31,9 @@ export class ShoppingCart {
     */
     removeFromCart = (i: number): void => {
         this.items.splice(i, 1);
+    }
+
+    existsCheck() {
+        ShoppingCart.exists = Utils.instanceCheck(ShoppingCart.exists);
     }
 }

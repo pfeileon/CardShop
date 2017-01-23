@@ -1,42 +1,35 @@
 import { config } from '../config/config';
-import * as Utils from './Utils';
-import { FetcherService } from './fetcherService';
-import { FetcherResource } from './fetcherResource';
+import * as Utils from './utilities';
+import { FetchService } from './fetchService';
+import { FetchResource } from './fetchResource';
 import { TemplateHandler, templates } from '../templates/templates';
 import { Renderer } from './renderer';
 
+import { SinglePageApplication } from './singlePageApplication'
+
 'use strict';
 
-/** Instantiate only once! */
-export class CardShop {
+export class CardShop extends SinglePageApplication {
 
     //Properties
-    private static exists: boolean = false;
+    protected content: any;
+    protected fResource: FetchResource;
+    protected tHandler: TemplateHandler;
+    protected renderer: Renderer;
     /** Chosen product */
     private item: {};
-    private content: any;
     private allCards: any;
-    private fResource: FetcherResource;
-    private tHandler: TemplateHandler;
 
     /** Warns after first instantiation */
-    constructor(fResource: FetcherResource, tHandler: TemplateHandler) {
-        if (CardShop.exists) {
-            console.log('Are you sure that you want another instance?');
-        }
+    constructor(fResource: FetchResource, tHandler: TemplateHandler, renderer: Renderer) {
+        super(fResource, tHandler, renderer);
         this.fResource = fResource;
         this.tHandler = tHandler;
-
-        CardShop.exists = true;
+        this.renderer = renderer;
     }
 
     //Methods
-    /** Initialize the app */
-    start(): void {
-        //Render App
-        this.content = this.tHandler.insertAllTemplates(templates);
-        Renderer.render(this.content);
-
+    loadSpecifics(): void {
         //Select Card Set
         this.iterateCardSet(this.selectCardSet);
 
@@ -48,7 +41,7 @@ export class CardShop {
     }
 
     /** Iterate the CardSet-List on the StartPage and doStuff */
-    iterateCardSet = (doStuff: any): void => {
+    iterateCardSet(doStuff: any): void {
         Utils.iterateUl(document.getElementById('start-filters').children[1].children, doStuff);
     }
 
@@ -58,7 +51,7 @@ export class CardShop {
     }
 
     /** Sets the hash-value according to the selected CardSet */
-    setCardSet = (e: any): void => {
+    setCardSet(e: any): void {
         let cardSetName = e.target.attributes[0].value
         config.data.setPreviewData.cardSetName = cardSetName;
         Utils.createHash(cardSetName);
