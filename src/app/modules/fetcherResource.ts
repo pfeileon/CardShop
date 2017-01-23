@@ -1,5 +1,6 @@
-import { FetcherService, Promise, Init } from './fetcherService';
+import { Promise, Init } from '../types/types';
 import { config } from '../config/config';
+import {FetcherService} from './fetcherService'
 
 'use strict';
 

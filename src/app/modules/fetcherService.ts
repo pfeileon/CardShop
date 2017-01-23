@@ -1,21 +1,10 @@
 import { config } from '../config/config';
-import { fetchAsync } from './utils'
-
-'use strict';
-
 // Hack for fetch-API
 declare const fetch;
-interface Headers { }
-interface Request { url: string, init?: Init }
-interface Response { json(); }
-export interface Promise<T> { then; }
+import { Headers, Request, Response, Promise, Init } from '../types/types'
+import { fetchAsync } from './utilities';
 
-export interface Init {
-    headers: Headers;
-    method: string;
-    mode?: string;
-    cache?: string;
-}
+'use strict';
 
 export class FetcherService {
 

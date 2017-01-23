@@ -1,5 +1,5 @@
 import { config } from '../config/config';
-import * as Utils from './utils'
+import * as Utils from './utilities'
 import { Card } from './card';
 import { FetcherService } from './fetcherService';
 import { FetcherResource } from './fetcherResource';

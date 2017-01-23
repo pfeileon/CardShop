@@ -1,8 +1,8 @@
 import '../assets/styles/styles.scss';
-import { Renderer } from './modules/renderer'
+import { Renderer } from './modules/renderer';
 import { FetcherResource } from './modules/fetcherResource';
 import { FetcherService } from './modules/fetcherService';
-import { templates, TemplateHandler } from './templates/templates'
+import { templates, TemplateHandler } from './templates/templates';
 import { CardShop } from './modules/cardShop';
 import { testing } from './modules/tests';
 

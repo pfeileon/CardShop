@@ -18,19 +18,19 @@ export const templates = (renderer: Renderer) => [{
 
 export class TemplateHandler {
 
-    private templates: Template[];
+    templates: Template[];
 
     constructor(templates: Template[]) {
         this.templates = templates;
     }
 
     /** Inserts a template after a specified element */
-    insertTemplate(template: Template): void {
+    insertTemplate = (template: Template): void => {
         document.getElementById(template.id).insertAdjacentHTML(template.where, template.html);
     }
 
     /** Inserts all templates of the passed array */
-    insertAllTemplates(templates: Template[]): void {
+    insertAllTemplates = (templates: Template[]): void => {
         for (let template of templates) {
             this.insertTemplate(template)
         }

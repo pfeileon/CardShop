@@ -1,5 +1,5 @@
 import { config } from '../config/config';
-import * as Utils from './utils';
+import * as Utils from './utilities';
 import { FetcherService } from './fetcherService';
 import { FetcherResource } from './fetcherResource';
 import { TemplateHandler, templates } from '../templates/templates';
@@ -27,6 +27,7 @@ export class CardShop {
         }
         this.fResource = fResource;
         this.tHandler = tHandler;
+        this.renderer = renderer;
 
         CardShop.exists = true;
     }
@@ -35,7 +36,7 @@ export class CardShop {
     /** Initialize the app */
     start = (): void => {
         //Render App
-        this.content = this.tHandler.insertAllTemplates(templates(this.renderer));
+        this.content = this.tHandler.insertAllTemplates(this.tHandler.templates);
         this.renderer.render(this.content);
 
         //Select Card Set
