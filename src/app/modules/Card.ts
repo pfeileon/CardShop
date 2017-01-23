@@ -1,4 +1,4 @@
-//import { Rarity, CardType, CardClass, CardSet, Locale } from './Enums';
+//import { Rarity, CardType, CardClass, CardSet, Locale } from '../config/Enums';
 
 'use strict';
 

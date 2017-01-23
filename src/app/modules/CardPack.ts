@@ -9,11 +9,13 @@ export class CardPack {
     //Properties
     private setName: string;
     private cardPack: Card[];
+    private fResource: FetcherResource;
 
     //Constructor
     /** Creates an instance of a CardPack of a specific CardSet */
-    constructor(setName: string) {
+    constructor(setName: string, fResource: FetcherResource) {
         this.setName = setName;
+        this.fResource = fResource;
     }
 
     //Methods
@@ -26,7 +28,7 @@ export class CardPack {
 
     /** Opens a purchased CardPack: Assign Cards to its Card[] */
     private openCardPack(): void {
-        let cardSet = FetcherResource.getCardSet(this.setName);
+        let cardSet = this.fResource.getCardSet(this.setName);
         for (let i: number = 0; i < 5; i++) {
             this.cardPack[i] = this.generateCard(cardSet);
         }

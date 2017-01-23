@@ -7,7 +7,8 @@ import { Templates } from '../templates/templates'
 import { Renderer } from './Renderer';
 
 export function testing() {
-    FetcherService.query()
+    let fService = new FetcherService;
+    fService.query()
         .then(data => {
             console.log(data)
         });

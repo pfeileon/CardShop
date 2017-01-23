@@ -3,30 +3,30 @@ import { config } from '../config/config';
 
 'use strict';
 
-/** static */
 export class FetcherResource {
+    
+    private fService: FetcherService;
 
-    /** Prevent instantiation */
-    private constructor() {
-        throw new Error("static class");
+    constructor(fService: FetcherService) {
+        this.fService = fService;
     }
 
     /** Returns single card data from the hearthstoneAPI */
-    static getSingleCard(cardName: string) {
+    getSingleCard(cardName: string) {
         let url = config.api.url + '/' + cardName;
-        return FetcherService.query(url);
+        return this.fService.query(url);
     }
 
     /** Returns card data of a cardSet from the hearthstoneAPI */
-    static getCardSet(setName: string) {
+    getCardSet(setName: string) {
         let url = config.api.url + '/sets/' + setName;
-        return FetcherService.query(url);
+        return this.fService.query(url);
 
     }
 
     /** Returns card data of a heroClass from the hearthstoneAPI */
-    static getClassCards(className: string) {
+    getClassCards(className: string) {
         let url = config.api.url + '/classes/' + className;
-        return FetcherService.query(url);
+        return this.fService.query(url);
     }
 }
