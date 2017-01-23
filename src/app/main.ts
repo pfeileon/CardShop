@@ -1,18 +1,20 @@
 import '../assets/styles/styles.scss';
-import { FetcherResource } from './modules/FetcherResource';
-import { FetcherService } from './modules/FetcherService';
-import { CardShop } from './modules/CardShop';
-import { testing } from './modules/Tests';
+import { FetcherResource } from './modules/fetcherResource';
+import { FetcherService } from './modules/fetcherService';
+import {templates, TemplateHandler} from './templates/templates'
+import { CardShop } from './modules/cardShop';
+import { testing } from './modules/tests';
 
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
     let fService: FetcherService = new FetcherService();
     let fResource: FetcherResource = new FetcherResource(fService);
-    let shop: CardShop = new CardShop(fResource);
+    let tHandler: TemplateHandler = new TemplateHandler(templates);
+    let shop: CardShop = new CardShop(fResource, tHandler);
 
     //Render Application
-    shop.init();
+    shop.start();
 
     //Testing
     testing();
