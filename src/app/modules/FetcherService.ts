@@ -7,9 +7,9 @@ declare const fetch;
 interface Headers { }
 interface Request { url: string, init?: Init }
 interface Response { json(); }
-interface Promise<T> { then; }
+export interface Promise<T> { then; }
 
-interface Init {
+export interface Init {
     headers: Headers;
     method: string;
     mode?: string;
@@ -19,7 +19,7 @@ interface Init {
 export class FetcherService {
 
     /** Returns all data from a hearthstoneAPI-endpoint */
-    query(url?: string, init?: Init, request?: Request): Promise<Init> {
+    query = (url?: string, init?: Init, request?: Request): Promise<Init> => {
         url = url || config.api.url;
 
         init = init || {

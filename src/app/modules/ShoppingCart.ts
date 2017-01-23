@@ -9,24 +9,29 @@ export class ShoppingCart {
     private static exists: boolean = false;
     private customer: Customer;
     /** All items in the cart */
-    public items: {}[];
+    private items: {}[];
+
+    //Constructor
+    /** Warns after first instantiation */
+    constructor() {
+        if (ShoppingCart.exists) {
+            console.log('Are you sure that you want another instance?');
+        }
+        ShoppingCart.exists = true;
+    }
 
     //Methods
-    /** Adds an item to the cart */
-    public AddToCart(item: {}) {
+    /** Adds an item to the cart
+     * @param {{}} item - The item to be added.
+    */
+    addToCart = (item: {}): void => {
         this.items.push(item);
     }
 
-    /** Removes an item from the cart */
-    public RemoveFromCart(i: number) {
+    /** Removes an item from the cart
+     * @param {number} i - Position of the item to be removed.
+    */
+    removeFromCart = (i: number): void => {
         this.items.splice(i, 1);
-    }
-
-    /** Prevents more than one instantiation */
-    constructor() {
-        if (ShoppingCart.exists) {
-            throw new Error("not more than one instance allowed");
-        }
-        ShoppingCart.exists = true;
     }
 }

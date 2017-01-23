@@ -1,4 +1,4 @@
-import { FetcherService } from './FetcherService';
+import { FetcherService, Promise, Init } from './FetcherService';
 import { config } from '../config/config';
 
 'use strict';
@@ -12,20 +12,19 @@ export class FetcherResource {
     }
 
     /** Returns single card data from the hearthstoneAPI */
-    getSingleCard(cardName: string) {
+    getSingleCard = (cardName: string): Promise<Init> => {
         let url = config.api.url + '/' + cardName;
         return this.fService.query(url);
     }
 
     /** Returns card data of a cardSet from the hearthstoneAPI */
-    getCardSet(setName: string) {
+    getCardSet = (setName: string): Promise<Init> => {
         let url = config.api.url + '/sets/' + setName;
         return this.fService.query(url);
-
     }
 
     /** Returns card data of a heroClass from the hearthstoneAPI */
-    getClassCards(className: string) {
+    getClassCards = (className: string): Promise<Init> => {
         let url = config.api.url + '/classes/' + className;
         return this.fService.query(url);
     }

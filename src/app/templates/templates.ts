@@ -3,40 +3,41 @@ import { startPage } from './startPage'
 import { setPreview } from './setPreview'
 
 /** Defines a ready to render HTML-Template */
-interface template {
+interface Template {
     id: string,
     where: string,
     html: string
 }
 
+export const templates = [{
+    id: 'start-page',
+    where: 'afterbegin',
+    html: startPage(config.data)
+}, {
+    id: 'set-preview',
+    where: 'afterbegin',
+    html: setPreview(config.data)
+}]
+
 /** All templates with exact position */
 
-export class Templates {
+export class TemplateHandler {
 
-    static templates: template[] = [
-        {
-            id: 'start-page',
-            where: 'afterbegin',
-            html: startPage(config.data)
-        },
-        {
-            id: 'set-preview',
-            where: 'afterbegin',
-            html: setPreview(config.data)
-        }
-    ];
+    private templates: Template[];
+
+    constructor(templates: Template[]) {
+        this.templates = templates;
+    }
 
     /** Inserts a template after a specified element */
-    static insertTemplate(template: template): void {
+    insertTemplate(template: Template): void {
         document.getElementById(template.id).insertAdjacentHTML(template.where, template.html);
     }
 
     /** Inserts all templates of the passed array */
-    static InsertAllTemplates(
-        templates: template[]
-    ): void {
+    insertAllTemplates(templates: Template[]): void {
         for (let template of templates) {
-            Templates.insertTemplate(template)
+            this.insertTemplate(template)
         }
     }
 }

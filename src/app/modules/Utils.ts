@@ -6,24 +6,24 @@ interface Callback<T, TResult> {
 }
 
 /** A collection of static utility functions */
-export class Utils {
+export namespace Utils {
 
     /** Click handler for HTMLElements */
-    static clickElement(element: HTMLElement, callback: Callback<MouseEvent, void>): void {
+    export function clickElement(element: HTMLElement, callback: Callback<MouseEvent, void>): void {
         element.addEventListener('click', (e) => {
             callback(e);
         });
     }
 
     /** Iterate an UL(HTMLCollection) and doStuff per LI */
-    static iterateUl(ul: any, doStuff: Callback<HTMLElement, void>): void {
+    export function iterateUl(ul: any, doStuff: Callback<HTMLElement, void>): void {
         for (let li of ul) {
             doStuff(li);
         }
     }
 
     /** Adds an encoded hash-value to the URL */
-    static createHash(filters: string): void {
+    export function createHash(filters: string): void {
         if (filters != null) {
             window.location.hash = encodeURI(`#${filters}`)
         }
@@ -33,12 +33,12 @@ export class Utils {
     }
 
     /** Returns the string after the hash */
-    static getHashValue(seperator: string, pos: number): string {
+    export function getHashValue(seperator: string, pos: number): string {
         return decodeURI(window.location.hash).split(seperator)[pos]
     }
 
     /** The Luhn-Algorithm for CreditCard-Validation */
-    static luhnAlgorithm(value: string) {
+    export function luhnAlgorithm(value: string) {
 
         let nCheck: number = 0;
         let nDigit: number = 0;

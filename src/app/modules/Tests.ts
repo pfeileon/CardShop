@@ -3,7 +3,7 @@ import { Utils } from './Utils'
 import { Card } from './Card';
 import { FetcherService } from './FetcherService';
 import { FetcherResource } from './FetcherResource';
-import { Templates } from '../templates/templates'
+import { templates, TemplateHandler } from '../templates/templates'
 import { Renderer } from './Renderer';
 
 export function testing() {
