@@ -48,3 +48,11 @@ export interface HardcodedData {
         mana: number[]
     }
 }
+
+export abstract class PseudoSingleton {
+    private static exists: boolean;
+    constructor() {
+        this.existsCheck();
+    }
+    abstract existsCheck();
+}

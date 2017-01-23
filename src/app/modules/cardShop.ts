@@ -5,39 +5,31 @@ import { FetchResource } from './fetchResource';
 import { TemplateHandler, templates } from '../templates/templates';
 import { Renderer } from './renderer';
 
+import { SinglePageApplication } from './singlePageApplication'
+
 'use strict';
 
-export class CardShop {
+export class CardShop extends SinglePageApplication {
 
     //Properties
-    private static exists: boolean = false;
     /** Chosen product */
     private item: {};
-    private content: any;
+    protected content: any;
     private allCards: any;
-    private fResource: FetchResource;
-    private tHandler: TemplateHandler;
-    private renderer: Renderer;
+    protected fResource: FetchResource;
+    protected tHandler: TemplateHandler;
+    protected renderer: Renderer;
 
     /** Warns after first instantiation */
     constructor(fResource: FetchResource, tHandler: TemplateHandler, renderer: Renderer) {
-        if (CardShop.exists) {
-            console.log('Are you sure that you want another instance?');
-        }
+        super(fResource, tHandler, renderer);
         this.fResource = fResource;
         this.tHandler = tHandler;
         this.renderer = renderer;
-
-        CardShop.exists = true;
     }
 
     //Methods
-    /** Initialize the app */
-    start = (): void => {
-        //Render App
-        this.content = this.tHandler.insertAllTemplates(this.tHandler.templates);
-        this.renderer.render(this.content);
-
+    loadSpecifics(): void {
         //Select Card Set
         this.iterateCardSet(this.selectCardSet);
 
@@ -49,7 +41,7 @@ export class CardShop {
     }
 
     /** Iterate the CardSet-List on the StartPage and doStuff */
-    iterateCardSet = (doStuff: any): void => {
+    iterateCardSet(doStuff: any): void {
         Utils.iterateUl(document.getElementById('start-filters').children[1].children, doStuff);
     }
 
@@ -59,7 +51,7 @@ export class CardShop {
     }
 
     /** Sets the hash-value according to the selected CardSet */
-    setCardSet = (e: any): void => {
+    setCardSet(e: any): void {
         let cardSetName = e.target.attributes[0].value
         config.data.setPreviewData.cardSetName = cardSetName;
         Utils.createHash(cardSetName);

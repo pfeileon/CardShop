@@ -9,6 +9,8 @@ import { testing } from './modules/tests';
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    //Initialization
     let fService: FetchService = new FetchService();
     let fResource: FetchResource = new FetchResource(fService);
     let renderer: Renderer = new Renderer();
