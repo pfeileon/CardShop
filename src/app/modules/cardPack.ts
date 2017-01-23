@@ -1,5 +1,5 @@
 import { Card } from './card';
-import { FetcherResource } from './fetcherResource';
+import { FetchResource } from './fetchResource';
 
 'use strict';
 
@@ -9,11 +9,11 @@ export class CardPack {
     //Properties
     private setName: string;
     private cardPack: Card[];
-    private fResource: FetcherResource;
+    private fResource: FetchResource;
 
     //Constructor
     /** Creates an instance of a CardPack of a specific CardSet */
-    constructor(setName: string, fResource: FetcherResource) {
+    constructor(setName: string, fResource: FetchResource) {
         this.setName = setName;
         this.fResource = fResource;
     }

@@ -1,7 +1,7 @@
 import { config } from '../config/config';
 import * as Utils from './utilities';
-import { FetcherService } from './fetcherService';
-import { FetcherResource } from './fetcherResource';
+import { FetchService } from './fetchService';
+import { FetchResource } from './fetchResource';
 import { TemplateHandler, templates } from '../templates/templates';
 import { Renderer } from './renderer';
 
@@ -16,12 +16,12 @@ export class CardShop {
     private item: {};
     private content: any;
     private allCards: any;
-    private fResource: FetcherResource;
+    private fResource: FetchResource;
     private tHandler: TemplateHandler;
     private renderer: Renderer;
 
     /** Warns after first instantiation */
-    constructor(fResource: FetcherResource, tHandler: TemplateHandler, renderer: Renderer) {
+    constructor(fResource: FetchResource, tHandler: TemplateHandler, renderer: Renderer) {
         if (CardShop.exists) {
             console.log('Are you sure that you want another instance?');
         }
