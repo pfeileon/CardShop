@@ -1,5 +1,5 @@
-import { Card } from './Card';
-import { FetcherResource } from './FetcherResource';
+import { Card } from './card';
+import { FetcherResource } from './fetcherResource';
 
 'use strict';
 

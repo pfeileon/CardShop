@@ -1,9 +1,9 @@
 import '../assets/styles/styles.scss';
-import { FetcherResource } from './modules/FetcherResource';
-import { FetcherService } from './modules/FetcherService';
+import { FetcherResource } from './modules/fetcherResource';
+import { FetcherService } from './modules/fetcherService';
 import {templates, TemplateHandler} from './templates/templates'
-import { CardShop } from './modules/CardShop';
-import { testing } from './modules/Tests';
+import { CardShop } from './modules/cardShop';
+import { testing } from './modules/tests';
 
 'use strict';
 

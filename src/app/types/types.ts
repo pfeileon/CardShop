@@ -2,7 +2,7 @@
 
 /** Generic type for callback functions */
 export interface Callback<T, TResult> {
-    (arg?: T): TResult;
+    (arg: T): TResult;
 }
 
 // Hack for fetch-API

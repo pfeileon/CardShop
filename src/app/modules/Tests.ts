@@ -1,10 +1,10 @@
 import { config } from '../config/config';
-import { Utils } from './Utils'
-import { Card } from './Card';
-import { FetcherService } from './FetcherService';
-import { FetcherResource } from './FetcherResource';
+import * as Utils from './utils'
+import { Card } from './card';
+import { FetcherService } from './fetcherService';
+import { FetcherResource } from './fetcherResource';
 import { templates, TemplateHandler } from '../templates/templates'
-import { Renderer } from './Renderer';
+import { Renderer } from './renderer';
 
 export function testing() {
     let fService = new FetcherService;

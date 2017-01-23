@@ -1,9 +1,9 @@
 import { config } from '../config/config';
-import { Utils } from './Utils';
-import { FetcherService } from './FetcherService';
-import { FetcherResource } from './FetcherResource';
+import * as Utils from './Utils';
+import { FetcherService } from './fetcherService';
+import { FetcherResource } from './fetcherResource';
 import { TemplateHandler, templates } from '../templates/templates';
-import { Renderer } from './Renderer';
+import { Renderer } from './renderer';
 
 'use strict';
 

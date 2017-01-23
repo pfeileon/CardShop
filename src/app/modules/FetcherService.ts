@@ -1,4 +1,5 @@
 import { config } from '../config/config';
+import { fetchAsync } from './utils'
 
 'use strict';
 
@@ -32,12 +33,6 @@ export class FetcherService {
             init
         }
 
-        return FetcherService.fetchAsync(request);
-    }
-
-    /** Generic Fetch-Method */
-    private static fetchAsync<T extends Request>(arg: T): Promise<T> {
-        return fetch(arg.url, arg.init)
-            .then((response: Response) => response.json());
+        return fetchAsync(request);
     }
 }

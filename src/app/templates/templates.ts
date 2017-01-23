@@ -1,13 +1,7 @@
+import { Template } from '../types/types'
 import { config } from '../config/config'
 import { startPage } from './startPage'
 import { setPreview } from './setPreview'
-
-/** Defines a ready to render HTML-Template */
-interface Template {
-    id: string,
-    where: string,
-    html: string
-}
 
 export const templates = [{
     id: 'start-page',
