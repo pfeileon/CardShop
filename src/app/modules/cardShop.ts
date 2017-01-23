@@ -7,7 +7,6 @@ import { Renderer } from './renderer';
 
 'use strict';
 
-/** Instantiate only once! */
 export class CardShop {
 
     //Properties

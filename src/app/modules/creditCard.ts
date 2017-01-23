@@ -1,4 +1,4 @@
-import * as Utils from './utilities'
+import * as Utils from './utilities';
 
 'use strict';
 

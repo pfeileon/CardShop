@@ -1,4 +1,4 @@
-import { CreditCard } from './creditCard'
+import { CreditCard } from './creditCard';
 
 'use strict';
 
@@ -12,7 +12,7 @@ export class Customer {
     private country: string;
     private tel: string;
     private email: string;
-    
+
     //Properties
     public get fName(): string { return this.fname; }
     public set fName(fname: string) { this.fname = fname }

@@ -1,8 +1,8 @@
-import { Template } from '../types/types'
-import { config } from '../config/config'
-import { startPage } from './startPage'
-import { setPreview } from './setPreview'
-import { Renderer } from '../modules/renderer'
+import { Template } from '../types/types';
+import { config } from '../config/config';
+import { startPage } from './startPage';
+import { setPreview } from './setPreview';
+import { Renderer } from '../modules/renderer';
 
 export const templates = (renderer: Renderer) => [{
     id: 'start-page',

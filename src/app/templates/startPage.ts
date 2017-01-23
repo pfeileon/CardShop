@@ -1,4 +1,4 @@
-import { Renderer } from '../modules/renderer'
+import { Renderer } from '../modules/renderer';
 
 'use strict'
 

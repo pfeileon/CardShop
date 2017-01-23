@@ -1,11 +1,11 @@
 import { Promise, Init } from '../types/types';
 import { config } from '../config/config';
-import {FetchService} from './fetchService'
+import { FetchService } from './fetchService';
 
 'use strict';
 
 export class FetchResource {
-    
+
     private fService: FetchService;
 
     constructor(fService: FetchService) {
