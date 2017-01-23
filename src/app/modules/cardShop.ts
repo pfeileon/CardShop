@@ -1,5 +1,5 @@
 import { config } from '../config/config';
-import * as Utils from './Utils';
+import * as Utils from './utils';
 import { FetcherService } from './fetcherService';
 import { FetcherResource } from './fetcherResource';
 import { TemplateHandler, templates } from '../templates/templates';
@@ -18,9 +18,10 @@ export class CardShop {
     private allCards: any;
     private fResource: FetcherResource;
     private tHandler: TemplateHandler;
+    private renderer: Renderer;
 
     /** Warns after first instantiation */
-    constructor(fResource: FetcherResource, tHandler: TemplateHandler) {
+    constructor(fResource: FetcherResource, tHandler: TemplateHandler, renderer: Renderer) {
         if (CardShop.exists) {
             console.log('Are you sure that you want another instance?');
         }
@@ -32,10 +33,10 @@ export class CardShop {
 
     //Methods
     /** Initialize the app */
-    start(): void {
+    start = (): void => {
         //Render App
-        this.content = this.tHandler.insertAllTemplates(templates);
-        Renderer.render(this.content);
+        this.content = this.tHandler.insertAllTemplates(templates(this.renderer));
+        this.renderer.render(this.content);
 
         //Select Card Set
         this.iterateCardSet(this.selectCardSet);

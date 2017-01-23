@@ -1,9 +1,9 @@
-import { Renderer } from '../modules/Renderer'
+import { Renderer } from '../modules/renderer'
 
 'use strict'
 
 /** Set Preview Template */
-export const setPreview = (data: { setPreviewData }) => {
+export const setPreview = (renderer: Renderer, data: { setPreviewData }) => {
     return `<article>
 
     <header id="preview-head">
@@ -13,9 +13,9 @@ export const setPreview = (data: { setPreviewData }) => {
 
     <section id="preview-filters">
         <h2>Select Hero:</h2>        
-        ${Renderer.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[1]])}
+        ${renderer.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[1]])}
         <h2>Mana Cost:</h2>
-        ${Renderer.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[2]])}
+        ${renderer.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[2]])}
     </section>
 
     <section id="preview-main">
