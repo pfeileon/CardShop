@@ -1,13 +1,13 @@
 import { config } from '../config/config';
-import * as Utils from './utils'
+import * as Utils from './utilities'
 import { Card } from './card';
-import { FetcherService } from './fetcherService';
-import { FetcherResource } from './fetcherResource';
+import { FetchService } from './fetchService';
+import { FetchResource } from './fetchResource';
 import { templates, TemplateHandler } from '../templates/templates'
 import { Renderer } from './renderer';
 
 export function testing() {
-    let fService = new FetcherService;
+    let fService = new FetchService;
     fService.query()
         .then(data => {
             console.log(data)

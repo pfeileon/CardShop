@@ -72,3 +72,10 @@ export function luhnAlgorithm(value: string) {
 
     return (nCheck % 10) === 0;
 }
+
+export function instanceCheck(exists: boolean): boolean {
+    if (exists) {
+        console.log('Are you sure that you want another instance?');
+    }
+    return true;
+}

@@ -1,4 +1,4 @@
-import * as Utils from '../modules/Utils'
+import * as Utils from '../modules/utilities';
 
 'use strict'
 
