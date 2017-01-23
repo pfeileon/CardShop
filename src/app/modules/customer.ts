@@ -1,4 +1,4 @@
-import { CreditCard } from './CreditCard'
+import { CreditCard } from './creditCard'
 
 'use strict';
 
@@ -14,10 +14,10 @@ export class Customer {
     private email: string;
     
     //Properties
-    public get Fname(): string { return this.fname; }
-    public set Fname(fname: string) { this.fname = fname }
-    public get Lname(): string { return this.lname; }
-    public set Lname(lname: string) { this.lname = lname; }
+    public get fName(): string { return this.fname; }
+    public set fName(fname: string) { this.fname = fname }
+    public get lName(): string { return this.lname; }
+    public set lName(lname: string) { this.lname = lname; }
     // TODO: other Getters and Setters
 
     /** The Customer's CreditCard */

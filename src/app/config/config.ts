@@ -1,4 +1,4 @@
-import { Utils } from '../modules/Utils'
+import * as Utils from '../modules/Utils'
 
 'use strict'
 
