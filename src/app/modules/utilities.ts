@@ -34,13 +34,6 @@ export function getHashValue(seperator: string, pos: number): string {
     return decodeURI(window.location.hash).split(seperator)[pos]
 }
 
-/** Inserts all templates of the passed array */
-export function insertAllTemplates(templates: Template[]): void {
-    for (let template of templates) {
-        this.insertTemplate(template)
-    }
-}
-
 /** Generic Fetch-Method */
 export function fetchAsync<T extends Request>(arg: T): Promise<T> {
     return fetch(arg.url, arg.init)
@@ -73,9 +66,14 @@ export function luhnAlgorithm(value: string) {
     return (nCheck % 10) === 0;
 }
 
-export function instanceCheck(exists: boolean): boolean {
+export function instanceCheck(exists: boolean, message: string) {
     if (exists) {
-        console.log('Are you sure that you want another instance?');
+        console.log(message);
     }
     return true;
+}
+
+/** Toggles the class value of a specified HTMLElement */
+export function toggleCssClass(id: string, cssClass: string): void {
+    document.getElementById(id).classList.toggle(cssClass);
 }

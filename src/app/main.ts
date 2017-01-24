@@ -4,6 +4,7 @@ import { FetchService } from './modules/fetchService';
 import { Renderer } from './modules/renderer';
 import { templates, TemplateHandler } from './templates/templates';
 import { CardShop } from './modules/cardShop';
+import { ShoppingCart } from './modules/shoppingCart';
 import { testing } from './modules/tests';
 
 'use strict';
@@ -15,11 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let fResource: FetchResource = new FetchResource(fService);
     let renderer: Renderer = new Renderer();
     let tHandler: TemplateHandler = new TemplateHandler(templates(renderer));
-    let shop: CardShop = new CardShop(fResource, tHandler, renderer);
+    let cart: ShoppingCart = new ShoppingCart();
+    let shop: CardShop = new CardShop(fResource, tHandler, renderer, cart);
 
     //Render Application
     shop.start();
 
     //Testing
-    testing();
+    //testing();
 });

@@ -8,6 +8,7 @@ export const setPreview = (renderer: Renderer, data: { setPreviewData }) => {
 
     <header id="preview-head">
         <h1>Preview Card Set: <span id="card-set-name">${data.setPreviewData[Object.keys(data.setPreviewData)[0]]}</span></h1>
+        <button id="return-btn">Return</button>
         <button id="goto-cart">Goto Cart </button>
     </header>
 
@@ -23,7 +24,7 @@ export const setPreview = (renderer: Renderer, data: { setPreviewData }) => {
 
     <footer id="preview-foot">
         <img src="../assets/images/shoppingCart.png" alt="Shopping Cart" />
-        <button id="add-to-cart">Add to Cart</button>
+        <button class="add-to-cart">Add to Cart</button>
     </footer>
 
 </article>`
