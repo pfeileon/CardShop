@@ -1,6 +1,5 @@
 import { config } from '../config/config';
 import * as Utils from './utilities';
-import { FetchService } from './fetchService';
 import { FetchResource } from './fetchResource';
 import { TemplateHandler, templates } from '../templates/templates';
 import { Renderer } from './renderer';
@@ -28,16 +27,23 @@ export class CardShop extends SinglePageApplication {
         this.renderer = renderer;
     }
 
-    //Methods
+    // Methods
     loadSpecifics(): void {
+        //Set invisible
+        Utils.toggleCssClass("set-preview", "noDisplay");
+        Utils.toggleCssClass("error-page", "noDisplay");
+
         //Select Card Set
         this.iterateCardSet(this.selectCardSet);
 
-        //Preview Card Set
+        // Preview Card Set
         Utils.clickElement(
             document.getElementById('preview-card-set-btn'),
             this.previewCardSet
         );
+
+        // return
+        Utils.clickElement(document.getElementById('return-btn'), this.return);
     }
 
     /** Iterate the CardSet-List on the StartPage and doStuff */
@@ -58,11 +64,22 @@ export class CardShop extends SinglePageApplication {
         document.getElementById('card-set-name').textContent = Utils.getHashValue('#', 1);
     }
 
-    previewCardSet = (param?: any): any => {
-        this.fResource.getCardSet(config.data.setPreviewData.cardSetName)
+    previewCardSet = (arg?: any): any => {
+        Utils.toggleCssClass("start-page", "noDisplay");
+        Utils.toggleCssClass("set-preview", "noDisplay");
+        if (Utils.getHashValue('#', 1) === undefined) {
+            Utils.createHash("Classic");
+            config.data.setPreviewData.cardSetName = "Classic";
+        }
+        this.fResource.getCardSet(Utils.getHashValue('#', 1))
             .then(data => {
                 let cardSetData = data;
                 console.log(cardSetData);
             })
     };
+
+    return(): void {
+        Utils.toggleCssClass("start-page", "noDisplay");
+        Utils.toggleCssClass("set-preview", "noDisplay");
+    }
 }
