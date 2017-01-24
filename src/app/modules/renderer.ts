@@ -15,4 +15,15 @@ export class Renderer {
     insertList(list: any[]): string {
         return `<ul>${list.map(item => record(item)).join('')}</ul>`;
     };
+
+    /** Inserts the images of the cards of a fetch call */
+    showCards(cardSetData: any) {
+        // First remove old code
+        document.getElementById("preview-main").innerText = "";
+        for (let card of cardSetData) {
+            if (card.img != undefined && card.collectible === true) {
+                document.getElementById("preview-main").insertAdjacentHTML("afterbegin", `<img src="${card.img}" alt = "${card.name}" />`);
+            }
+        }
+    }
 }

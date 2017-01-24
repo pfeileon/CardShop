@@ -71,6 +71,7 @@ export class CardShop extends SinglePageApplication {
         document.getElementById('card-set-name').textContent = Utils.getHashValue('#', 1);
     }
 
+    /** What happens when you click the Preview Card Set Button */
     previewCardSet = (arg?: any): any => {
         Utils.toggleCssClass("start-page", "noDisplay");
         Utils.toggleCssClass("set-preview", "noDisplay");
@@ -81,20 +82,17 @@ export class CardShop extends SinglePageApplication {
         this.fResource.getCardSet(Utils.getHashValue('#', 1))
             .then(data => {
                 let cardSetData = data;
-                document.getElementById("preview-main").innerText = "";
-                for (let card of cardSetData) {
-                    if (card.img != undefined && card.collectible === true) {
-                        document.getElementById("preview-main").insertAdjacentHTML("afterbegin", `<img src="${card.img}" alt = "${card.name}" />`);
-                    }
-                }
+                this.renderer.showCards(cardSetData);
             })
     };
 
+    /** What happens when you click the Return Button */
     return(): void {
         Utils.toggleCssClass("start-page", "noDisplay");
         Utils.toggleCssClass("set-preview", "noDisplay");
     }
 
+    /** What happens when you click the Add To Cart Button */
     addToCart = (): void => {
         let pack: CardPack = new CardPack(Utils.getHashValue('#', 1) || "Classic", this.fResource);
         this.cart.pushToCart(pack);
