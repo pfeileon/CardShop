@@ -1,3 +1,4 @@
+import * as Utils from '../modules/utilities'
 'use strict';
 
 /** Generic type for callback functions */
@@ -49,10 +50,12 @@ export interface HardcodedData {
     }
 }
 
+/** Abstract basis for classes which are normally only instantiated once during runtime */
 export abstract class PseudoSingleton {
     private static exists: boolean;
+    static readonly message: string = 'Are you sure that you want another instance?';
+    abstract existsCheck(): void;
     constructor() {
         this.existsCheck();
     }
-    abstract existsCheck();
 }

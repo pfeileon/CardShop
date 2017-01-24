@@ -1,13 +1,12 @@
 import { PseudoSingleton } from '../types/types'
-import { config } from '../config/config';
 import * as Utils from './utilities';
-import { FetchService } from './fetchService';
 import { FetchResource } from './fetchResource';
 import { TemplateHandler, templates } from '../templates/templates';
 import { Renderer } from './renderer';
 
 'use strict';
 
+/** Abstract basis for the SPA */
 export abstract class SinglePageApplication implements PseudoSingleton {
 
     private static exists: boolean = false;
@@ -20,21 +19,22 @@ export abstract class SinglePageApplication implements PseudoSingleton {
         this.existsCheck();
     }
 
-    //Methods
+    // Methods
     /** Initialize the app */
     start(): void {
         //Render App
         this.content = this.tHandler.insertAllTemplates(this.tHandler.templates);
         this.renderer.render(this.content);
 
-        //Implementation-specific methods are called
+        // Implementation-specific methods are called
         this.loadSpecifics();
     };
 
     /** Implements a call of all methods needed at start-up for the specific implementation of SinglePageApplication  */
     abstract loadSpecifics(): void;
 
+    /** Checks if the constructor has already been called */
     existsCheck() {
-        SinglePageApplication.exists = Utils.instanceCheck(SinglePageApplication.exists);
+        SinglePageApplication.exists = Utils.instanceCheck(SinglePageApplication.exists, PseudoSingleton.message);
     }
 }
