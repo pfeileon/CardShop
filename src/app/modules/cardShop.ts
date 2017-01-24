@@ -3,8 +3,9 @@ import * as Utils from './utilities';
 import { FetchResource } from './fetchResource';
 import { TemplateHandler, templates } from '../templates/templates';
 import { Renderer } from './renderer';
-
+import { ShoppingCart } from './shoppingCart';
 import { SinglePageApplication } from './singlePageApplication'
+import { CardPack } from './cardPack'
 
 'use strict';
 
@@ -16,15 +17,17 @@ export class CardShop extends SinglePageApplication {
     protected tHandler: TemplateHandler;
     protected renderer: Renderer;
     /** Chosen product */
+    private cart: ShoppingCart;
     private item: {};
     private allCards: any;
 
     /** Warns after first instantiation */
-    constructor(fResource: FetchResource, tHandler: TemplateHandler, renderer: Renderer) {
+    constructor(fResource: FetchResource, tHandler: TemplateHandler, renderer: Renderer, cart: ShoppingCart) {
         super(fResource, tHandler, renderer);
         this.fResource = fResource;
         this.tHandler = tHandler;
         this.renderer = renderer;
+        this.cart = cart;
     }
 
     // Methods
@@ -44,6 +47,10 @@ export class CardShop extends SinglePageApplication {
 
         // return
         Utils.clickElement(document.getElementById('return-btn'), this.return);
+
+        // Add to Cart
+        Utils.clickElement(<HTMLElement>document.getElementsByClassName("add-to-cart")[0], this.addToCart);
+        Utils.clickElement(<HTMLElement>document.getElementsByClassName("add-to-cart")[1], this.addToCart);
     }
 
     /** Iterate the CardSet-List on the StartPage and doStuff */
@@ -74,12 +81,23 @@ export class CardShop extends SinglePageApplication {
         this.fResource.getCardSet(Utils.getHashValue('#', 1))
             .then(data => {
                 let cardSetData = data;
-                console.log(cardSetData);
+                document.getElementById("preview-main").innerText = "";
+                for (let card of cardSetData) {
+                    if (card.img != undefined && card.collectible === true) {
+                        document.getElementById("preview-main").insertAdjacentHTML("afterbegin", `<img src="${card.img}" alt = "${card.name}" />`);
+                    }
+                }
             })
     };
 
     return(): void {
         Utils.toggleCssClass("start-page", "noDisplay");
         Utils.toggleCssClass("set-preview", "noDisplay");
+    }
+
+    addToCart = (): void => {
+        let pack: CardPack = new CardPack(Utils.getHashValue('#', 1) || "Classic", this.fResource);
+        this.cart.pushToCart(pack);
+        console.log(this.cart.items);
     }
 }

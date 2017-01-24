@@ -24,7 +24,7 @@ export const setPreview = (renderer: Renderer, data: { setPreviewData }) => {
 
     <footer id="preview-foot">
         <img src="../assets/images/shoppingCart.png" alt="Shopping Cart" />
-        <button id="add-to-cart">Add to Cart</button>
+        <button class="add-to-cart">Add to Cart</button>
     </footer>
 
 </article>`

@@ -10,7 +10,7 @@ export class ShoppingCart implements PseudoSingleton {
     private static exists: boolean = false;
     private customer: Customer;
     /** All items in the cart */
-    private items: {}[];
+    items: {}[] = new Array<{}>();
 
     //Constructor
     /** Warns after first instantiation */
@@ -22,14 +22,14 @@ export class ShoppingCart implements PseudoSingleton {
     /** Adds an item to the cart
      * @param {{}} item - The item to be added.
     */
-    addToCart = (item: {}): void => {
+    pushToCart = (item: {}): void => {
         this.items.push(item);
     }
 
     /** Removes an item from the cart
      * @param {number} i - Position of the item to be removed.
     */
-    removeFromCart = (i: number): void => {
+    spliceFromCart = (i: number): void => {
         this.items.splice(i, 1);
     }
 
