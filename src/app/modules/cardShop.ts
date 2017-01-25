@@ -5,8 +5,6 @@ import { TemplateHandler, templates } from '../templates/templateHandler';
 import { RenderService } from './services/renderService';
 import { ShoppingCart } from './shoppingCart';
 import { SinglePageApplication } from './abstracts/singlePageApplication';
-import { CardPack } from './cardPack';
-
 import { ButtonHandler } from './buttonHandler';
 
 'use strict';
@@ -21,10 +19,9 @@ export class CardShop extends SinglePageApplication {
 
     /** Chosen product */
     private cart: ShoppingCart;
+    private bHandler: ButtonHandler;
     private item: {};
     private allCards: any;
-
-    private bHandler: ButtonHandler;
 
     /** Warns after first instantiation */
     constructor(tHandler: TemplateHandler, bHandler: ButtonHandler) {
@@ -46,10 +43,7 @@ export class CardShop extends SinglePageApplication {
         this.iterateCardSet(this.selectCardSet);
 
         // Preview Card Set
-        Utils.clickElement(
-            document.getElementById('preview-card-set-btn'),
-            this.bHandler.previewCardSet
-        );
+        Utils.clickElement(document.getElementById('preview-card-set-btn'), this.bHandler.previewCardSet);
 
         // return
         Utils.clickElement(document.getElementById('return-btn'), this.bHandler.return);

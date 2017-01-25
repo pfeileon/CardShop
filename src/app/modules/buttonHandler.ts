@@ -14,18 +14,10 @@ export class ButtonHandler {
     private rService: RenderService;
     private cart: ShoppingCart;
 
-    public get FResource() {
-        return this.fResource;
-    }
+    public get FResource() { return this.fResource; }
+    public get RService() { return this.rService; }
+    public get Cart() { return this.cart; }
 
-    public get RService() {
-        return this.rService;
-    }
-
-    public get Cart() {
-        return this.cart;
-    }
-    
     constructor(fResource: FetchResource, rService: RenderService, cart: ShoppingCart) {
         this.fResource = fResource;
         this.rService = rService;
@@ -33,7 +25,7 @@ export class ButtonHandler {
     }
 
     /** What happens when you click the Preview Card Set Button */
-    previewCardSet = (arg?: any): any => {
+    previewCardSet = (): any => {
         Utils.toggleCssClass("start-page", "noDisplay");
         Utils.toggleCssClass("set-preview", "noDisplay");
         if (Utils.getHashValue('#', 1) === undefined) {
