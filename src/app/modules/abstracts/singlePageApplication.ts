@@ -26,7 +26,7 @@ export abstract class SinglePageApplication extends PseudoSingleton {
     }
 
     // Methods
-    /** Initialize the app */
+    /** Start the app */
     start(): void {
         //Render App
         this.content = this.tHandler.insertAllTemplates(this.tHandler.templates);

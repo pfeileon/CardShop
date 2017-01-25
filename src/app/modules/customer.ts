@@ -4,8 +4,8 @@ import { CreditCard } from './creditCard';
 
 export class Customer {
     //Fields
-    private fname: string;
-    private lname: string;
+    private fName: string;
+    private lName: string;
     private address: string;
     private zipCode: string;
     private city: string;
@@ -14,10 +14,10 @@ export class Customer {
     private email: string;
 
     //Properties
-    public get fName(): string { return this.fname; }
-    public set fName(fname: string) { this.fname = fname }
-    public get lName(): string { return this.lname; }
-    public set lName(lname: string) { this.lname = lname; }
+    public get FName(): string { return this.fName; }
+    public set FName(fName: string) { this.fName = fName }
+    public get LName(): string { return this.lName; }
+    public set LName(lName: string) { this.lName = lName; }
     // TODO: other Getters and Setters
 
     /** The Customer's CreditCard */

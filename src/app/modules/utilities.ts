@@ -1,4 +1,4 @@
-import { Callback, Promise, Request, Response, Template } from '../types/types'
+import { Callback, Promise, Request, Response } from '../types/types'
 declare const fetch;
 
 // A collection of static utility functions

@@ -9,6 +9,7 @@ import { ButtonHandler } from './buttonHandler';
 
 'use strict';
 
+/** Start via inherited method "start()" */
 export class CardShop extends SinglePageApplication {
 
     //Properties
@@ -49,8 +50,13 @@ export class CardShop extends SinglePageApplication {
         Utils.clickElement(document.getElementById('return-btn'), this.bHandler.return);
 
         // Add to Cart
-        Utils.clickElement(<HTMLElement>document.getElementsByClassName("add-to-cart")[0], this.bHandler.addToCart);
-        Utils.clickElement(<HTMLElement>document.getElementsByClassName("add-to-cart")[1], this.bHandler.addToCart);
+        for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
+            Utils.clickElement(item, this.bHandler.addToCart)
+        }
+
+
+        this.iterateHero(this.selectHero);
+        this.iterateManaCost(this.selectManaCost);
     }
 
     /** Iterate the CardSet-List on the StartPage and doStuff */
@@ -65,9 +71,50 @@ export class CardShop extends SinglePageApplication {
 
     /** Sets the hash-value according to the selected CardSet */
     setCardSet(e: any): void {
-        let cardSetName = e.target.attributes[0].value
+        let cardSetName = e.target.attributes[0].value;
         config.data.setPreviewData.cardSetName = cardSetName;
+
         Utils.createHash(cardSetName);
         document.getElementById('card-set-name').textContent = Utils.getHashValue('#', 1);
+    }
+
+
+
+    // TODO
+    // Change CreateHash-Function:
+    // - needs to create "#filter/"
+    // Filters need to be in this format:
+    // {"filter1":["value1","value2"],"filter2":["value1"]} etc.
+
+
+
+    iterateHero(doStuff: any): void {
+        Utils.iterateUl(document.getElementById('hero-filter').children[1].children, doStuff);
+    }
+
+    selectHero = (hero: any): void => {
+        Utils.clickElement(hero, this.setHero);
+    }
+
+    setHero(e: any): void {
+        let hero = e.target.attributes[0].value;
+
+        Utils.createHash(hero);
+    }
+
+
+
+    iterateManaCost(doStuff: any): void {
+        Utils.iterateUl(document.getElementById('mana-filter').children[1].children, doStuff);
+    }
+
+    selectManaCost = (mana: any): void => {
+        Utils.clickElement(mana, this.setManaCost);
+    }
+
+    setManaCost(e: any): void {
+        let mana = e.target.attributes[0].value;
+
+        Utils.createHash(mana);
     }
 }

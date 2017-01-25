@@ -13,10 +13,14 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
     </header>
 
     <section id="preview-filters">
-        <h2>Select Hero:</h2>        
-        ${rService.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[1]])}
-        <h2>Mana Cost:</h2>
-        ${rService.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[2]])}
+        <section id="hero-filter">
+            <h2>Select Hero:</h2>        
+            ${rService.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[1]])}
+        </section>
+        <section id ="mana-filter">
+            <h2>Mana Cost:</h2>
+            ${rService.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[2]])}
+        </section>
     </section>
 
     <section id="preview-main">
@@ -24,7 +28,7 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
 
     <footer id="preview-foot">
         <img src="../assets/images/shoppingCart.png" alt="Shopping Cart" />
-        <button class="add-to-cart">Add to Cart</button>
+        <button class="add-to-cart-btn">Add to Cart</button>
     </footer>
 
 </article>`

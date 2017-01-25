@@ -22,7 +22,7 @@ export const startPage = (rService: RenderService, data: { startPageData }) => {
 
     <footer id="start-foot">
         <img src="../assets/images/shoppingCart.png" alt="Shopping Cart" />
-        <button class="add-to-cart">Add to Cart</Button>
+        <button class="add-to-cart-btn">Add to Cart</Button>
     </footer>
 
 </article>`
