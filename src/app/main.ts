@@ -1,7 +1,7 @@
 import '../assets/styles/styles.scss';
 import { FetchResource } from './modules/fetchResource';
-import { FetchService } from './modules/fetchService';
-import { Renderer } from './modules/renderer';
+import { FetchService } from './modules/services/fetchService';
+import { RenderService } from './modules/services/renderService';
 import { templates, TemplateHandler } from './templates/templates';
 import { CardShop } from './modules/cardShop';
 import { ShoppingCart } from './modules/shoppingCart';
@@ -14,16 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
     //Initialization
     let fService: FetchService = new FetchService();
     let fResource: FetchResource = new FetchResource(fService);
-    let renderer: Renderer = new Renderer();
-    let tHandler: TemplateHandler = new TemplateHandler(templates(renderer));
+    let rService: RenderService = new RenderService();
+    let tHandler: TemplateHandler = new TemplateHandler(templates(rService));
     let cart: ShoppingCart = new ShoppingCart();
-    let shop: CardShop = new CardShop(fResource, tHandler, renderer, cart);
+    let shop: CardShop = new CardShop(fResource, tHandler, rService, cart);
 
     //Render Application
     shop.start();
 
     //Testing
     //testing();
-    let cart2: ShoppingCart = new ShoppingCart();
-    let shop2: CardShop = new CardShop(fResource, tHandler, renderer, cart);
 });

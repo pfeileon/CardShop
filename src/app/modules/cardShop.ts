@@ -2,7 +2,7 @@ import { config } from '../config/config';
 import * as Utils from './utilities';
 import { FetchResource } from './fetchResource';
 import { TemplateHandler, templates } from '../templates/templates';
-import { Renderer } from './renderer';
+import { RenderService } from './services/renderService';
 import { ShoppingCart } from './shoppingCart';
 import { SinglePageApplication } from './abstracts/singlePageApplication'
 import { CardPack } from './cardPack'
@@ -15,18 +15,18 @@ export class CardShop extends SinglePageApplication {
     protected content: any;
     protected fResource: FetchResource;
     protected tHandler: TemplateHandler;
-    protected renderer: Renderer;
+    protected rService: RenderService;
     /** Chosen product */
     private cart: ShoppingCart;
     private item: {};
     private allCards: any;
 
     /** Warns after first instantiation */
-    constructor(fResource: FetchResource, tHandler: TemplateHandler, renderer: Renderer, cart: ShoppingCart) {
-        super(fResource, tHandler, renderer);
+    constructor(fResource: FetchResource, tHandler: TemplateHandler, RenderService: RenderService, cart: ShoppingCart) {
+        super(fResource, tHandler, RenderService);
         this.fResource = fResource;
         this.tHandler = tHandler;
-        this.renderer = renderer;
+        this.rService = RenderService;
         this.cart = cart;
     }
 
@@ -82,7 +82,7 @@ export class CardShop extends SinglePageApplication {
         this.fResource.getCardSet(Utils.getHashValue('#', 1))
             .then(data => {
                 let cardSetData = data;
-                this.renderer.showCards(cardSetData);
+                this.rService.showCards(cardSetData);
             })
     };
 

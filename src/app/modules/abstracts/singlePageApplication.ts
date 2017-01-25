@@ -2,7 +2,7 @@ import { PseudoSingleton } from './pseudoSingleton'
 import * as Utils from '../utilities';
 import { FetchResource } from '../fetchResource';
 import { TemplateHandler, templates } from '../../templates/templates';
-import { Renderer } from '../renderer';
+import { RenderService } from '../services/renderService';
 
 'use strict';
 
@@ -18,10 +18,10 @@ export abstract class SinglePageApplication extends PseudoSingleton {
 
     protected abstract content: any;
     protected abstract tHandler: TemplateHandler;
-    protected abstract renderer: Renderer;
+    protected abstract rService: RenderService;
 
     /** Warns after first instantiation */
-    constructor(fResource: FetchResource, tHandler: TemplateHandler, renderer: Renderer) {
+    constructor(fResource: FetchResource, tHandler: TemplateHandler, rService: RenderService) {
         super(SinglePageApplication.ctorArg);
     }
 
@@ -30,7 +30,7 @@ export abstract class SinglePageApplication extends PseudoSingleton {
     start(): void {
         //Render App
         this.content = this.tHandler.insertAllTemplates(this.tHandler.templates);
-        this.renderer.render(this.content);
+        this.rService.render(this.content);
 
         // Implementation-specific methods are called
         this.loadSpecifics();

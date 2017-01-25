@@ -4,7 +4,7 @@ let record = (item) => {
     return `<li data-id="${item}">${item}</li>`;
 };
 
-export class Renderer {
+export class RenderService {
 
     /** Returns content as string */
     render(content: any): any {

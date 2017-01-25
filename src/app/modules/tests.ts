@@ -1,10 +1,10 @@
 import { config } from '../config/config';
 import * as Utils from './utilities'
 import { Card } from './card';
-import { FetchService } from './fetchService';
+import { FetchService } from './services/fetchService';
 import { FetchResource } from './fetchResource';
 import { templates, TemplateHandler } from '../templates/templates'
-import { Renderer } from './renderer';
+import { RenderService } from './services/renderService';
 
 export function testing() {
     let fService = new FetchService;

@@ -1,9 +1,9 @@
-import { Renderer } from '../modules/renderer';
+import { RenderService } from '../modules/services/renderService';
 
 'use strict'
 
 /** Set Preview Template */
-export const setPreview = (renderer: Renderer, data: { setPreviewData }) => {
+export const setPreview = (rService: RenderService, data: { setPreviewData }) => {
     return `<article>
 
     <header id="preview-head">
@@ -14,9 +14,9 @@ export const setPreview = (renderer: Renderer, data: { setPreviewData }) => {
 
     <section id="preview-filters">
         <h2>Select Hero:</h2>        
-        ${renderer.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[1]])}
+        ${rService.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[1]])}
         <h2>Mana Cost:</h2>
-        ${renderer.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[2]])}
+        ${rService.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[2]])}
     </section>
 
     <section id="preview-main">
