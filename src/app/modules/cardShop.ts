@@ -4,7 +4,7 @@ import { FetchResource } from './fetchResource';
 import { TemplateHandler, templates } from '../templates/templates';
 import { Renderer } from './renderer';
 import { ShoppingCart } from './shoppingCart';
-import { SinglePageApplication } from './singlePageApplication'
+import { SinglePageApplication } from './abstracts/singlePageApplication'
 import { CardPack } from './cardPack'
 
 'use strict';

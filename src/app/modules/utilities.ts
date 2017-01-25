@@ -66,13 +66,6 @@ export function luhnAlgorithm(value: string) {
     return (nCheck % 10) === 0;
 }
 
-export function instanceCheck(exists: boolean, message: string) {
-    if (exists) {
-        console.log(message);
-    }
-    return true;
-}
-
 /** Toggles the class value of a specified HTMLElement */
 export function toggleCssClass(id: string, cssClass: string): void {
     document.getElementById(id).classList.toggle(cssClass);

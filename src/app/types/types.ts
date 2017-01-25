@@ -3,7 +3,7 @@ import * as Utils from '../modules/utilities'
 
 /** Generic type for callback functions */
 export interface Callback<T, TResult> {
-    (arg: T): TResult;
+    (ctorArg: T): TResult;
 }
 
 // Hack for fetch-API
@@ -47,15 +47,5 @@ export interface HardcodedData {
         cardSetName: string;
         heroes: string[],
         mana: number[]
-    }
-}
-
-/** Abstract basis for classes which are normally only instantiated once during runtime */
-export abstract class PseudoSingleton {
-    private static exists: boolean;
-    static readonly message: string = 'Are you sure that you want another instance?';
-    abstract existsCheck(): void;
-    constructor() {
-        this.existsCheck();
     }
 }

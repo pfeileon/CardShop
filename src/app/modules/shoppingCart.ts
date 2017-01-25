@@ -1,13 +1,20 @@
-import { PseudoSingleton } from '../types/types'
+import { PseudoSingleton } from './abstracts/pseudoSingleton'
 import * as Utils from './utilities'
 import { Customer } from './customer'
 
 'use strict';
 
-export class ShoppingCart implements PseudoSingleton {
+export class ShoppingCart extends PseudoSingleton {
 
     //Properties
+    private static name: string;
     private static exists: boolean = false;
+    private static pseudoSingletonArg: { exists: boolean, message: string } = {
+        exists: ShoppingCart.exists,
+        message: `${ShoppingCart.name}: ${PseudoSingleton.message}`
+    };
+
+
     private customer: Customer;
     /** All items in the cart */
     items: {}[] = new Array<{}>();
@@ -15,7 +22,7 @@ export class ShoppingCart implements PseudoSingleton {
     //Constructor
     /** Warns after first instantiation */
     constructor() {
-        this.existsCheck();
+        super(ShoppingCart.pseudoSingletonArg);
     }
 
     //Methods
@@ -31,9 +38,5 @@ export class ShoppingCart implements PseudoSingleton {
     */
     spliceFromCart = (i: number): void => {
         this.items.splice(i, 1);
-    }
-
-    existsCheck() {
-        ShoppingCart.exists = Utils.instanceCheck(ShoppingCart.exists, PseudoSingleton.message);
     }
 }

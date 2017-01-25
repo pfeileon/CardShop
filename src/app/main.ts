@@ -24,4 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Testing
     //testing();
+    let cart2: ShoppingCart = new ShoppingCart();
+    let shop2: CardShop = new CardShop(fResource, tHandler, renderer, cart);
 });
