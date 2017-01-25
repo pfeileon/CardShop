@@ -7,6 +7,8 @@ import { CardShop } from './modules/cardShop';
 import { ShoppingCart } from './modules/shoppingCart';
 import { testing } from './modules/tests';
 
+import { ButtonHandler } from './modules/buttonHandler';
+
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,7 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let rService: RenderService = new RenderService();
     let tHandler: TemplateHandler = new TemplateHandler(templates(rService));
     let cart: ShoppingCart = new ShoppingCart();
-    let shop: CardShop = new CardShop(fResource, tHandler, rService, cart);
+    let bHandler: ButtonHandler = new ButtonHandler(fResource, rService, cart);
+    let shop: CardShop = new CardShop(fResource, tHandler, rService, cart, bHandler);
 
     //Render Application
     shop.start();
