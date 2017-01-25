@@ -29,7 +29,8 @@ export class CardPack {
     /** Opens a purchased CardPack: Assign Cards to its Card[] */
     private openCardPack(): void {
         let cardSet = this.fResource.getCardSet(this.setName);
-        for (let i: number = 0; i < 5; i++) {
+        this.cardPack = new Array<Card>(5);
+        for (let i: number = 0; i < this.cardPack.length; i++) {
             this.cardPack[i] = this.generateCard(cardSet);
         }
     }

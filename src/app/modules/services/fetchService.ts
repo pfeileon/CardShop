@@ -1,8 +1,8 @@
-import { config } from '../config/config';
+import { config } from '../../config/config';
 // Hack for fetch-API
 declare const fetch;
-import { Headers, Request, Response, Promise, Init } from '../types/types'
-import { fetchAsync } from './utilities';
+import { Headers, Request, Response, Promise, Init } from '../../types/types'
+import { fetchAsync } from '../utilities';
 
 'use strict';
 
