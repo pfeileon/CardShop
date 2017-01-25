@@ -2,16 +2,16 @@ import { Template } from '../types/types';
 import { config } from '../config/config';
 import { startPage } from './startPage';
 import { setPreview } from './setPreview';
-import { Renderer } from '../modules/renderer';
+import { RenderService } from '../modules/services/renderService';
 
-export const templates = (renderer: Renderer) => [{
+export const templates = (rService: RenderService) => [{
     id: 'start-page',
     where: 'afterbegin',
-    html: startPage(renderer, config.data)
+    html: startPage(rService, config.data)
 }, {
     id: 'set-preview',
     where: 'afterbegin',
-    html: setPreview(renderer, config.data)
+    html: setPreview(rService, config.data)
 }]
 
 /** All templates with exact position */
