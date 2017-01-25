@@ -27,12 +27,12 @@ export class CardShop extends SinglePageApplication {
     private bHandler: ButtonHandler;
 
     /** Warns after first instantiation */
-    constructor(fResource: FetchResource, tHandler: TemplateHandler, RenderService: RenderService, cart: ShoppingCart, bHandler: ButtonHandler) {
-        super(fResource, tHandler, RenderService);
-        this.fResource = fResource;
+    constructor(tHandler: TemplateHandler, bHandler: ButtonHandler) {
+        super(bHandler.FResource, tHandler, bHandler.RService);
+        this.fResource = bHandler.FResource;
         this.tHandler = tHandler;
-        this.rService = RenderService;
-        this.cart = cart;
+        this.rService = bHandler.RService;
+        this.cart = bHandler.Cart;
         this.bHandler = bHandler;
     }
 

@@ -14,6 +14,18 @@ export class ButtonHandler {
     private rService: RenderService;
     private cart: ShoppingCart;
 
+    public get FResource() {
+        return this.fResource;
+    }
+
+    public get RService() {
+        return this.rService;
+    }
+
+    public get Cart() {
+        return this.cart;
+    }
+    
     constructor(fResource: FetchResource, rService: RenderService, cart: ShoppingCart) {
         this.fResource = fResource;
         this.rService = rService;
