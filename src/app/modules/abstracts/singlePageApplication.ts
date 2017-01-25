@@ -1,7 +1,7 @@
 import { PseudoSingleton } from './pseudoSingleton'
 import * as Utils from '../utilities';
 import { FetchResource } from '../fetchResource';
-import { TemplateHandler, templates } from '../../templates/templates';
+import { TemplateHandler, templates } from '../../templates/templateHandler';
 import { RenderService } from '../services/renderService';
 
 'use strict';
