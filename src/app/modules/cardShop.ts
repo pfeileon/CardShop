@@ -1,7 +1,7 @@
 import { config } from '../config/config';
 import * as Utils from './utilities';
 import { FetchResource } from './fetchResource';
-import { TemplateHandler, templates } from '../templates/templateHandler';
+import { TemplateHandler, templates } from '../templates/TemplateHandler';
 import { RenderService } from './services/renderService';
 import { ShoppingCart } from './shoppingCart';
 import { SinglePageApplication } from './abstracts/singlePageApplication';
@@ -22,7 +22,6 @@ export class CardShop extends SinglePageApplication {
     private cart: ShoppingCart;
     private bHandler: ButtonHandler;
     private item: {};
-    private allCards: any;
 
     /** Warns after first instantiation */
     constructor(tHandler: TemplateHandler, bHandler: ButtonHandler) {
@@ -75,7 +74,9 @@ export class CardShop extends SinglePageApplication {
         config.data.setPreviewData.cardSetName = cardSetName;
 
         Utils.createHash(cardSetName);
-        document.getElementById('card-set-name').textContent = Utils.getHashValue('#', 1);
+
+        try {document.getElementById('card-set-name').textContent = Utils.getFilters()["cardSet"];}
+        catch(error) {document.getElementById('card-set-name').textContent = Utils.getHashValue("#", 1)}
     }
 
 
@@ -96,10 +97,16 @@ export class CardShop extends SinglePageApplication {
         Utils.clickElement(hero, this.setHero);
     }
 
-    setHero(e: any): void {
-        let hero = e.target.attributes[0].value;
+    setHero = (e: any): void => {
+        let heroValue = e.target.attributes[0].value;
 
-        Utils.createHash(hero);
+        let hero = Utils.getFilters();
+        hero["hero"] = heroValue;
+        Utils.createHash(`filters/${JSON.stringify(hero)}`);
+
+        if (this.bHandler.LastFetch !== undefined) {
+            this.rService.showCards(this.bHandler.LastFetch);
+        }
     }
 
 
@@ -112,9 +119,21 @@ export class CardShop extends SinglePageApplication {
         Utils.clickElement(mana, this.setManaCost);
     }
 
-    setManaCost(e: any): void {
-        let mana = e.target.attributes[0].value;
+    setManaCost = (e: any): void => {
+        let manaCostValue = e.target.attributes[0].value;
 
-        Utils.createHash(mana);
+        let manaCost = Utils.getFilters();
+        if (manaCost["manaCost"] !== undefined && manaCost["manaCost"] === manaCostValue) {
+            delete (manaCost["manaCost"]);
+        }
+        else {
+            manaCost["manaCost"] = manaCostValue;
+        }
+
+        Utils.createHash(`filters/${JSON.stringify(manaCost)}`);
+
+        if (this.bHandler.LastFetch !== undefined) {
+            this.rService.showCards(this.bHandler.LastFetch);
+        }
     }
 }
