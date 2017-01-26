@@ -1,3 +1,5 @@
+import * as Utils from '../utilities'
+
 'use strict';
 
 let record = (item) => {
@@ -18,11 +20,15 @@ export class RenderService {
 
     /** Inserts the images of the cards of a fetch call */
     showCards(cardSetData: any) {
+        let mana: string = Utils.getFilters()["manaCost"];
+        let hero: string = Utils.getFilters()["hero"];
         // First remove old code
         document.getElementById("preview-main").innerText = "";
         for (let card of cardSetData) {
-            if (card.img != undefined && card.collectible === true) {
-                document.getElementById("preview-main").insertAdjacentHTML("afterbegin", `<img src="${card.img}" alt = "${card.name}" />`);
+            if (card.img !== undefined && card.collectible === true) {
+                if ((hero === undefined || (hero !== undefined && card.playerClass === hero)) && (mana === undefined || (mana !== undefined && card.cost == mana))) {
+                    document.getElementById("preview-main").insertAdjacentHTML("beforeend", `<img src="${card.img}" alt = "${card.name}" />`);
+                }
             }
         }
     }

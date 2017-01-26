@@ -70,3 +70,8 @@ export function luhnAlgorithm(value: string) {
 export function toggleCssClass(id: string, cssClass: string): void {
     document.getElementById(id).classList.toggle(cssClass);
 }
+
+export function getFilters(): {} {
+    let filters: any = JSON.parse(getHashValue("#", 1).split("/")[1]);
+    return filters;
+}
