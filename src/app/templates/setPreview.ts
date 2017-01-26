@@ -8,6 +8,7 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
 
     <header id="preview-head">
         <h1>Preview Card Set: <span id="card-set-name">${data.setPreviewData[Object.keys(data.setPreviewData)[0]]}</span></h1>
+        ${rService.insertList(data["startPageData"][Object.keys(data["startPageData"])[0]])}
         <button id="return-btn">Return</button>
         <button id="goto-cart">Goto Cart </button>
     </header>
