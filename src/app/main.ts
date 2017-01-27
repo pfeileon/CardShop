@@ -16,13 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
     //Initialization
     let fService: FetchService = new FetchService();
     let fResource: FetchResource = new FetchResource(fService);
-    let rService: RenderService = new RenderService();
+    let rService: RenderService = new RenderService(fResource);
     let tHandler: TemplateHandler = new TemplateHandler(templates(rService));
     let cart: ShoppingCart = new ShoppingCart();
     let bHandler: ButtonHandler = new ButtonHandler(fResource, rService, cart);
     let shop: CardShop = new CardShop(tHandler, bHandler);
 
-    //Render Application
     shop.start();
 
     //Testing

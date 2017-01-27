@@ -28,14 +28,22 @@ export abstract class SinglePageApplication extends PseudoSingleton {
     // Methods
     /** Start the app */
     start(): void {
-        //Render App
+        // Render App
         this.content = this.tHandler.insertAllTemplates(this.tHandler.templates);
         this.rService.render(this.content);
 
         // Implementation-specific methods are called
         this.loadSpecifics();
+
+        // User input is processed
+        window.onhashchange = (e) => {
+            this.onHashChange();
+        }
     };
 
     /** Implements a call of all methods needed at start-up for the specific implementation of SinglePageApplication  */
-    abstract loadSpecifics(): void;
+    abstract loadSpecifics = (): void => { }
+
+    /** Implements what happens when the hash value changes during runtime */
+    abstract onHashChange = (): void => { }
 }

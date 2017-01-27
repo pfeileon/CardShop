@@ -34,7 +34,7 @@ export class CardShop extends SinglePageApplication {
     }
 
     // Methods
-    loadSpecifics(): void {
+    loadSpecifics = (): void => {
         //Select Card Set
         this.iterateCardSet(this.selectCardSet);
 
@@ -52,6 +52,10 @@ export class CardShop extends SinglePageApplication {
 
         this.iterateHero(this.selectHero);
         this.iterateManaCost(this.selectManaCost);
+    }
+
+    onHashChange = (): void => {
+        this.rService.render(this.content);
     }
 
     /** Iterate the CardSet-List on the StartPage and doStuff */
@@ -75,13 +79,6 @@ export class CardShop extends SinglePageApplication {
             let filter = Utils.getFilters();
             filter["cardSet"] = cardSetName;
             Utils.createHash(`filters/${JSON.stringify(filter)}`);
-
-            this.fResource.getCardSet(Utils.getFilters()["cardSet"])
-                .then(data => {
-                    let cardSetData = data;
-                    this.bHandler.LastFetch = data;
-                    this.rService.showCards(cardSetData);
-                })
         }
         catch (error) {
             Utils.createHash(cardSetName);
@@ -113,10 +110,6 @@ export class CardShop extends SinglePageApplication {
         let filter = Utils.getFilters();
         filter["hero"] = heroValue;
         Utils.createHash(`filters/${JSON.stringify(filter)}`);
-
-        if (this.bHandler.LastFetch !== undefined) {
-            this.rService.showCards(this.bHandler.LastFetch);
-        }
     }
 
     iterateManaCost(doStuff: any): void {
@@ -139,9 +132,5 @@ export class CardShop extends SinglePageApplication {
         }
 
         Utils.createHash(`filters/${JSON.stringify(filter)}`);
-
-        if (this.bHandler.LastFetch !== undefined) {
-            this.rService.showCards(this.bHandler.LastFetch);
-        }
     }
 }
