@@ -21,7 +21,7 @@ export function iterateUl(ul: any, doStuff: Callback<HTMLElement, void>): void {
 
 /** Adds an encoded hash-value to the URL */
 export function createHash(filters: string): void {
-    if (filters != null) {
+    if (filters !== undefined) {
         window.location.hash = encodeURI(`#${filters}`)
     }
     else {

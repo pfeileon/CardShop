@@ -92,13 +92,14 @@ export class CardShop extends SinglePageApplication {
         }
 
         try {
-            //document.getElementById('start-card-set-name').textContent = Utils.getFilters()["cardSet"];
             for (let item of <any>document.getElementsByClassName("card-set-name")) {
                 item.textContent = Utils.getFilters()["cardSet"];
             }
         }
         catch (error) {
-            document.getElementsByClassName("card-set-name")[0].textContent = Utils.getHashValue("#", 1)
+            for (let item of <any>document.getElementsByClassName("card-set-name")) {
+                item.textContent = Utils.getHashValue("#", 1)
+            }
         }
     }
 

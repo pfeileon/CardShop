@@ -10,6 +10,7 @@ export class RenderService {
 
     /** Returns content as string */
     render(content: any): any {
+        Utils.createHash("");
         return `${content}`;
     }
 
