@@ -10,8 +10,36 @@ export class RenderService {
 
     /** Returns content as string */
     render(content: any): any {
-        Utils.createHash("");
-        return `${content}`;
+        
+        let temp;
+        if (decodeURI(window.location.hash).includes("/")) {
+            temp = decodeURI(window.location.hash.split("/")[0]);
+        }
+        else temp = "";
+        console.log(`debug: "${temp}"`);
+
+        switch (temp) {
+            case undefined:
+                Utils.toggleCssClass("set-preview", "noDisplay");
+                Utils.toggleCssClass("error-page", "noDisplay");
+                return `${content}`;
+            case "":
+                Utils.toggleCssClass("set-preview", "noDisplay");
+                Utils.toggleCssClass("error-page", "noDisplay");
+                return `${content}`;
+            case "#":
+                Utils.toggleCssClass("set-preview", "noDisplay");
+                Utils.toggleCssClass("error-page", "noDisplay");
+                return `${content}`;
+            case "#filters":
+                Utils.toggleCssClass("start-page", "noDisplay");
+                Utils.toggleCssClass("error-page", "noDisplay");
+                return `${content}`;
+            default:
+                Utils.toggleCssClass("start-page", "noDisplay");
+                Utils.toggleCssClass("set-preview", "noDisplay");
+                return `${content}`;
+        }
     }
 
     /** Inserts an <ul> with the passed array as <li>-elements */

@@ -30,7 +30,7 @@ export function createHash(filters: string): void {
 }
 
 /** Returns the string after the hash */
-export function getHashValue(seperator: string, pos: number): string {
+export function getHashValue(seperator: string = "#", pos: number = 1): string {
     return decodeURI(window.location.hash).split(seperator)[pos]
 }
 
@@ -72,6 +72,6 @@ export function toggleCssClass(id: string, cssClass: string): void {
 }
 
 export function getFilters(): {} {
-    let filters: any = JSON.parse(getHashValue("#", 1).split("/")[1]);
+    let filters: any = JSON.parse(getHashValue().split("/")[1]);
     return filters;
 }

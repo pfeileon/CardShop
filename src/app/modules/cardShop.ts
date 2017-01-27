@@ -35,10 +35,6 @@ export class CardShop extends SinglePageApplication {
 
     // Methods
     loadSpecifics(): void {
-        //Set invisible
-        Utils.toggleCssClass("set-preview", "noDisplay");
-        Utils.toggleCssClass("error-page", "noDisplay");
-
         //Select Card Set
         this.iterateCardSet(this.selectCardSet);
 

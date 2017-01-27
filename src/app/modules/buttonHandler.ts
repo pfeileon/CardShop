@@ -19,7 +19,7 @@ export class ButtonHandler {
     public get RService() { return this.rService; }
     public get Cart() { return this.cart; }
     public get LastFetch() { return this.lastFetch; }
-    public set LastFetch(LastFetch) { this.lastFetch = LastFetch; }
+    public set LastFetch(lastFetch) { this.lastFetch = lastFetch; }
 
     constructor(fResource: FetchResource, rService: RenderService, cart: ShoppingCart) {
         this.fResource = fResource;
