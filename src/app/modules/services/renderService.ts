@@ -23,31 +23,42 @@ export class RenderService {
             hashValue = decodeURI(window.location.hash.split("/")[0]);
         }
         else hashValue = "";
-        console.log(`debug: "${hashValue}"`);
 
         switch (hashValue) {
             case undefined:
                 this.displayCheck(1);
                 break;
+                
             case "":
                 this.displayCheck(1);
                 break;
+
             case "#":
                 this.displayCheck(1);
                 break;
-            case "#filters": {
+
+            case "#filters":
                 this.displayCheck(2);
+
                 let filter: {} = Utils.getFilters();
-                this.fResource.getCardSet(`${filter["cardSet"]}?cost=${filter["manaCost"]}`)
+                let setName: string
+                if (filter["manaCost"] === undefined) {
+                    setName = `${filter["cardSet"]}?collectible=1`;
+                }
+                else {
+                    setName = `${filter["cardSet"]}?collectible=1&cost=${filter["manaCost"]}`;
+                }
+                this.fResource.getCardSet(setName)
                     .then(data => {
                         this.showCards(data);
                     })
                 break;
-            }
+            
             default:
                 this.displayCheck(3);
                 break;
         }
+        
         return `${content}`;
     }
 
@@ -71,7 +82,7 @@ export class RenderService {
         // Iterate the list of cards
         for (card of cardSetData) {
             // Check if img-path exists and if card is collectible
-            if (card.img !== undefined && card.collectible === true) {
+            if (card.img !== undefined) {
 
                 heroFilterPassed = (
                     hero === undefined ||
@@ -102,6 +113,8 @@ export class RenderService {
 
         switch (selector) {
             case 1: {
+                document.getElementsByClassName("card-set-name")[0].textContent = Utils.getHashValue("#", 1);
+
                 if (startPageShown) {
                     Utils.toggleCssClass("start-page", "noDisplay");
                 }
@@ -114,6 +127,8 @@ export class RenderService {
                 break;
             }
             case 2: {
+                document.getElementsByClassName("card-set-name")[1].textContent = Utils.getFilters()["cardSet"];
+
                 if (setPreviewShown) {
                     Utils.toggleCssClass("set-preview", "noDisplay");
                 }

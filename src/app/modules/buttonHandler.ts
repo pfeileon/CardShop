@@ -36,7 +36,7 @@ export class ButtonHandler {
         }
 
         try {
-            let cardSetName = Utils.getHashValue('#', 1);
+            let cardSetName = Utils.getHashValue();
             Utils.createHash(`filters/{"cardSet":"${cardSetName}","hero":"Druid"}`);
         }
         catch (error) {
@@ -54,9 +54,6 @@ export class ButtonHandler {
 
     /** What happens when you click the Return Button */
     return = (): void => {
-        Utils.toggleCssClass("start-page", "noDisplay");
-        Utils.toggleCssClass("set-preview", "noDisplay");
-
         try {
             Utils.createHash(Utils.getFilters()["cardSet"]);
         }
@@ -67,7 +64,15 @@ export class ButtonHandler {
 
     /** What happens when you click the Add To Cart Button */
     addToCart = (): void => {
-        let pack: CardPack = new CardPack(Utils.getHashValue('#', 1) || "Classic", this.fResource);
+        let setName: string;
+        if (Utils.getHashValue().includes("/")) {
+            setName = Utils.getFilters()["cardSet"];
+        }
+        else {
+            setName = Utils.getHashValue();
+        }
+
+        let pack: CardPack = new CardPack(setName || "Classic", this.fResource);
         this.cart.pushToCart(pack);
         console.log(this.cart.items);
     }

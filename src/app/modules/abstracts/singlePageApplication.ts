@@ -37,13 +37,14 @@ export abstract class SinglePageApplication extends PseudoSingleton {
 
         // User input is processed
         window.onhashchange = (e) => {
-            this.onHashChange();
+            this.rService.render(this.content);
+        }
+
+        window.onload = (e) => {
+            this.rService.render(this.content);
         }
     };
 
     /** Implements a call of all methods needed at start-up for the specific implementation of SinglePageApplication  */
     abstract loadSpecifics = (): void => { }
-
-    /** Implements what happens when the hash value changes during runtime */
-    abstract onHashChange = (): void => { }
 }

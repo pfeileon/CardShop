@@ -26,6 +26,7 @@ export class CardShop extends SinglePageApplication {
     /** Warns after first instantiation */
     constructor(tHandler: TemplateHandler, bHandler: ButtonHandler) {
         super(bHandler.FResource, tHandler, bHandler.RService);
+
         this.fResource = bHandler.FResource;
         this.tHandler = tHandler;
         this.rService = bHandler.RService;
@@ -34,6 +35,11 @@ export class CardShop extends SinglePageApplication {
     }
 
     // Methods
+    /** 
+     * Abstract --> implementation 
+     * 
+     * see Parent
+    */
     loadSpecifics = (): void => {
         //Select Card Set
         this.iterateCardSet(this.selectCardSet);
@@ -49,16 +55,12 @@ export class CardShop extends SinglePageApplication {
             Utils.clickElement(item, this.bHandler.addToCart)
         }
 
-
+        // Filters
         this.iterateHero(this.selectHero);
         this.iterateManaCost(this.selectManaCost);
     }
 
-    onHashChange = (): void => {
-        this.rService.render(this.content);
-    }
-
-    /** Iterate the CardSet-List on the StartPage and doStuff */
+    /** Iterate the CardSet-List on the StartPage and SetPreview and doStuff */
     iterateCardSet(doStuff: any): void {
         for (let item of <any>document.getElementsByClassName("set-filter")) {
             Utils.iterateUl(item.children[1].children, doStuff);
@@ -75,24 +77,13 @@ export class CardShop extends SinglePageApplication {
         let cardSetName = e.target.attributes[0].value;
         config.data.setPreviewData.cardSetName = cardSetName;
 
-        try {
+        if (Utils.getHashValue().includes("/")) {
             let filter = Utils.getFilters();
             filter["cardSet"] = cardSetName;
             Utils.createHash(`filters/${JSON.stringify(filter)}`);
         }
-        catch (error) {
+        else {
             Utils.createHash(cardSetName);
-        }
-
-        try {
-            for (let item of <any>document.getElementsByClassName("card-set-name")) {
-                item.textContent = Utils.getFilters()["cardSet"];
-            }
-        }
-        catch (error) {
-            for (let item of <any>document.getElementsByClassName("card-set-name")) {
-                item.textContent = Utils.getHashValue("#", 1)
-            }
         }
     }
 
