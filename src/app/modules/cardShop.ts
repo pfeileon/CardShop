@@ -60,7 +60,9 @@ export class CardShop extends SinglePageApplication {
 
     /** Iterate the CardSet-List on the StartPage and doStuff */
     iterateCardSet(doStuff: any): void {
-        Utils.iterateUl(document.getElementById('start-filters').children[1].children, doStuff);
+        for (let item of <any>document.getElementsByClassName("set-filter")) {
+            Utils.iterateUl(item.children[1].children, doStuff);
+        }
     }
 
     /** Selects the CardSet on the StartPage */
@@ -69,25 +71,36 @@ export class CardShop extends SinglePageApplication {
     }
 
     /** Sets the hash-value according to the selected CardSet */
-    setCardSet(e: any): void {
+    setCardSet = (e: any): void => {
         let cardSetName = e.target.attributes[0].value;
         config.data.setPreviewData.cardSetName = cardSetName;
 
-        Utils.createHash(cardSetName);
+        try {
+            let filter = Utils.getFilters();
+            filter["cardSet"] = cardSetName;
+            Utils.createHash(`filters/${JSON.stringify(filter)}`);
 
-        try {document.getElementById('card-set-name').textContent = Utils.getFilters()["cardSet"];}
-        catch(error) {document.getElementById('card-set-name').textContent = Utils.getHashValue("#", 1)}
+            this.fResource.getCardSet(Utils.getFilters()["cardSet"])
+                .then(data => {
+                    let cardSetData = data;
+                    this.bHandler.LastFetch = data;
+                    this.rService.showCards(cardSetData);
+                })
+        }
+        catch (error) {
+            Utils.createHash(cardSetName);
+        }
+
+        try {
+            //document.getElementById('start-card-set-name').textContent = Utils.getFilters()["cardSet"];
+            for (let item of <any>document.getElementsByClassName("card-set-name")) {
+                item.textContent = Utils.getFilters()["cardSet"];
+            }
+        }
+        catch (error) {
+            document.getElementsByClassName("card-set-name")[0].textContent = Utils.getHashValue("#", 1)
+        }
     }
-
-
-
-    // TODO
-    // Change CreateHash-Function:
-    // - needs to create "#filter/"
-    // Filters need to be in this format:
-    // {"filter1":["value1","value2"],"filter2":["value1"]} etc.
-
-
 
     iterateHero(doStuff: any): void {
         Utils.iterateUl(document.getElementById('hero-filter').children[1].children, doStuff);
@@ -100,16 +113,14 @@ export class CardShop extends SinglePageApplication {
     setHero = (e: any): void => {
         let heroValue = e.target.attributes[0].value;
 
-        let hero = Utils.getFilters();
-        hero["hero"] = heroValue;
-        Utils.createHash(`filters/${JSON.stringify(hero)}`);
+        let filter = Utils.getFilters();
+        filter["hero"] = heroValue;
+        Utils.createHash(`filters/${JSON.stringify(filter)}`);
 
         if (this.bHandler.LastFetch !== undefined) {
             this.rService.showCards(this.bHandler.LastFetch);
         }
     }
-
-
 
     iterateManaCost(doStuff: any): void {
         Utils.iterateUl(document.getElementById('mana-filter').children[1].children, doStuff);
@@ -122,15 +133,15 @@ export class CardShop extends SinglePageApplication {
     setManaCost = (e: any): void => {
         let manaCostValue = e.target.attributes[0].value;
 
-        let manaCost = Utils.getFilters();
-        if (manaCost["manaCost"] !== undefined && manaCost["manaCost"] === manaCostValue) {
-            delete (manaCost["manaCost"]);
+        let filter = Utils.getFilters();
+        if (filter["manaCost"] !== undefined && filter["manaCost"] === manaCostValue) {
+            delete (filter["manaCost"]);
         }
         else {
-            manaCost["manaCost"] = manaCostValue;
+            filter["manaCost"] = manaCostValue;
         }
 
-        Utils.createHash(`filters/${JSON.stringify(manaCost)}`);
+        Utils.createHash(`filters/${JSON.stringify(filter)}`);
 
         if (this.bHandler.LastFetch !== undefined) {
             this.rService.showCards(this.bHandler.LastFetch);

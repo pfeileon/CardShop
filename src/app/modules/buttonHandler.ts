@@ -19,6 +19,7 @@ export class ButtonHandler {
     public get RService() { return this.rService; }
     public get Cart() { return this.cart; }
     public get LastFetch() { return this.lastFetch; }
+    public set LastFetch(LastFetch) { this.lastFetch = LastFetch; }
 
     constructor(fResource: FetchResource, rService: RenderService, cart: ShoppingCart) {
         this.fResource = fResource;
@@ -34,18 +35,16 @@ export class ButtonHandler {
         if (Utils.getHashValue('#', 1) === undefined) {
             config.data.setPreviewData.cardSetName = "Classic";
             Utils.createHash("Classic");
-
         }
+
         try {
             let cardSetName = Utils.getHashValue('#', 1);
             Utils.createHash(`filters/{"cardSet":"${cardSetName}","hero":"Druid"}`);
         }
-        catch(error) {
+        catch (error) {
             config.data.setPreviewData.cardSetName = "Classic";
             Utils.createHash(`filters/{"cardSet":"${config.data.setPreviewData.cardSetName}","hero":"Druid"}`);
         }
-
-        document.getElementById('card-set-name').textContent = Utils.getFilters()["cardSet"];
 
         this.fResource.getCardSet(Utils.getFilters()["cardSet"])
             .then(data => {
@@ -53,7 +52,7 @@ export class ButtonHandler {
                 this.lastFetch = data;
                 this.rService.showCards(cardSetData);
             })
-    };
+    }
 
     /** What happens when you click the Return Button */
     return = (): void => {
@@ -63,7 +62,7 @@ export class ButtonHandler {
         try {
             Utils.createHash(Utils.getFilters()["cardSet"]);
         }
-        catch(error) {
+        catch (error) {
             Utils.createHash("Classic");
         }
     }
