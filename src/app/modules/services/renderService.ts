@@ -27,18 +27,22 @@ export class RenderService {
         switch (hashValue) {
             case undefined:
                 this.displayCheck(1);
+                history.replaceState(content, "Start-Page")
                 break;
                 
             case "":
                 this.displayCheck(1);
+                history.replaceState(content, "Start-Page")
                 break;
 
             case "#":
                 this.displayCheck(1);
+                history.replaceState(content, "Start-Page")
                 break;
 
             case "#filters":
                 this.displayCheck(2);
+                history.replaceState(content, "Set-Preview")
 
                 let filter: {} = Utils.getFilters();
                 let setName: string
@@ -56,6 +60,7 @@ export class RenderService {
             
             default:
                 this.displayCheck(3);
+                history.replaceState(content, "Error-Page")
                 break;
         }
         
