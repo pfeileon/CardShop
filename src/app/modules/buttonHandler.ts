@@ -67,7 +67,13 @@ export class ButtonHandler {
         let setName: string;
         // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
         if (Utils.getHashValue().search("/") !== -1) {
-            setName = Utils.getFilters()["cardSet"];
+            if (Utils.getHashValue()["cardSet"] !== undefined) {
+                setName = Utils.getFilters()["cardSet"];
+            }
+            else {
+                alert("Please choose a Card Set first!");
+                return;
+            }
         }
         else {
             setName = Utils.getHashValue();
