@@ -77,9 +77,15 @@ export class CardShop extends SinglePageApplication {
         let cardSetName = e.target.attributes[0].value;
         config.data.setPreviewData.cardSetName = cardSetName;
 
-        if (Utils.getHashValue().includes("/")) {
+        // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
+        if (Utils.getHashValue() !== undefined && Utils.getHashValue().search("/") !== -1) {
             let filter = Utils.getFilters();
-            filter["cardSet"] = cardSetName;
+            if (filter["cardSet"] !== undefined && filter["cardSet"] === cardSetName) {
+                delete (filter["cardSet"]);
+            }
+            else {
+                filter["cardSet"] = cardSetName;
+            }
             Utils.createHash(`filters/${JSON.stringify(filter)}`);
         }
         else {
@@ -99,7 +105,12 @@ export class CardShop extends SinglePageApplication {
         let heroValue = e.target.attributes[0].value;
 
         let filter = Utils.getFilters();
-        filter["hero"] = heroValue;
+        if (filter["hero"] !== undefined && filter["hero"] === heroValue) {
+            delete (filter["hero"]);
+        }
+        else {
+            filter["hero"] = heroValue;
+        }
         Utils.createHash(`filters/${JSON.stringify(filter)}`);
     }
 

@@ -42,6 +42,7 @@ export abstract class SinglePageApplication extends PseudoSingleton {
 
         window.onload = (e) => {
             this.rService.render(this.content);
+            history.replaceState(this.content, "CardShop")
         }
     };
 

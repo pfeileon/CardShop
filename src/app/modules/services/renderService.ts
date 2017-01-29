@@ -9,6 +9,8 @@ let record = (item) => {
 
 export class RenderService {
 
+    private lastSetName: string;
+    private lastCardData: any;
     private fResource: FetchResource;
 
     constructor(fResource: FetchResource) {
@@ -19,7 +21,8 @@ export class RenderService {
     render(content: any): any {
 
         let hashValue;
-        if (decodeURI(window.location.hash).includes("/")) {
+        // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
+        if (decodeURI(window.location.hash).search("/") !== -1) {
             hashValue = decodeURI(window.location.hash.split("/")[0]);
         }
         else hashValue = "";
@@ -27,43 +30,51 @@ export class RenderService {
         switch (hashValue) {
             case undefined:
                 this.displayCheck(1);
-                history.replaceState(content, "Start-Page")
                 break;
-                
+
             case "":
                 this.displayCheck(1);
-                history.replaceState(content, "Start-Page")
                 break;
 
             case "#":
                 this.displayCheck(1);
-                history.replaceState(content, "Start-Page")
                 break;
 
             case "#filters":
                 this.displayCheck(2);
-                history.replaceState(content, "Set-Preview")
 
                 let filter: {} = Utils.getFilters();
-                let setName: string
-                if (filter["manaCost"] === undefined) {
-                    setName = `${filter["cardSet"]}?collectible=1`;
+                let setName: string = filter["cardSet"];
+                let filterString: string = `${setName}?collectible=1`;
+
+                // let manaCost: string = filter["manaCost"];
+                // if (manaCost !== undefined) {
+                //     filterString += `&cost=${manaCost}`;
+                // }
+                if (this.lastSetName === setName && setName !== undefined) {
+                    this.showCards(this.lastCardData);
+                    console.log("hui!: lastCardData");
                 }
                 else {
-                    setName = `${filter["cardSet"]}?collectible=1&cost=${filter["manaCost"]}`;
+                    this.fResource.getCardData(filter)
+                        .then(cardData => {
+                            if (setName !== undefined) {
+                                this.lastSetName = setName;
+                            }
+                            if (cardData !== undefined) {
+                                this.lastCardData = cardData;
+                            }
+                            this.showCards(cardData);
+                        })
                 }
-                this.fResource.getCardSet(setName)
-                    .then(data => {
-                        this.showCards(data);
-                    })
                 break;
-            
+
             default:
                 this.displayCheck(3);
-                history.replaceState(content, "Error-Page")
+                // history.replaceState(content, "Error-Page")
                 break;
         }
-        
+
         return `${content}`;
     }
 
@@ -73,37 +84,38 @@ export class RenderService {
     };
 
     /** Inserts the images of the cards of a fetch call */
-    showCards(cardSetData: any) {
-        // let mana: string = Utils.getFilters()["manaCost"];
+    showCards(cardData: any) {
+        console.log(cardData);
+        let mana: string = Utils.getFilters()["manaCost"];
         let hero: string = Utils.getFilters()["hero"];
 
         let card: any;
         let heroFilterPassed: boolean;
-        // let manaFilterPassed: boolean;
+        let manaFilterPassed: boolean;
 
         // First remove old code
         document.getElementById("preview-main").innerText = "";
 
         // Iterate the list of cards
-        for (card of cardSetData) {
+        for (card of cardData) {
             // Check if img-path exists and if card is collectible
-            if (card.img !== undefined) {
+            if (card.img !== undefined && card.collectible) {
 
                 heroFilterPassed = (
                     hero === undefined ||
                     (hero !== undefined && card.playerClass === hero)
                 )
 
-                // manaFilterPassed = (
-                //     mana === undefined || (
-                //         mana !== undefined && (
-                //             (card.cost == mana && mana <= "9") ||
-                //             (mana == "10" && card.cost >= "10"))
-                //     )
-                // )
+                manaFilterPassed = (
+                    mana === undefined || (
+                        mana !== undefined && (
+                            (card.cost == mana && mana <= "9") ||
+                            (mana == "10" && card.cost >= "10"))
+                    )
+                )
 
                 // Check filters
-                if (heroFilterPassed) { // && manaFilterPassed) {
+                if (heroFilterPassed && manaFilterPassed) {
                     // Render card image
                     document.getElementById("preview-main").insertAdjacentHTML("beforeend", `<img src="${card.img}" alt = "${card.name}" />`);
                 }

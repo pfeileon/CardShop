@@ -65,7 +65,8 @@ export class ButtonHandler {
     /** What happens when you click the Add To Cart Button */
     addToCart = (): void => {
         let setName: string;
-        if (Utils.getHashValue().includes("/")) {
+        // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
+        if (Utils.getHashValue().search("/") !== -1) {
             setName = Utils.getFilters()["cardSet"];
         }
         else {
