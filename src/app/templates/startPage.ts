@@ -11,8 +11,8 @@ export const startPage = (rService: RenderService, data: { startPageData }) => {
         <button id="goto-cart">Goto Cart</Button>
     </header>
 
-    <section id="start-filters">
-        <h2>Select the Card Set: <span id="card-set-name">${data["setPreviewData"][Object.keys(data["setPreviewData"])[0]]}</span></h2>
+    <section class="set-filter">
+        <h2>Select the Card Set: <span class="card-set-name">${data["setPreviewData"][Object.keys(data["setPreviewData"])[0]]}</span></h2>
         ${rService.insertList(data.startPageData[Object.keys(data.startPageData)[0]])}
         <button id="preview-card-set-btn">Preview Card Set</button>
     </section>

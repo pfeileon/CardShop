@@ -21,7 +21,7 @@ export function iterateUl(ul: any, doStuff: Callback<HTMLElement, void>): void {
 
 /** Adds an encoded hash-value to the URL */
 export function createHash(filters: string): void {
-    if (filters != null) {
+    if (filters !== undefined) {
         window.location.hash = encodeURI(`#${filters}`)
     }
     else {
@@ -30,7 +30,7 @@ export function createHash(filters: string): void {
 }
 
 /** Returns the string after the hash */
-export function getHashValue(seperator: string, pos: number): string {
+export function getHashValue(seperator: string = "#", pos: number = 1): string {
     return decodeURI(window.location.hash).split(seperator)[pos]
 }
 
@@ -72,6 +72,6 @@ export function toggleCssClass(id: string, cssClass: string): void {
 }
 
 export function getFilters(): {} {
-    let filters: any = JSON.parse(getHashValue("#", 1).split("/")[1]);
+    let filters: any = JSON.parse(getHashValue().split("/")[1]);
     return filters;
 }
