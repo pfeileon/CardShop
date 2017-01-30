@@ -1,3 +1,4 @@
+import { config } from '../../config/config';
 import * as Utils from '../utilities';
 import { FetchResource } from "../fetchResource";
 
@@ -17,7 +18,7 @@ export class RenderService {
         this.fResource = fResource;
     }
 
-    /** Returns content as string */
+    /** Renders the page according to the hash */
     render(content: any): any {
 
         let hashValue;
@@ -53,16 +54,16 @@ export class RenderService {
                 // }
                 if (this.lastSetName === setName && setName !== undefined) {
                     this.showCards(this.lastCardData);
-                    console.log("hui!: lastCardData");
                 }
                 else {
                     this.fResource.getCardData(filter)
                         .then(cardData => {
                             if (setName !== undefined) {
                                 this.lastSetName = setName;
-                            }
-                            if (cardData !== undefined) {
-                                this.lastCardData = cardData;
+
+                                if (cardData !== undefined) {
+                                    this.lastCardData = cardData;
+                                }
                             }
                             this.showCards(cardData);
                         })
@@ -85,36 +86,48 @@ export class RenderService {
 
     /** Inserts the images of the cards of a fetch call */
     showCards(cardData: any) {
-        console.log(cardData);
-        let mana: string = Utils.getFilters()["manaCost"];
-        let hero: string = Utils.getFilters()["hero"];
+
+        let manaFilter: string = Utils.getFilters()["manaCost"];
+        let heroFilter: string = Utils.getFilters()["hero"];
 
         let card: any;
+        let cardFilterPassed: boolean;
         let heroFilterPassed: boolean;
         let manaFilterPassed: boolean;
+        let setFilterPassed: boolean;
+
+
 
         // First remove old code
         document.getElementById("preview-main").innerText = "";
 
         // Iterate the list of cards
         for (card of cardData) {
-            // Check if img-path exists and if card is collectible
-            if (card.img !== undefined && card.collectible) {
+
+            cardFilterPassed = (
+                card.collectible &&
+                card.img !== undefined
+            )
+
+            setFilterPassed = (
+                config.data.startPageData.cardSets.indexOf(card.cardSet) !== -1
+            );
+
+            if (cardFilterPassed && setFilterPassed) {
 
                 heroFilterPassed = (
-                    hero === undefined ||
-                    (hero !== undefined && card.playerClass === hero)
-                )
+                    heroFilter === undefined || (
+                        heroFilter !== undefined &&
+                        card.playerClass === heroFilter
+                    ))
 
                 manaFilterPassed = (
-                    mana === undefined || (
-                        mana !== undefined && (
-                            (card.cost == mana && mana <= "9") ||
-                            (mana == "10" && card.cost >= "10"))
-                    )
-                )
+                    manaFilter === undefined || (
+                        manaFilter !== undefined && (
+                            (card.cost == manaFilter && manaFilter <= "9") ||
+                            (manaFilter == "10" && card.cost >= "10")
+                        )))
 
-                // Check filters
                 if (heroFilterPassed && manaFilterPassed) {
                     // Render card image
                     document.getElementById("preview-main").insertAdjacentHTML("beforeend", `<img src="${card.img}" alt = "${card.name}" />`);
@@ -130,7 +143,12 @@ export class RenderService {
 
         switch (selector) {
             case 1: {
-                document.getElementsByClassName("card-set-name")[0].textContent = Utils.getHashValue("#", 1);
+                if (config.data.startPageData.cardSets.indexOf(Utils.getHashValue()) !== -1) {
+                    document.getElementsByClassName("card-set-name")[0].textContent = Utils.getHashValue();
+                }
+                else {
+                    document.getElementsByClassName("card-set-name")[0].textContent = "";
+                }
 
                 if (startPageShown) {
                     Utils.toggleCssClass("start-page", "noDisplay");

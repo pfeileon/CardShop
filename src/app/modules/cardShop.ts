@@ -80,7 +80,7 @@ export class CardShop extends SinglePageApplication {
         // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
         if (Utils.getHashValue() !== undefined && Utils.getHashValue().search("/") !== -1) {
             let filter = Utils.getFilters();
-            if (filter["cardSet"] !== undefined && filter["cardSet"] === cardSetName) {
+            if (filter["cardSet"] !== undefined && filter["cardSet"] === cardSetName && filter["hero"] !== undefined) {
                 delete (filter["cardSet"]);
             }
             else {
@@ -105,7 +105,7 @@ export class CardShop extends SinglePageApplication {
         let heroValue = e.target.attributes[0].value;
 
         let filter = Utils.getFilters();
-        if (filter["hero"] !== undefined && filter["hero"] === heroValue) {
+        if (filter["hero"] !== undefined && filter["hero"] === heroValue && filter["cardSet"] !== undefined) {
             delete (filter["hero"]);
         }
         else {

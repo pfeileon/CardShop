@@ -30,19 +30,28 @@ export class ButtonHandler {
         Utils.toggleCssClass("start-page", "noDisplay");
         Utils.toggleCssClass("set-preview", "noDisplay");
 
-        if (Utils.getHashValue('#', 1) === undefined) {
+        let hashValue: string = Utils.getHashValue();
+
+        if (hashValue === undefined || "") {
             config.data.setPreviewData.cardSetName = "Classic";
             Utils.createHash("Classic");
         }
 
-        try {
-            let cardSetName = Utils.getHashValue();
-            Utils.createHash(`filters/{"cardSet":"${cardSetName}","hero":"Druid"}`);
+        let cardSetName: string;
+
+        if (config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
+            cardSetName = hashValue;
         }
-        catch (error) {
-            config.data.setPreviewData.cardSetName = "Classic";
-            Utils.createHash(`filters/{"cardSet":"${config.data.setPreviewData.cardSetName}","hero":"Druid"}`);
+        else {
+            alert(`
+                "${hashValue}": Invalid Card Set.
+                Showing "Classic" instead.
+            `)
+            cardSetName = "Classic";
         }
+
+        config.data.setPreviewData.cardSetName = cardSetName;
+        Utils.createHash(`filters/{"cardSet":"${cardSetName}","hero":"Druid"}`);
 
         this.fResource.getCardSet(Utils.getFilters()["cardSet"])
             .then(data => {
