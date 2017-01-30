@@ -162,7 +162,7 @@ export class RenderService {
                 break;
             }
             case "preview": {
-                if (config.data.startPageData.cardSets.indexOf(Utils.getFilters()["cardSet"]) !== -1) {
+                if (Utils.getFilters()["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(Utils.getFilters()["cardSet"]) !== -1) {
                     document.getElementsByClassName("card-set-name")[1].textContent = Utils.getFilters()["cardSet"];
                 }
                 else {
@@ -170,6 +170,11 @@ export class RenderService {
                     Utils.createHash(`filters/{"cardSet":"Classic"}`);
                     document.getElementsByClassName("card-set-name")[1].textContent = "Classic";
 
+                }
+
+                if (Utils.getFilters()["hero"] !== undefined && config.data.setPreviewData.heroes.indexOf(Utils.getFilters()["hero"]) === -1) {
+                    alert("Invalid Hero! Showing Druid instead");
+                    Utils.createHash(`filters/{"cardSet":"${config.data.setPreviewData.cardSetName}","hero":"Druid"}`);
                 }
 
                 if (!setPreviewShown) {
