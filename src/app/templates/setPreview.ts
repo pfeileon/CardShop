@@ -10,7 +10,10 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
         <h1>Preview Card Set: <span class="card-set-name">${data.setPreviewData[Object.keys(data.setPreviewData)[0]]}</span></h1>
         ${rService.insertList(data["startPageData"][Object.keys(data["startPageData"])[0]])}
         <button id="return-btn">Return</button>
-        <button id="goto-cart">Goto Cart </button>
+        <input class="input-amount" type="number" name ="amount" value="1" min="1" max="100" />
+        <img src="../assets/images/shoppingCart.png" alt="Shopping Cart" />
+        <button class="add-to-cart-btn">Add to Cart</button>
+        <button class="goto-cart-btn">Goto Cart </button>
     </header>
 
     <section id="preview-filters">
@@ -36,9 +39,6 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
     </section>
 
     <footer id="preview-foot">
-        <input class="input-amount" type="number" name ="amount" value="1" min="1" max="100" />
-        <img src="../assets/images/shoppingCart.png" alt="Shopping Cart" />
-        <button class="add-to-cart-btn">Add to Cart</button>
     </footer>
 
 </article>`

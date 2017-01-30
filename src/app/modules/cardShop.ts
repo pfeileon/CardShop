@@ -59,6 +59,10 @@ export class CardShop extends SinglePageApplication {
         this.iterateHero(this.selectHero);
         this.iterateManaCost(this.selectManaCost);
 
+        for (let item of <any>document.getElementsByClassName("goto-cart-btn")) {
+             Utils.clickElement(item, this.bHandler.goToCart);
+        }
+
         // Utils.clickElement(document.getElementById("next-cards-shown"), this.bHandler.showNextCards);
         // Utils.clickElement(document.getElementById("previous-cards-shown"), this.bHandler.showPreviousCards);
     }

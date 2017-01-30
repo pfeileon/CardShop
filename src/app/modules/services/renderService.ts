@@ -178,7 +178,6 @@ export class RenderService {
 
                     Utils.createHash(`filters/{"cardSet":"Classic"}`);
                     shownCardSetHeader[1].textContent = "Classic";
-
                 }
                 else {
                     shownCardSetHeader[1].textContent = "none chosen";

@@ -179,4 +179,8 @@ export class ButtonHandler {
             return;
         }
     }
+
+    goToCart = (): any => {
+        alert("Not implemented, yet");
+    }
 }

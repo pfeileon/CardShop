@@ -8,7 +8,6 @@ export const startPage = (rService: RenderService, data: { startPageData }) => {
 
     <header id="start-head">
         <h1>Welcome to the Hearthstone Card Shop</h1>
-        <button id="goto-cart">Goto Cart</Button>
     </header>
 
     <section class="set-filter display-in-line">
@@ -24,6 +23,7 @@ export const startPage = (rService: RenderService, data: { startPageData }) => {
         <input class="input-amount" type="number" name ="amount" value="1" min="1" max="100" />
         <img src="../assets/images/shoppingCart.png" alt="Shopping Cart" />
         <button class="add-to-cart-btn">Add to Cart</Button>
+        <button class="goto-cart-btn">Goto Cart</Button>
     </footer>
 
 </article>`
