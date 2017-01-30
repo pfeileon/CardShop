@@ -21,6 +21,7 @@ export const startPage = (rService: RenderService, data: { startPageData }) => {
     </section>
 
     <footer id="start-foot">
+        <input id="input-amount" type="number" name ="amount" value="1" min="1" max="100" />
         <img src="../assets/images/shoppingCart.png" alt="Shopping Cart" />
         <button class="add-to-cart-btn">Add to Cart</Button>
     </footer>

@@ -82,18 +82,30 @@ export class ButtonHandler {
 
             }
             else if (hashValue.search("/") === -1 && config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
-                console.log("no error");
                 setName = hashValue;
             }
             else {
-                console.log("error");
                 alert("Please choose a Card Set first!");
                 return;
             }
         }
-
+        else {
+            alert("Please choose a Card Set first!");
+            return;
+        }
+        
         let pack: CardPack = new CardPack(setName || "Classic", this.fResource);
-        this.cart.pushToCart(pack);
+
+        this.fillCart(pack);
         console.log(this.cart.items);
     }
+
+    fillCart = (pack: CardPack) => {
+        let amountOfPacks: number = +(<HTMLInputElement>document.getElementById("input-amount")).value;
+
+        for (let i: number = 0; i < amountOfPacks; i++) {
+            this.cart.pushToCart(pack);
+        }
+    }
 }
+
