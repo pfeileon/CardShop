@@ -1,10 +1,12 @@
+import { config } from '../../config/config';
 import * as Utils from '../utilities';
 import { FetchResource } from "../fetchResource";
+import { CardPack } from "../cardPack";
 
 'use strict';
 
 let record = (item) => {
-    return `<li data-id="${item}">${item}</li>`;
+    return `<li data-id="${item}"><button data-id="${item}">${item}</button></li>`;
 };
 
 export class RenderService {
@@ -17,7 +19,7 @@ export class RenderService {
         this.fResource = fResource;
     }
 
-    /** Returns content as string */
+    /** Renders the page according to the hash */
     render(content: any): any {
 
         let hashValue;
@@ -29,22 +31,22 @@ export class RenderService {
 
         switch (hashValue) {
             case undefined:
-                this.displayCheck(1);
+                this.displayCheck("start");
                 break;
 
             case "":
-                this.displayCheck(1);
+                this.displayCheck("start");
                 break;
 
             case "#":
-                this.displayCheck(1);
+                this.displayCheck("start");
                 break;
 
             case "#filters":
-                this.displayCheck(2);
+                this.displayCheck("preview");
 
-                let filter: {} = Utils.getFilters();
-                let setName: string = filter["cardSet"];
+                let filters: {} = Utils.getFilters();
+                let setName: string = filters["cardSet"];
                 let filterString: string = `${setName}?collectible=1`;
 
                 // let manaCost: string = filter["manaCost"];
@@ -53,16 +55,16 @@ export class RenderService {
                 // }
                 if (this.lastSetName === setName && setName !== undefined) {
                     this.showCards(this.lastCardData);
-                    console.log("hui!: lastCardData");
                 }
                 else {
-                    this.fResource.getCardData(filter)
+                    this.fResource.getCardData(filters)
                         .then(cardData => {
                             if (setName !== undefined) {
                                 this.lastSetName = setName;
-                            }
-                            if (cardData !== undefined) {
-                                this.lastCardData = cardData;
+
+                                if (cardData !== undefined) {
+                                    this.lastCardData = cardData;
+                                }
                             }
                             this.showCards(cardData);
                         })
@@ -70,7 +72,7 @@ export class RenderService {
                 break;
 
             default:
-                this.displayCheck(3);
+                this.displayCheck("error");
                 // history.replaceState(content, "Error-Page")
                 break;
         }
@@ -85,90 +87,154 @@ export class RenderService {
 
     /** Inserts the images of the cards of a fetch call */
     showCards(cardData: any) {
-        console.log(cardData);
-        let mana: string = Utils.getFilters()["manaCost"];
-        let hero: string = Utils.getFilters()["hero"];
+
+        let manaFilter: string = Utils.getFilters()["manaCost"];
+        let heroFilter: string = Utils.getFilters()["hero"];
 
         let card: any;
+        let cardFilterPassed: boolean;
         let heroFilterPassed: boolean;
         let manaFilterPassed: boolean;
+        let setFilterPassed: boolean;
+        let i: number = 1;
+
 
         // First remove old code
-        document.getElementById("preview-main").innerText = "";
+        document.getElementById("card-images").innerText = "";
 
         // Iterate the list of cards
         for (card of cardData) {
-            // Check if img-path exists and if card is collectible
-            if (card.img !== undefined && card.collectible) {
+
+            cardFilterPassed = (
+                card.collectible &&
+                card.img !== undefined
+            )
+
+            setFilterPassed = (
+                config.data.startPageData.cardSets.indexOf(card.cardSet) !== -1
+            );
+
+            if (cardFilterPassed && setFilterPassed) {
 
                 heroFilterPassed = (
-                    hero === undefined ||
-                    (hero !== undefined && card.playerClass === hero)
-                )
+                    heroFilter === undefined || (
+                        heroFilter !== undefined &&
+                        card.playerClass === heroFilter
+                    ))
 
                 manaFilterPassed = (
-                    mana === undefined || (
-                        mana !== undefined && (
-                            (card.cost == mana && mana <= "9") ||
-                            (mana == "10" && card.cost >= "10"))
-                    )
-                )
+                    manaFilter === undefined || (
+                        manaFilter !== undefined && (
+                            (card.cost == manaFilter && manaFilter <= "9") ||
+                            (manaFilter == "10" && card.cost >= "10")
+                        )))
 
-                // Check filters
                 if (heroFilterPassed && manaFilterPassed) {
                     // Render card image
-                    document.getElementById("preview-main").insertAdjacentHTML("beforeend", `<img src="${card.img}" alt = "${card.name}" />`);
+                    document.getElementById("card-images").insertAdjacentHTML("beforeend", `<img id="card_${i}" class="noDisplay" src="${card.img}" alt = "${card.name}" />`);
+                    if (i < 9) {
+                        Utils.toggleCssClass(`card_${i}`, "noDisplay");
+                    }
+                    i++;
                 }
             }
         }
     }
 
-    displayCheck(selector: number) {
-        let startPageShown: boolean = document.getElementById("start-page").classList.contains("noDisplay");
-        let setPreviewShown: boolean = document.getElementById("set-preview").classList.contains("noDisplay");
-        let errorPageShown: boolean = document.getElementById("error-page").classList.contains("noDisplay");
+    displayCheck(selector: string) {
+        let startPageShown: boolean = !document.getElementById("start-page").classList.contains("noDisplay");
+        let setPreviewShown: boolean = !document.getElementById("set-preview").classList.contains("noDisplay");
+        let errorPageShown: boolean = !document.getElementById("error-page").classList.contains("noDisplay");
+
+        let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
 
         switch (selector) {
-            case 1: {
-                document.getElementsByClassName("card-set-name")[0].textContent = Utils.getHashValue("#", 1);
+            case "start": {
+                if (config.data.startPageData.cardSets.indexOf(Utils.getHashValue()) !== -1) {
+                    shownCardSetHeader[0].textContent = Utils.getHashValue();
+                }
+                else {
+                    shownCardSetHeader[0].textContent = "";
+                }
 
-                if (startPageShown) {
+                if (!startPageShown) {
                     Utils.toggleCssClass("start-page", "noDisplay");
                 }
-                if (!setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "noDisplay");
-                }
-                if (!errorPageShown) {
-                    Utils.toggleCssClass("error-page", "noDisplay");
-                }
-                break;
-            }
-            case 2: {
-                document.getElementsByClassName("card-set-name")[1].textContent = Utils.getFilters()["cardSet"];
-
                 if (setPreviewShown) {
                     Utils.toggleCssClass("set-preview", "noDisplay");
                 }
-                if (!startPageShown) {
-                    Utils.toggleCssClass("start-page", "noDisplay");
-                }
-                if (!errorPageShown) {
+                if (errorPageShown) {
                     Utils.toggleCssClass("error-page", "noDisplay");
                 }
                 break;
             }
-            case 3: {
+            case "preview": {
+                let filters: {} = Utils.getFilters();
+                if (filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
+                    shownCardSetHeader[1].textContent = filters["cardSet"];
+                }
+                else if (filters["cardSet"] !== undefined) {
+                    alert("Invalid Card Set! Reverting to Classic");
+
+                    Utils.createHash(`filters/{"cardSet":"Classic"}`);
+                    shownCardSetHeader[1].textContent = "Classic";
+                }
+                else {
+                    shownCardSetHeader[1].textContent = "none chosen";
+                }
+
+                if (filters["hero"] !== undefined && config.data.setPreviewData.heroes.indexOf(filters["hero"]) === -1) {
+                    alert("Invalid Hero! Showing Druid instead");
+
+                    Utils.createHash(`filters/{"cardSet":"${config.data.setPreviewData.cardSetName}","hero":"Druid"}`);
+                }
+
+                if (!setPreviewShown) {
+                    Utils.toggleCssClass("set-preview", "noDisplay");
+                }
+                if (startPageShown) {
+                    Utils.toggleCssClass("start-page", "noDisplay");
+                }
                 if (errorPageShown) {
                     Utils.toggleCssClass("error-page", "noDisplay");
                 }
-                if (!startPageShown) {
+                break;
+            }
+            case "error": {
+                if (!errorPageShown) {
+                    Utils.toggleCssClass("error-page", "noDisplay");
+                }
+                if (startPageShown) {
                     Utils.toggleCssClass("start-page", "noDisplay");
                 }
-                if (!setPreviewShown) {
+                if (setPreviewShown) {
                     Utils.toggleCssClass("set-preview", "noDisplay");
                 }
                 break;
             }
         }
+    }
+
+    showPacks(pack: CardPack) {
+        let packLink: string;
+
+        switch (pack["setName"]) {
+            case "Classic":
+                packLink = "http://www.hearthcards.net/packs/images/pack.png";
+                break;
+            case "The Grand Tournament":
+                packLink = "http://www.hearthcards.net/packs/images/packtgt.png";
+                break;
+            case "Whispers of the Old Gods":
+                packLink = "http://www.hearthcards.net/packs/images/packwotog.png";
+                break;
+            case "Mean Streets of Gadgetzan":
+                packLink = "http://www.hearthcards.net/packs/images/packmsog.png";
+                break;
+            default:
+                break;
+        }
+
+        document.getElementById("start-main").insertAdjacentHTML("beforeend", `<img src="${packLink}" />`);
     }
 }

@@ -58,6 +58,13 @@ export class CardShop extends SinglePageApplication {
         // Filters
         this.iterateHero(this.selectHero);
         this.iterateManaCost(this.selectManaCost);
+
+        for (let item of <any>document.getElementsByClassName("goto-cart-btn")) {
+             Utils.clickElement(item, this.bHandler.goToCart);
+        }
+
+        // Utils.clickElement(document.getElementById("next-cards-shown"), this.bHandler.showNextCards);
+        // Utils.clickElement(document.getElementById("previous-cards-shown"), this.bHandler.showPreviousCards);
     }
 
     /** Iterate the CardSet-List on the StartPage and SetPreview and doStuff */
@@ -80,7 +87,7 @@ export class CardShop extends SinglePageApplication {
         // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
         if (Utils.getHashValue() !== undefined && Utils.getHashValue().search("/") !== -1) {
             let filter = Utils.getFilters();
-            if (filter["cardSet"] !== undefined && filter["cardSet"] === cardSetName) {
+            if (filter["cardSet"] !== undefined && filter["cardSet"] === cardSetName && filter["hero"] !== undefined) {
                 delete (filter["cardSet"]);
             }
             else {
@@ -105,7 +112,7 @@ export class CardShop extends SinglePageApplication {
         let heroValue = e.target.attributes[0].value;
 
         let filter = Utils.getFilters();
-        if (filter["hero"] !== undefined && filter["hero"] === heroValue) {
+        if (filter["hero"] !== undefined && filter["hero"] === heroValue && filter["cardSet"] !== undefined) {
             delete (filter["hero"]);
         }
         else {

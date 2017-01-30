@@ -1,3 +1,17 @@
 .noDisplay {
     display: none;
 }
+
+.slider {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+.display-in-line > * & > * {
+        display: inline !important;
+        list-style-type: disc !important;
+
+}

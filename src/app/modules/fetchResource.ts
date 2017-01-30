@@ -26,14 +26,10 @@ export class FetchResource {
         else if (hero !== undefined) {
             return this.getClassCards(`${hero}?collectible=1`);
         }
-        else {
-            return this.getAllCards("?collectible=1");
-        }
     }
 
-    getAllCards = (collectible: string): Promise<Init> => {
-        let url = config.api.url + collectible;
-        return this.fService.query(url);
+    getAllCards = (): Promise<Init> => {
+        return this.fService.query(config.api.url);
     }
 
     /** Returns single card data from the hearthstoneAPI */
