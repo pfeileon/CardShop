@@ -58,6 +58,9 @@ export class CardShop extends SinglePageApplication {
         // Filters
         this.iterateHero(this.selectHero);
         this.iterateManaCost(this.selectManaCost);
+
+        // Utils.clickElement(document.getElementById("next-cards-shown"), this.bHandler.showNextCards);
+        // Utils.clickElement(document.getElementById("previous-cards-shown"), this.bHandler.showPreviousCards);
     }
 
     /** Iterate the CardSet-List on the StartPage and SetPreview and doStuff */

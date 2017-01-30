@@ -1,11 +1,12 @@
 import { config } from '../../config/config';
 import * as Utils from '../utilities';
 import { FetchResource } from "../fetchResource";
+import { CardPack } from "../cardPack";
 
 'use strict';
 
 let record = (item) => {
-    return `<li data-id="${item}">${item}</li>`;
+    return `<li data-id="${item}"><button data-id="${item}">${item}</button></li>`;
 };
 
 export class RenderService {
@@ -95,11 +96,11 @@ export class RenderService {
         let heroFilterPassed: boolean;
         let manaFilterPassed: boolean;
         let setFilterPassed: boolean;
-
+        let i: number = 1;
 
 
         // First remove old code
-        document.getElementById("preview-main").innerText = "";
+        document.getElementById("card-images").innerText = "";
 
         // Iterate the list of cards
         for (card of cardData) {
@@ -130,7 +131,11 @@ export class RenderService {
 
                 if (heroFilterPassed && manaFilterPassed) {
                     // Render card image
-                    document.getElementById("preview-main").insertAdjacentHTML("beforeend", `<img src="${card.img}" alt = "${card.name}" />`);
+                    document.getElementById("card-images").insertAdjacentHTML("beforeend", `<img id="card_${i}" class="noDisplay" src="${card.img}" alt = "${card.name}" />`);
+                    if (i < 9) {
+                        Utils.toggleCssClass(`card_${i}`, "noDisplay");
+                    }
+                    i++;
                 }
             }
         }
@@ -209,5 +214,28 @@ export class RenderService {
                 break;
             }
         }
+    }
+
+    showPacks(pack: CardPack) {
+        let packLink: string;
+
+        switch (pack["setName"]) {
+            case "Classic":
+                packLink = "http://www.hearthcards.net/packs/images/pack.png";
+                break;
+            case "The Grand Tournament":
+                packLink = "http://www.hearthcards.net/packs/images/packtgt.png";
+                break;
+            case "Whispers of the Old Gods":
+                packLink = "http://www.hearthcards.net/packs/images/packwotog.png";
+                break;
+            case "Mean Streets of Gadgetzan":
+                packLink = "http://www.hearthcards.net/packs/images/packmsog.png";
+                break;
+            default:
+                break;
+        }
+
+        document.getElementById("start-main").insertAdjacentHTML("beforeend", `<img src="${packLink}" />`);
     }
 }
