@@ -30,19 +30,19 @@ export class RenderService {
 
         switch (hashValue) {
             case undefined:
-                this.displayCheck(1);
+                this.displayCheck("start");
                 break;
 
             case "":
-                this.displayCheck(1);
+                this.displayCheck("start");
                 break;
 
             case "#":
-                this.displayCheck(1);
+                this.displayCheck("start");
                 break;
 
             case "#filters":
-                this.displayCheck(2);
+                this.displayCheck("preview");
 
                 let filter: {} = Utils.getFilters();
                 let setName: string = filter["cardSet"];
@@ -71,7 +71,7 @@ export class RenderService {
                 break;
 
             default:
-                this.displayCheck(3);
+                this.displayCheck("error");
                 // history.replaceState(content, "Error-Page")
                 break;
         }
@@ -136,13 +136,13 @@ export class RenderService {
         }
     }
 
-    displayCheck(selector: number) {
-        let startPageShown: boolean = document.getElementById("start-page").classList.contains("noDisplay");
-        let setPreviewShown: boolean = document.getElementById("set-preview").classList.contains("noDisplay");
-        let errorPageShown: boolean = document.getElementById("error-page").classList.contains("noDisplay");
+    displayCheck(selector: string) {
+        let startPageShown: boolean = !document.getElementById("start-page").classList.contains("noDisplay");
+        let setPreviewShown: boolean = !document.getElementById("set-preview").classList.contains("noDisplay");
+        let errorPageShown: boolean = !document.getElementById("error-page").classList.contains("noDisplay");
 
         switch (selector) {
-            case 1: {
+            case "start": {
                 if (config.data.startPageData.cardSets.indexOf(Utils.getHashValue()) !== -1) {
                     document.getElementsByClassName("card-set-name")[0].textContent = Utils.getHashValue();
                 }
@@ -150,39 +150,39 @@ export class RenderService {
                     document.getElementsByClassName("card-set-name")[0].textContent = "";
                 }
 
-                if (startPageShown) {
+                if (!startPageShown) {
                     Utils.toggleCssClass("start-page", "noDisplay");
                 }
-                if (!setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "noDisplay");
-                }
-                if (!errorPageShown) {
-                    Utils.toggleCssClass("error-page", "noDisplay");
-                }
-                break;
-            }
-            case 2: {
-                document.getElementsByClassName("card-set-name")[1].textContent = Utils.getFilters()["cardSet"];
-
                 if (setPreviewShown) {
                     Utils.toggleCssClass("set-preview", "noDisplay");
                 }
-                if (!startPageShown) {
-                    Utils.toggleCssClass("start-page", "noDisplay");
-                }
-                if (!errorPageShown) {
+                if (errorPageShown) {
                     Utils.toggleCssClass("error-page", "noDisplay");
                 }
                 break;
             }
-            case 3: {
+            case "preview": {
+                document.getElementsByClassName("card-set-name")[1].textContent = Utils.getFilters()["cardSet"];
+
+                if (!setPreviewShown) {
+                    Utils.toggleCssClass("set-preview", "noDisplay");
+                }
+                if (startPageShown) {
+                    Utils.toggleCssClass("start-page", "noDisplay");
+                }
                 if (errorPageShown) {
                     Utils.toggleCssClass("error-page", "noDisplay");
                 }
-                if (!startPageShown) {
+                break;
+            }
+            case "error": {
+                if (!errorPageShown) {
+                    Utils.toggleCssClass("error-page", "noDisplay");
+                }
+                if (startPageShown) {
                     Utils.toggleCssClass("start-page", "noDisplay");
                 }
-                if (!setPreviewShown) {
+                if (setPreviewShown) {
                     Utils.toggleCssClass("set-preview", "noDisplay");
                 }
                 break;
