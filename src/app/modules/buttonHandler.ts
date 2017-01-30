@@ -18,7 +18,6 @@ export class ButtonHandler {
     public get FResource() { return this.fResource; }
     public get RService() { return this.rService; }
     public get Cart() { return this.cart; }
-    public get LastFetch() { return this.lastFetch; }
 
     constructor(fResource: FetchResource, rService: RenderService, cart: ShoppingCart) {
         this.fResource = fResource;
@@ -34,18 +33,16 @@ export class ButtonHandler {
         if (Utils.getHashValue('#', 1) === undefined) {
             config.data.setPreviewData.cardSetName = "Classic";
             Utils.createHash("Classic");
-
         }
+
         try {
-            let cardSetName = Utils.getHashValue('#', 1);
+            let cardSetName = Utils.getHashValue();
             Utils.createHash(`filters/{"cardSet":"${cardSetName}","hero":"Druid"}`);
         }
-        catch(error) {
+        catch (error) {
             config.data.setPreviewData.cardSetName = "Classic";
             Utils.createHash(`filters/{"cardSet":"${config.data.setPreviewData.cardSetName}","hero":"Druid"}`);
         }
-
-        document.getElementById('card-set-name').textContent = Utils.getFilters()["cardSet"];
 
         this.fResource.getCardSet(Utils.getFilters()["cardSet"])
             .then(data => {
@@ -53,24 +50,36 @@ export class ButtonHandler {
                 this.lastFetch = data;
                 this.rService.showCards(cardSetData);
             })
-    };
+    }
 
     /** What happens when you click the Return Button */
     return = (): void => {
-        Utils.toggleCssClass("start-page", "noDisplay");
-        Utils.toggleCssClass("set-preview", "noDisplay");
-
         try {
             Utils.createHash(Utils.getFilters()["cardSet"]);
         }
-        catch(error) {
+        catch (error) {
             Utils.createHash("Classic");
         }
     }
 
     /** What happens when you click the Add To Cart Button */
     addToCart = (): void => {
-        let pack: CardPack = new CardPack(Utils.getHashValue('#', 1) || "Classic", this.fResource);
+        let setName: string;
+        // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
+        if (Utils.getHashValue().search("/") !== -1) {
+            if (Utils.getHashValue()["cardSet"] !== undefined) {
+                setName = Utils.getFilters()["cardSet"];
+            }
+            else {
+                alert("Please choose a Card Set first!");
+                return;
+            }
+        }
+        else {
+            setName = Utils.getHashValue();
+        }
+
+        let pack: CardPack = new CardPack(setName || "Classic", this.fResource);
         this.cart.pushToCart(pack);
         console.log(this.cart.items);
     }

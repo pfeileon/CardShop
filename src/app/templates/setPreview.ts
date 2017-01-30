@@ -6,8 +6,8 @@ import { RenderService } from '../modules/services/renderService';
 export const setPreview = (rService: RenderService, data: { setPreviewData }) => {
     return `<article>
 
-    <header id="preview-head">
-        <h1>Preview Card Set: <span id="card-set-name">${data.setPreviewData[Object.keys(data.setPreviewData)[0]]}</span></h1>
+    <header id="preview-head" class="set-filter">
+        <h1>Preview Card Set: <span class="card-set-name">${data.setPreviewData[Object.keys(data.setPreviewData)[0]]}</span></h1>
         ${rService.insertList(data["startPageData"][Object.keys(data["startPageData"])[0]])}
         <button id="return-btn">Return</button>
         <button id="goto-cart">Goto Cart </button>
