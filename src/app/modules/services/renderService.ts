@@ -162,7 +162,15 @@ export class RenderService {
                 break;
             }
             case "preview": {
-                document.getElementsByClassName("card-set-name")[1].textContent = Utils.getFilters()["cardSet"];
+                if (config.data.startPageData.cardSets.indexOf(Utils.getFilters()["cardSet"]) !== -1) {
+                    document.getElementsByClassName("card-set-name")[1].textContent = Utils.getFilters()["cardSet"];
+                }
+                else {
+                    alert("Invalid Card Set! Reverting to Classic");
+                    Utils.createHash(`filters/{"cardSet":"Classic"}`);
+                    document.getElementsByClassName("card-set-name")[1].textContent = "Classic";
+
+                }
 
                 if (!setPreviewShown) {
                     Utils.toggleCssClass("set-preview", "noDisplay");

@@ -74,18 +74,22 @@ export class ButtonHandler {
     /** What happens when you click the Add To Cart Button */
     addToCart = (): void => {
         let setName: string;
+        let hashValue: string = Utils.getHashValue();
         // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
-        if (Utils.getHashValue().search("/") !== -1) {
-            if (Utils.getHashValue()["cardSet"] !== undefined) {
+        if (hashValue !== undefined || "" || null) {
+            if (hashValue.search("/") !== -1 && Utils.getFilters()["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(Utils.getFilters()["cardSet"]) !== -1) {
                 setName = Utils.getFilters()["cardSet"];
+
+            }
+            else if (hashValue.search("/") === -1 && config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
+                console.log("no error");
+                setName = hashValue;
             }
             else {
+                console.log("error");
                 alert("Please choose a Card Set first!");
                 return;
             }
-        }
-        else {
-            setName = Utils.getHashValue();
         }
 
         let pack: CardPack = new CardPack(setName || "Classic", this.fResource);
