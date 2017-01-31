@@ -1,7 +1,7 @@
 import { PseudoSingleton } from './pseudoSingleton'
 import * as Utils from '../utilities';
 import { FetchResource } from '../fetchResource';
-import { TemplateHandler, templates } from '../../templates/templateHandler';
+import { TemplateHandler } from '../../templates/templateHandler';
 import { RenderService } from '../services/renderService';
 
 'use strict';
@@ -17,19 +17,22 @@ export abstract class SinglePageApplication extends PseudoSingleton {
     };
 
     protected abstract content: any;
-    protected abstract tHandler: TemplateHandler;
+    protected abstract fResource: FetchResource;
     protected abstract rService: RenderService;
+    protected abstract tHandler: TemplateHandler;
 
     /** Warns after first instantiation */
-    constructor(fResource: FetchResource, tHandler: TemplateHandler, rService: RenderService) {
+    constructor(tHandler: TemplateHandler) {
         super(SinglePageApplication.ctorArg);
+        this.rService = tHandler.RService;
+        this.fResource = this.rService.FResource;
     }
 
     // Methods
     /** Start the app */
     start(): void {
         // Render App
-        this.content = this.tHandler.insertAllTemplates(this.tHandler.templates);
+        this.content = this.tHandler.insertAllTemplates();
         this.rService.render(this.content);
 
         // Implementation-specific methods are called
@@ -40,10 +43,8 @@ export abstract class SinglePageApplication extends PseudoSingleton {
             this.rService.render(this.content);
         }
 
-        window.onload = (e) => {
-            this.rService.render(this.content);
-            history.replaceState(this.content, "CardShop")
-        }
+        // Enable browser-history
+        history.replaceState(this.content, "CardShop");
     };
 
     /** Implements a call of all methods needed at start-up for the specific implementation of SinglePageApplication  */

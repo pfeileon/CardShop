@@ -9,13 +9,11 @@ export class CardPack {
     //Properties
     private setName: string;
     private cardPack: Card[];
-    private fResource: FetchResource;
 
     //Constructor
     /** Creates an instance of a CardPack of a specific CardSet */
-    constructor(setName: string, fResource: FetchResource) {
+    constructor(setName: string) {
         this.setName = setName;
-        this.fResource = fResource;
     }
 
     //Methods
@@ -27,18 +25,21 @@ export class CardPack {
     }
 
     /** Opens a purchased CardPack: Assign Cards to its Card[] */
-    private openCardPack(): void {
-        let cardSet = this.fResource.getCardSet(this.setName);
-        this.cardPack = new Array<Card>(5);
-        for (let i: number = 0; i < this.cardPack.length; i++) {
-            this.cardPack[i] = this.generateCard(cardSet);
-        }
+    private openCardPack(fResource: FetchResource): void {
+        fResource.getCardSet(this.setName + "?collectible=1")
+            .then(cardData => {
+                let cardSet = cardData;
+                this.cardPack = new Array<Card>(5);
+                for (let i: number = 0; i < this.cardPack.length; i++) {
+                    this.cardPack[i] = this.generateCard(cardSet);
+                }
+            })
     }
 
-    /** Returns a randomly chosen card of the set */
+    /** Returns a card with a randomly chosen cardId of the set */
     private generateCard(cardSet: any): Card {
-        let cardId: string;
-        //TODO: randomly choose cardId from set
+        const cardNumber = Math.floor(Math.random() * cardSet.length);
+        const cardId: string = cardSet[cardNumber].cardId;
         return new Card(cardId);
     }
 }

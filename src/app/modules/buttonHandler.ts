@@ -13,32 +13,24 @@ export class ButtonHandler {
     private fResource: FetchResource;
     private rService: RenderService;
     private cart: ShoppingCart;
-    private lastFetch: any;
-    private firstCard: any;
-
-    public get FResource() { return this.fResource; }
-    public get RService() { return this.rService; }
+    
     public get Cart() { return this.cart; }
 
-    constructor(fResource: FetchResource, rService: RenderService, cart: ShoppingCart) {
-        this.fResource = fResource;
+    constructor(rService: RenderService, cart: ShoppingCart) {
         this.rService = rService;
+        this.fResource = rService.FResource;
         this.cart = cart;
     }
 
     /** What happens when you click the Preview Card Set Button */
     previewCardSet = (): any => {
-        Utils.toggleCssClass("start-page", "noDisplay");
-        Utils.toggleCssClass("set-preview", "noDisplay");
-
-        let hashValue: string = Utils.getHashValue();
+        const hashValue: string = Utils.getHashValue();
+        let cardSetName: string;
 
         if (hashValue === undefined || "") {
             config.data.setPreviewData.cardSetName = "Classic";
             Utils.createHash("Classic");
         }
-
-        let cardSetName: string;
 
         if (config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
             cardSetName = hashValue;
@@ -55,31 +47,26 @@ export class ButtonHandler {
         Utils.createHash(`filters/{"cardSet":"${cardSetName}","hero":"Druid"}`);
 
         this.fResource.getCardSet(Utils.getFilters()["cardSet"])
-            .then(data => {
-                let cardSetData = data;
-                this.lastFetch = data;
+            .then(cardSetData => {
                 this.rService.showCards(cardSetData);
             })
     }
 
     /** What happens when you click the Return Button */
     return = (): void => {
-        try {
-            Utils.createHash(Utils.getFilters()["cardSet"]);
-        }
-        catch (error) {
-            Utils.createHash("Classic");
-        }
+        Utils.createHash(Utils.getFilters()["cardSet"]);
     }
 
     /** What happens when you click the Add To Cart Button */
     addToCart = (): void => {
         let setName: string;
-        let hashValue: string = Utils.getHashValue();
+        const hashValue: string = Utils.getHashValue();
+        const filters: {} = Utils.getFilters();
+
         // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
         if (hashValue !== undefined || "" || null) {
-            if (hashValue.search("/") !== -1 && Utils.getFilters()["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(Utils.getFilters()["cardSet"]) !== -1) {
-                setName = Utils.getFilters()["cardSet"];
+            if (hashValue.search("/") !== -1 && filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
+                setName = filters["cardSet"];
 
             }
             else if (hashValue.search("/") === -1 && config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
@@ -95,12 +82,13 @@ export class ButtonHandler {
             return;
         }
 
-        let pack: CardPack = new CardPack(setName || "Classic", this.fResource);
+        const pack: CardPack = new CardPack(setName || "Classic");
 
         this.fillCart(pack);
         console.log(this.cart.items);
     }
 
+    /** Fills the ShoppingCart with packs and displays them */
     fillCart = (pack: CardPack) => {
         let amountOfPacks: number;
 
@@ -116,6 +104,115 @@ export class ButtonHandler {
             this.rService.showPacks(pack);
         }
     }
+
+    /** Not implemented, yet */
+    goToCart = (): any => {
+        alert("Not implemented, yet");
+    }
+
+
+    // ****************************
+    // *** CardSet Button-Group ***
+    // ****************************
+
+    /** Iterate the CardSet-List on the StartPage and SetPreview and doStuff */
+    iterateCardSet(doStuff: any): void {
+        for (let item of <any>document.getElementsByClassName("set-filter")) {
+            Utils.iterateUl(item.children[1].children, doStuff);
+        }
+    }
+
+    /** Selects the CardSet on the StartPage */
+    selectCardSet = (cardSet: any): void => {
+        Utils.clickElement(cardSet, this.setCardSet);
+    }
+
+    /** Sets the hash-value according to the selected CardSet */
+    setCardSet = (e: any): void => {
+        const cardSetName = e.target.attributes[0].value;
+        config.data.setPreviewData.cardSetName = cardSetName;
+
+        // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
+        if (Utils.getHashValue() !== undefined && Utils.getHashValue().search("/") !== -1) {
+            let filter = Utils.getFilters();
+            if (filter["cardSet"] !== undefined && filter["cardSet"] === cardSetName && filter["hero"] !== undefined) {
+                delete (filter["cardSet"]);
+            }
+            else {
+                filter["cardSet"] = cardSetName;
+            }
+            Utils.createHash(`filters/${JSON.stringify(filter)}`);
+        }
+        else {
+            Utils.createHash(cardSetName);
+        }
+    }
+
+
+    // ****************************
+    // *** Heroes Button-Group ***
+    // ****************************
+
+    /** Iterate the hero-filter-list on the preview-page */
+    iterateHero(doStuff: any): void {
+        Utils.iterateUl(document.getElementById('hero-filter').children[1].children, doStuff);
+    }
+
+    /** Select the Hero from the hero-filter-list */
+    selectHero = (hero: any): void => {
+        Utils.clickElement(hero, this.setHero);
+    }
+
+    /** Sets the hash according to the selected hero */
+    setHero = (e: any): void => {
+        const heroValue = e.target.attributes[0].value;
+
+        let filter = Utils.getFilters();
+        if (filter["hero"] !== undefined && filter["hero"] === heroValue && filter["cardSet"] !== undefined) {
+            delete (filter["hero"]);
+        }
+        else {
+            filter["hero"] = heroValue;
+        }
+        Utils.createHash(`filters/${JSON.stringify(filter)}`);
+    }
+
+
+    // ****************************
+    // *** Mana Button-Group ***
+    // ****************************
+
+    /** Iterates the mana-cost-filter on the preview-page */
+    iterateManaCost(doStuff: any): void {
+        Utils.iterateUl(document.getElementById('mana-filter').children[1].children, doStuff);
+    }
+
+    /** Selects the mana-cost- from the filter */
+    selectManaCost = (mana: any): void => {
+        Utils.clickElement(mana, this.setManaCost);
+    }
+
+    /** Sets the hash according to the selected mana-cost */
+    setManaCost = (e: any): void => {
+        const manaCostValue = e.target.attributes[0].value;
+
+        let filter = Utils.getFilters();
+        if (filter["manaCost"] !== undefined && filter["manaCost"] === manaCostValue) {
+            delete (filter["manaCost"]);
+        }
+        else {
+            filter["manaCost"] = manaCostValue;
+        }
+
+        Utils.createHash(`filters/${JSON.stringify(filter)}`);
+    }
+
+
+    // *** *** *** *** ****
+    // *** UNUSED STUFF ***
+    // *** *** *** *** ****
+
+    private firstCard: any;
 
     showNextCards = (): void => {
         let temp: HTMLImageElement[] = [];
@@ -178,9 +275,5 @@ export class ButtonHandler {
             Utils.toggleCssClass("previous-cards-shown", "noDisplay");
             return;
         }
-    }
-
-    goToCart = (): any => {
-        alert("Not implemented, yet");
     }
 }

@@ -12,8 +12,10 @@ export const startPage = (rService: RenderService, data: { startPageData }) => {
 
     <section class="set-filter display-in-line">
         <h2>Select the Card Set: <span class="card-set-name">${data["setPreviewData"][Object.keys(data["setPreviewData"])[0]]}</span></h2>
-        ${rService.insertList(data.startPageData[Object.keys(data.startPageData)[0]])}
-        <button id="preview-card-set-btn">Preview Card Set</button>
+        <div class="btn-group-justified" role="group" aria-label="CardSets">
+            ${rService.insertList(data.startPageData[Object.keys(data.startPageData)[0]])}
+        </div>
+        <button id="preview-card-set-btn" class="btn btn-default" type="button">Preview Card Set</button>
     </section>
 
     <section id="start-main" class="slider">
@@ -21,9 +23,9 @@ export const startPage = (rService: RenderService, data: { startPageData }) => {
 
     <footer id="start-foot">
         <input class="input-amount" type="number" name ="amount" value="1" min="1" max="100" />
-        <img src="../assets/images/shoppingCart.png" alt="Shopping Cart" />
-        <button class="add-to-cart-btn">Add to Cart</Button>
-        <button class="goto-cart-btn">Goto Cart</Button>
+        <button class="add-to-cart-btn btn btn-default" type="button">Add to Cart</Button>
+        <img src="https://openclipart.org/image/2400px/svg_to_png/60139/cart.png" alt="Shopping Cart" width="30px" />
+        <button class="goto-cart-btn btn btn-default" type="button">Goto Cart</Button>
     </footer>
 
 </article>`

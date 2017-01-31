@@ -1,7 +1,7 @@
 import { Callback, Promise, Request, Response } from '../types/types'
 declare const fetch;
 
-// A collection of static utility functions
+// A collection of utility functions
 
 'use strict';
 
@@ -72,6 +72,13 @@ export function toggleCssClass(id: string, cssClass: string): void {
 }
 
 export function getFilters(): {} {
-    let filters: any = JSON.parse(getHashValue().split("/")[1]);
+    const hashValue = getHashValue();
+    let filters: {};
+    if (hashValue.search("/") !== -1) {
+        filters = JSON.parse(hashValue.split("/")[1]);
+    }
+    else {
+        filters = hashValue;
+    }
     return filters;
 }
