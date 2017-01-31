@@ -4,7 +4,7 @@ import { FetchResource } from './modules/fetchResource';
 import { RenderService } from './modules/services/renderService';
 import { TemplateHandler } from './templates/templateHandler';
 import { ShoppingCart } from './modules/shoppingCart';
-import { ButtonHandler } from './modules/buttonHandler';
+import { ButtonHandler } from './buttons/buttonHandler';
 import { CardShop } from './modules/cardShop';
 
 import { testing } from './modules/tests';

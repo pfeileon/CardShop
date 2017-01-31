@@ -17,13 +17,6 @@ export class CardPack {
     }
 
     //Methods
-    /** Returns an empty CardPack */
-    static generateCardPack(cardSet: string): CardPack {
-        let cardPack: CardPack;
-        cardPack.setName = cardSet;
-        return cardPack;
-    }
-
     /** Opens a purchased CardPack: Assign Cards to its Card[] */
     private openCardPack(fResource: FetchResource): void {
         fResource.getCardSet(this.setName + "?collectible=1")

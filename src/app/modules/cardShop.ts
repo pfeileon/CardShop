@@ -5,7 +5,7 @@ import { TemplateHandler } from '../templates/templateHandler';
 import { RenderService } from './services/renderService';
 import { ShoppingCart } from './shoppingCart';
 import { SinglePageApplication } from './abstracts/singlePageApplication';
-import { ButtonHandler } from './buttonHandler';
+import { ButtonHandler } from '../buttons/buttonHandler';
 
 'use strict';
 
@@ -39,27 +39,20 @@ export class CardShop extends SinglePageApplication {
      * Called by SinglePageApplication.start()
     */
     loadSpecifics = (): void => {
-        //Select Card Set
-        this.bHandler.iterateCardSet(this.bHandler.selectCardSet);
-
-        // Preview Card Set
-        Utils.clickElement(document.getElementById('preview-card-set-btn'), this.bHandler.previewCardSet);
-
-        // return
-        Utils.clickElement(document.getElementById('return-btn'), this.bHandler.return);
-
-        // Add to Cart
-        for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
-            Utils.clickElement(item, this.bHandler.addToCart)
-        }
-
         // Filters
+        this.bHandler.iterateCardSet(this.bHandler.selectCardSet);
         this.bHandler.iterateHero(this.bHandler.selectHero);
         this.bHandler.iterateManaCost(this.bHandler.selectManaCost);
 
-        for (let item of <any>document.getElementsByClassName("goto-cart-btn")) {
-             Utils.clickElement(item, this.bHandler.goToCart);
-        }
+        // Preview Card Set
+        this.bHandler.previewCardSet();
+
+        // Return
+        this.bHandler.return();
+
+        // Cart
+        this.bHandler.addToCart();
+        this.bHandler.gotoCart();
 
         // Utils.clickElement(document.getElementById("next-cards-shown"), this.bHandler.showNextCards);
         // Utils.clickElement(document.getElementById("previous-cards-shown"), this.bHandler.showPreviousCards);

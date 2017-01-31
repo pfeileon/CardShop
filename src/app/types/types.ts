@@ -3,7 +3,7 @@ import * as Utils from '../modules/utilities'
 
 /** Generic type for callback functions */
 export interface Callback<T, TResult> {
-    (ctorArg: T): TResult;
+    (arg?: T): TResult;
 }
 
 // Hack for fetch-API

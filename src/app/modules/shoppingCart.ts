@@ -33,10 +33,27 @@ export class ShoppingCart extends PseudoSingleton {
         this.items.push(item);
     }
 
-    /** Removes an item from the cart
-     * @param {number} i - Position of the item to be removed.
-    */
-    spliceFromCart = (i: number): void => {
-        this.items.splice(i, 1);
+    /** Removes an item from the cart */
+    popFromCart = (): void => {
+        this.items.pop();
+    }
+
+    /** Fills the ShoppingCart with packs and displays them */
+    fillCart = (item: {}, showItems = (item: {}) => {}): {}[] => {
+        let amountOfPacks: number;
+
+        if (Utils.getHashValue().search("/") === -1) {
+            amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[0]).value;
+        }
+        else {
+            amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[1]).value;
+        }
+
+        for (let i: number = 0; i < amountOfPacks; i++) {
+            this.pushToCart(item);
+            showItems(item);
+        }
+
+        return this.items;
     }
 }

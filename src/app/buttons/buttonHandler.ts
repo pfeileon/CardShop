@@ -1,9 +1,9 @@
 import { config } from '../config/config';
-import * as Utils from './utilities';
-import { CardPack } from './cardPack';
-import { FetchResource } from './fetchResource';
-import { RenderService } from './services/renderService';
-import { ShoppingCart } from './shoppingCart';
+import * as Utils from '../modules/utilities';
+import { CardPack } from '../modules/cardPack';
+import { FetchResource } from '../modules/fetchResource';
+import { RenderService } from '../modules/services/renderService';
+import { ShoppingCart } from '../modules/shoppingCart';
 
 'use strict';
 
@@ -13,7 +13,7 @@ export class ButtonHandler {
     private fResource: FetchResource;
     private rService: RenderService;
     private cart: ShoppingCart;
-    
+
     public get Cart() { return this.cart; }
 
     constructor(rService: RenderService, cart: ShoppingCart) {
@@ -24,90 +24,89 @@ export class ButtonHandler {
 
     /** What happens when you click the Preview Card Set Button */
     previewCardSet = (): any => {
-        const hashValue: string = Utils.getHashValue();
-        let cardSetName: string;
+        const previewBtn = (e) => {
+            const hashValue: string = Utils.getHashValue();
+            let cardSetName: string;
 
-        if (hashValue === undefined || "") {
-            config.data.setPreviewData.cardSetName = "Classic";
-            Utils.createHash("Classic");
-        }
+            if (hashValue === undefined || "") {
+                config.data.setPreviewData.cardSetName = "Classic";
+                Utils.createHash("Classic");
+            }
 
-        if (config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
-            cardSetName = hashValue;
-        }
-        else {
-            alert(`
+            if (config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
+                cardSetName = hashValue;
+            }
+            else {
+                alert(`
                 "${hashValue}": Invalid Card Set.
                 Showing "Classic" instead.
             `)
-            cardSetName = "Classic";
+                cardSetName = "Classic";
+            }
+
+            config.data.setPreviewData.cardSetName = cardSetName;
+            Utils.createHash(`filters/{"cardSet":"${cardSetName}","hero":"Druid"}`);
+
+            this.fResource.getCardSet(Utils.getFilters()["cardSet"])
+                .then(cardSetData => {
+                    this.rService.showCards(cardSetData);
+                })
         }
 
-        config.data.setPreviewData.cardSetName = cardSetName;
-        Utils.createHash(`filters/{"cardSet":"${cardSetName}","hero":"Druid"}`);
-
-        this.fResource.getCardSet(Utils.getFilters()["cardSet"])
-            .then(cardSetData => {
-                this.rService.showCards(cardSetData);
-            })
+        Utils.clickElement(document.getElementById('preview-card-set-btn'), previewBtn);
     }
 
     /** What happens when you click the Return Button */
-    return = (): void => {
-        Utils.createHash(Utils.getFilters()["cardSet"]);
+    return(): void {
+        const returnBtn = (e) => {
+            Utils.createHash(Utils.getFilters()["cardSet"]);
+        }
+        Utils.clickElement(document.getElementById('return-btn'), returnBtn);
     }
 
     /** What happens when you click the Add To Cart Button */
     addToCart = (): void => {
-        let setName: string;
-        const hashValue: string = Utils.getHashValue();
-        const filters: {} = Utils.getFilters();
+        const addToCartBtn = (e) => {
+            let setName: string;
+            const hashValue: string = Utils.getHashValue();
+            const filters: {} = Utils.getFilters();
 
-        // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
-        if (hashValue !== undefined || "" || null) {
-            if (hashValue.search("/") !== -1 && filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
-                setName = filters["cardSet"];
+            // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
+            if (hashValue !== undefined || "" || null) {
+                if (hashValue.search("/") !== -1 && filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
+                    setName = filters["cardSet"];
 
-            }
-            else if (hashValue.search("/") === -1 && config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
-                setName = hashValue;
+                }
+                else if (hashValue.search("/") === -1 && config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
+                    setName = hashValue;
+                }
+                else {
+                    alert("Please choose a Card Set first!");
+                    return;
+                }
             }
             else {
                 alert("Please choose a Card Set first!");
                 return;
             }
+
+            const pack: CardPack = new CardPack(setName || "Classic");
+
+            this.cart.fillCart(pack, this.rService.showPacks);
         }
-        else {
-            alert("Please choose a Card Set first!");
-            return;
-        }
-
-        const pack: CardPack = new CardPack(setName || "Classic");
-
-        this.fillCart(pack);
-        console.log(this.cart.items);
-    }
-
-    /** Fills the ShoppingCart with packs and displays them */
-    fillCart = (pack: CardPack) => {
-        let amountOfPacks: number;
-
-        if (Utils.getHashValue().search("/") === -1) {
-            amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[0]).value;
-        }
-        else {
-            amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[1]).value;
-        }
-
-        for (let i: number = 0; i < amountOfPacks; i++) {
-            this.cart.pushToCart(pack);
-            this.rService.showPacks(pack);
+        for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
+            Utils.clickElement(item, addToCartBtn);
         }
     }
 
     /** Not implemented, yet */
-    goToCart = (): any => {
-        alert("Not implemented, yet");
+    gotoCart = (): any => {
+        const gotoCartBtn = (e) => {
+            alert("Not implemented, yet");
+        }
+        for (let item of <any>document.getElementsByClassName("goto-cart-btn")) {
+            Utils.clickElement(item, gotoCartBtn);
+        }
     }
 
 
@@ -116,20 +115,20 @@ export class ButtonHandler {
     // ****************************
 
     /** Iterate the CardSet-List on the StartPage and SetPreview and doStuff */
-    iterateCardSet(doStuff: any): void {
+    iterateCardSet(doStuff = (e) => { }): void {
         for (let item of <any>document.getElementsByClassName("set-filter")) {
             Utils.iterateUl(item.children[1].children, doStuff);
         }
     }
 
     /** Selects the CardSet on the StartPage */
-    selectCardSet = (cardSet: any): void => {
+    selectCardSet = (cardSet: HTMLElement): void => {
         Utils.clickElement(cardSet, this.setCardSet);
     }
 
     /** Sets the hash-value according to the selected CardSet */
-    setCardSet = (e: any): void => {
-        const cardSetName = e.target.attributes[0].value;
+    setCardSet = (e): void => {
+        const cardSetName: string = e.target.attributes[0].value;
         config.data.setPreviewData.cardSetName = cardSetName;
 
         // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
@@ -154,18 +153,18 @@ export class ButtonHandler {
     // ****************************
 
     /** Iterate the hero-filter-list on the preview-page */
-    iterateHero(doStuff: any): void {
+    iterateHero(doStuff = (e) => { }): void {
         Utils.iterateUl(document.getElementById('hero-filter').children[1].children, doStuff);
     }
 
     /** Select the Hero from the hero-filter-list */
-    selectHero = (hero: any): void => {
+    selectHero = (hero: HTMLElement): void => {
         Utils.clickElement(hero, this.setHero);
     }
 
     /** Sets the hash according to the selected hero */
-    setHero = (e: any): void => {
-        const heroValue = e.target.attributes[0].value;
+    setHero = (e): void => {
+        const heroValue: string = e.target.attributes[0].value;
 
         let filter = Utils.getFilters();
         if (filter["hero"] !== undefined && filter["hero"] === heroValue && filter["cardSet"] !== undefined) {
@@ -183,18 +182,18 @@ export class ButtonHandler {
     // ****************************
 
     /** Iterates the mana-cost-filter on the preview-page */
-    iterateManaCost(doStuff: any): void {
+    iterateManaCost(doStuff = (e) => { }): void {
         Utils.iterateUl(document.getElementById('mana-filter').children[1].children, doStuff);
     }
 
     /** Selects the mana-cost- from the filter */
-    selectManaCost = (mana: any): void => {
+    selectManaCost = (mana: HTMLElement): void => {
         Utils.clickElement(mana, this.setManaCost);
     }
 
     /** Sets the hash according to the selected mana-cost */
-    setManaCost = (e: any): void => {
-        const manaCostValue = e.target.attributes[0].value;
+    setManaCost = (e): void => {
+        const manaCostValue: string = e.target.attributes[0].value;
 
         let filter = Utils.getFilters();
         if (filter["manaCost"] !== undefined && filter["manaCost"] === manaCostValue) {
