@@ -7,8 +7,6 @@ import { RenderService } from '../modules/services/renderService';
 import { ShoppingCart } from '../modules/shoppingCart';
 import * as Buttons from "./buttons";
 
-
-
 'use strict';
 
 export class ButtonHandler {

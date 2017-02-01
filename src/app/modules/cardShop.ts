@@ -32,11 +32,8 @@ export class CardShop extends SinglePageApplication {
     }
 
     // Methods
-    /** 
-     * Abstract --> implementation 
-     * 
-     * Called by SinglePageApplication.start()
-    */
+    
+    /** Called by SinglePageApplication.start() */
     loadSpecifics = (): void => {
         // Filters
         this.bHandler.iterateFilters();
@@ -50,8 +47,5 @@ export class CardShop extends SinglePageApplication {
         // Cart
         this.bHandler.addToCart();
         this.bHandler.gotoCart();
-
-        // Utils.clickElement(document.getElementById("next-cards-shown"), this.bHandler.showNextCards);
-        // Utils.clickElement(document.getElementById("previous-cards-shown"), this.bHandler.showPreviousCards);
     }
 }

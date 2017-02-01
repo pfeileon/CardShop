@@ -8,7 +8,6 @@ import { ButtonHandler } from './buttons/buttonHandler';
 import { CardShop } from './modules/cardShop';
 
 import { testing } from './modules/tests';
-import { CardPack } from "./modules/cardPack"
 
 'use strict';
 
