@@ -62,6 +62,128 @@ export class RenderService {
         return `<ul>${list.map(item => record(item)).join('')}</ul>`;
     };
 
+    /**
+     * Decides which parts of the site have to be displayed or not, depending on the state
+     * 
+     * @param {string} selector - The state of the site
+     */
+    displayCheck(selector: string): void {
+        let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
+
+        let startPageShown: boolean = !document.getElementById("start-page").classList.contains("noDisplay");
+        let setPreviewShown: boolean = !document.getElementById("set-preview").classList.contains("noDisplay");
+        let errorPageShown: boolean = !document.getElementById("error-page").classList.contains("noDisplay");
+
+        switch (selector) {
+            case "start": {
+                shownCardSetHeader[0].textContent = this.renderStart();
+
+                if (!startPageShown) {
+                    Utils.toggleCssClass("start-page", "noDisplay");
+                }
+                if (setPreviewShown) {
+                    Utils.toggleCssClass("set-preview", "noDisplay");
+                }
+                if (errorPageShown) {
+                    Utils.toggleCssClass("error-page", "noDisplay");
+                }
+                break;
+            }
+            case "preview": {
+                shownCardSetHeader[1].textContent = this.renderPreview();
+
+                if (!setPreviewShown) {
+                    Utils.toggleCssClass("set-preview", "noDisplay");
+                }
+                if (startPageShown) {
+                    Utils.toggleCssClass("start-page", "noDisplay");
+                }
+                if (errorPageShown) {
+                    Utils.toggleCssClass("error-page", "noDisplay");
+                }
+                break;
+            }
+            case "error": {
+                if (!errorPageShown) {
+                    Utils.toggleCssClass("error-page", "noDisplay");
+                }
+                if (startPageShown) {
+                    Utils.toggleCssClass("start-page", "noDisplay");
+                }
+                if (setPreviewShown) {
+                    Utils.toggleCssClass("set-preview", "noDisplay");
+                }
+                break;
+            }
+        }
+    }
+
+    /** Adds dynamically generated content to the StartPage */
+    renderStart(): string {
+        
+        // TODO
+        // Implement dynamic rendering of items in cart
+        // For now: see ShoppingCart.fillCart()
+
+        const hashValue = Utils.getHashValue();
+
+        if (config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
+            return hashValue;
+        }
+        else {
+            return "";
+        }
+    }
+
+    /** Adds dynamically generated content to the PreviewPage */
+    renderPreview(): string {
+        const filters: {} = Utils.getFilters();
+
+        if (filters["hero"] !== undefined && config.data.setPreviewData.heroes.indexOf(filters["hero"]) === -1) {
+            alert("Invalid Hero! Showing Druid instead");
+
+            Utils.createHash(`filters/{"cardSet":"${config.data.setPreviewData.cardSetName}","hero":"Druid"}`);
+        }
+
+        const setName: string = filters["cardSet"];
+        const filterString: string = `${setName}`;
+
+        // let manaCost: string = filter["manaCost"];
+        // if (manaCost !== undefined) {
+        //     filterString += `&cost=${manaCost}`;
+        // }
+        if (this.lastSetName === setName && setName !== undefined) {
+            this.showCards(this.lastCardData);
+        }
+        else {
+            this.fResource.getCardData(filters)
+                .then(cardData => {
+                    if (setName !== undefined) {
+                        this.lastSetName = setName;
+
+                        if (cardData !== undefined) {
+                            this.lastCardData = cardData;
+                        }
+                    }
+                    this.showCards(cardData);
+                })
+        }
+
+        // Set Heading
+        if (filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
+            return filters["cardSet"];
+        }
+        else if (filters["cardSet"] !== undefined) {
+            alert("Invalid Card Set! Reverting to Classic");
+
+            Utils.createHash(`filters/{"cardSet":"Classic"}`);
+            return "Classic";
+        }
+        else {
+            return "none chosen";
+        }
+    }
+
     /** Inserts the images of the cards of a fetch call */
     showCards(cardData: any) {
 
@@ -118,126 +240,11 @@ export class RenderService {
     }
 
     /**
-     * Decides which parts of the site have to be displayed or not, depending on the state
-     * 
-     * @param {string} selector - The state of the site
-     */
-    displayCheck(selector: string) {
-        let startPageShown: boolean = !document.getElementById("start-page").classList.contains("noDisplay");
-        let setPreviewShown: boolean = !document.getElementById("set-preview").classList.contains("noDisplay");
-        let errorPageShown: boolean = !document.getElementById("error-page").classList.contains("noDisplay");
-
-        switch (selector) {
-            case "start": {
-                this.renderStart();
-
-                if (!startPageShown) {
-                    Utils.toggleCssClass("start-page", "noDisplay");
-                }
-                if (setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "noDisplay");
-                }
-                if (errorPageShown) {
-                    Utils.toggleCssClass("error-page", "noDisplay");
-                }
-                break;
-            }
-            case "preview": {
-                this.renderPreview();
-
-                if (!setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "noDisplay");
-                }
-                if (startPageShown) {
-                    Utils.toggleCssClass("start-page", "noDisplay");
-                }
-                if (errorPageShown) {
-                    Utils.toggleCssClass("error-page", "noDisplay");
-                }
-                break;
-            }
-            case "error": {
-                if (!errorPageShown) {
-                    Utils.toggleCssClass("error-page", "noDisplay");
-                }
-                if (startPageShown) {
-                    Utils.toggleCssClass("start-page", "noDisplay");
-                }
-                if (setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "noDisplay");
-                }
-                break;
-            }
-        }
-    }
-
-    /** Adds dynamically generated content to the StartPage */
-    renderStart() {
-        let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
-                
-                if (config.data.startPageData.cardSets.indexOf(Utils.getHashValue()) !== -1) {
-                    shownCardSetHeader[0].textContent = Utils.getHashValue();
-                }
-                else {
-                    shownCardSetHeader[0].textContent = "";
-                }
-    }
-
-    /** Adds dynamically generated content to the PreviewPage */
-    renderPreview() {
-        const filters: {} = Utils.getFilters();
-        let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
-
-        if (filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
-            shownCardSetHeader[1].textContent = filters["cardSet"];
-        }
-        else if (filters["cardSet"] !== undefined) {
-            alert("Invalid Card Set! Reverting to Classic");
-
-            Utils.createHash(`filters/{"cardSet":"Classic"}`);
-            shownCardSetHeader[1].textContent = "Classic";
-        }
-        else {
-            shownCardSetHeader[1].textContent = "none chosen";
-        }
-
-        if (filters["hero"] !== undefined && config.data.setPreviewData.heroes.indexOf(filters["hero"]) === -1) {
-            alert("Invalid Hero! Showing Druid instead");
-
-            Utils.createHash(`filters/{"cardSet":"${config.data.setPreviewData.cardSetName}","hero":"Druid"}`);
-        }
-
-        const setName: string = filters["cardSet"];
-        const filterString: string = `${setName}`;
-
-        // let manaCost: string = filter["manaCost"];
-        // if (manaCost !== undefined) {
-        //     filterString += `&cost=${manaCost}`;
-        // }
-        if (this.lastSetName === setName && setName !== undefined) {
-            this.showCards(this.lastCardData);
-        }
-        else {
-            this.fResource.getCardData(filters)
-                .then(cardData => {
-                    if (setName !== undefined) {
-                        this.lastSetName = setName;
-
-                        if (cardData !== undefined) {
-                            this.lastCardData = cardData;
-                        }
-                    }
-                    this.showCards(cardData);
-                })
-        }
-    }
-
-    /**
      * Displays the CardPacks
      * 
      * @param {CardPack} pack - The CardPack to be displayed
     */
-    showPacks(pack: CardPack) {
+    showPacks(pack: CardPack): void {
         let packLink: string;
 
         switch (pack["setName"]) {
@@ -256,7 +263,8 @@ export class RenderService {
             default:
                 break;
         }
-
+        
+        //document.getElementById("start-main").innerText = "";
         document.getElementById("start-main").insertAdjacentHTML("beforeend", `<img src="${packLink}" />`);
     }
 }
