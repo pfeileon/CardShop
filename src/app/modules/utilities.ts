@@ -5,13 +5,6 @@ declare const fetch;
 
 'use strict';
 
-/** Click handler for HTMLElements */
-export function clickElement(element: HTMLElement, callback: Callback<MouseEvent, void>): void {
-    element.addEventListener('click', (e) => {
-        callback(e);
-    });
-}
-
 /** Iterate an UL(HTMLCollection) and doStuff per LI */
 export function iterateUl(ul: any, doStuff: Callback<HTMLElement, void>): void {
     for (let li of ul) {

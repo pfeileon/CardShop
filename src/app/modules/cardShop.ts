@@ -6,6 +6,7 @@ import { RenderService } from './services/renderService';
 import { ShoppingCart } from './shoppingCart';
 import { SinglePageApplication } from './abstracts/singlePageApplication';
 import { ButtonHandler } from '../buttons/buttonHandler';
+import * as Buttons from '../buttons/buttons';
 
 'use strict';
 
@@ -18,10 +19,8 @@ export class CardShop extends SinglePageApplication {
     protected tHandler: TemplateHandler;
     protected rService: RenderService;
 
-    /** Chosen product */
     private cart: ShoppingCart;
     private bHandler: ButtonHandler;
-    private item: {};
 
     /** Warns after first instantiation */
     constructor(tHandler: TemplateHandler, bHandler: ButtonHandler) {
@@ -40,9 +39,7 @@ export class CardShop extends SinglePageApplication {
     */
     loadSpecifics = (): void => {
         // Filters
-        this.bHandler.iterateCardSet(this.bHandler.selectCardSet);
-        this.bHandler.iterateHero(this.bHandler.selectHero);
-        this.bHandler.iterateManaCost(this.bHandler.selectManaCost);
+        this.bHandler.iterateFilters();
 
         // Preview Card Set
         this.bHandler.previewCardSet();

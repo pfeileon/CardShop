@@ -26,19 +26,8 @@ export class ShoppingCart extends PseudoSingleton {
     }
 
     //Methods
-    /** Adds an item to the cart
-     * @param {{}} item - The item to be added.
-    */
-    pushToCart = (item: {}): void => {
-        this.items.push(item);
-    }
 
-    /** Removes an item from the cart */
-    popFromCart = (): void => {
-        this.items.pop();
-    }
-
-    /** Fills the ShoppingCart with packs and displays them */
+    /** Fills the ShoppingCart with packs, displays and returns them */
     fillCart = (item: {}, showItems = (item: {}) => {}): {}[] => {
         let amountOfPacks: number;
 
@@ -50,7 +39,7 @@ export class ShoppingCart extends PseudoSingleton {
         }
 
         for (let i: number = 0; i < amountOfPacks; i++) {
-            this.pushToCart(item);
+            this.items.push(item);
             showItems(item);
         }
 
