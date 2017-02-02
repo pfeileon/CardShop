@@ -21,8 +21,6 @@ export class TemplateHandler {
     private rService: RenderService;
     private templates: Template[];
 
-    public get RService() { return this.rService; }
-
     constructor(rService: RenderService) {
         this.rService = rService;
         this.templates = templates(this.rService);

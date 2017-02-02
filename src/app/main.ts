@@ -4,7 +4,7 @@ import { FetchResource } from './modules/fetchResource';
 import { RenderService } from './modules/services/renderService';
 import { TemplateHandler } from './templates/templateHandler';
 import { ShoppingCart } from './modules/shoppingCart';
-import { ButtonHandler } from './buttons/buttonHandler';
+import { ShopButtonHandler } from './buttons/shopButtonHandler';
 import { CardShop } from './modules/cardShop';
 
 import { testing } from './modules/tests';
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tHandler: TemplateHandler = new TemplateHandler(rService);
 
     const cart: ShoppingCart = new ShoppingCart();
-    const bHandler: ButtonHandler = new ButtonHandler(rService, cart);
+    const bHandler: ShopButtonHandler = new ShopButtonHandler(rService, cart);
 
     const shop: CardShop = new CardShop(tHandler, bHandler);
 

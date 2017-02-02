@@ -15,7 +15,6 @@ export class ShoppingCart extends PseudoSingleton {
         message: `${ShoppingCart.name}: ${PseudoSingleton.message}`
     };
 
-
     private customer: Customer;
     /** All items in the cart */
     private items: Shopable[] = new Array<Shopable>();

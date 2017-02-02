@@ -14,15 +14,11 @@ export class ButtonHandler {
     //Properties
     private fResource: FetchResource;
     private rService: RenderService;
-    private cart: ShoppingCart;
-
-    public get Cart() { return this.cart; }
     public get RService() { return this.rService; }
 
-    constructor(rService: RenderService, cart: ShoppingCart) {
+    constructor(rService: RenderService) {
         this.rService = rService;
         this.fResource = rService.FResource;
-        this.cart = cart;
     }
 
     /** What happens when you click the Preview Card Set Button */

@@ -3,13 +3,13 @@ import { Shopable } from "../types/types";
 import * as Utils from "../modules/utilities";
 import { CardPack } from "../modules/cardPack";
 import { Callback } from "../types/types";
-import { ButtonHandler } from "./buttonHandler";
+import { ShopButtonHandler } from "./ShopButtonHandler";
 
-
+"use strict";
 
 interface Button {
     id: string;
-    click: Callback<MouseEvent | ButtonHandler, Shopable[] | void>;
+    click: Callback<MouseEvent | ShopButtonHandler, Shopable[] | void>;
 }
 
 export const previewBtn: Button = {
@@ -46,7 +46,7 @@ export const returnBtn: Button = {
 
 export const addToCartBtn: Button = {
     id: "AdToCart",
-    click: (that: ButtonHandler) => {
+    click: (that: ShopButtonHandler) => {
         let setName: string;
         const hashValue: string = Utils.getHashValue();
         const filters: {} = Utils.getFilters();

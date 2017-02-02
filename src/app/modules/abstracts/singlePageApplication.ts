@@ -21,11 +21,12 @@ export abstract class SinglePageApplication extends PseudoSingleton {
     protected abstract fResource: FetchResource;
     protected abstract rService: RenderService;
     protected abstract tHandler: TemplateHandler;
+    protected abstract bHandler: ButtonHandler;
 
     /** Warns after first instantiation */
-    constructor(tHandler: TemplateHandler) {
+    constructor(tHandler: TemplateHandler, bHandler: ButtonHandler) {
         super(SinglePageApplication.ctorArg);
-        this.rService = tHandler.RService;
+        this.rService = bHandler.RService;
         this.fResource = this.rService.FResource;
     }
 

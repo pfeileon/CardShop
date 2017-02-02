@@ -6,6 +6,7 @@ import { RenderService } from './services/renderService';
 import { ShoppingCart } from './shoppingCart';
 import { SinglePageApplication } from './abstracts/singlePageApplication';
 import { ButtonHandler } from '../buttons/buttonHandler';
+import { ShopButtonHandler } from '../buttons/shopButtonHandler';
 import * as Buttons from '../buttons/buttons';
 
 'use strict';
@@ -16,15 +17,15 @@ export class CardShop extends SinglePageApplication {
     //Properties
     protected content: any;
     protected fResource: FetchResource;
-    protected bHandler: ButtonHandler;
+    protected bHandler: ShopButtonHandler;
     protected tHandler: TemplateHandler;
     protected rService: RenderService;
 
     private cart: ShoppingCart;
 
     /** Warns after first instantiation */
-    constructor(tHandler: TemplateHandler, bHandler: ButtonHandler) {
-        super(tHandler);
+    constructor(tHandler: TemplateHandler, bHandler: ShopButtonHandler) {
+        super(tHandler, bHandler);
 
         this.tHandler = tHandler;
         this.bHandler = bHandler;
