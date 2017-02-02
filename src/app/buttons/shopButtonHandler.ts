@@ -2,6 +2,7 @@ import { config } from '../config/config';
 import { Callback } from "../types/types";
 import * as Utils from '../modules/utilities';
 import { ButtonHandler } from "./buttonHandler";
+import { FetchResource } from '../modules/fetchResource';
 import { RenderService } from "../modules/services/renderService";
 import { ShoppingCart } from "../modules/shoppingCart";
 import * as Buttons from "./buttons";
@@ -9,8 +10,10 @@ import * as Buttons from "./buttons";
 "use strict";
 
 export class ShopButtonHandler extends ButtonHandler {
+    protected fResource: FetchResource;
+    protected rService: RenderService;
+    
     private cart: ShoppingCart;
-
     public get Cart() { return this.cart; }
 
     constructor(rService: RenderService, cart: ShoppingCart) {
