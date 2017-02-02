@@ -1,9 +1,16 @@
 import * as Utils from '../modules/utilities'
 'use strict';
 
-/** Generic type for callback functions */
+/**
+ * Generic type for callback functions
+ * @param {T} arg - generic argument
+ * @return {TResult} - generic return type
+ * */
 export interface Callback<T, TResult> {
-    (ctorArg: T): TResult;
+    (arg?: T): TResult;
+}
+
+export interface Shopable {
 }
 
 // Hack for fetch-API

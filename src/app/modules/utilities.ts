@@ -1,16 +1,9 @@
 import { Callback, Promise, Request, Response } from '../types/types'
 declare const fetch;
 
-// A collection of static utility functions
+// A collection of utility functions
 
 'use strict';
-
-/** Click handler for HTMLElements */
-export function clickElement(element: HTMLElement, callback: Callback<MouseEvent, void>): void {
-    element.addEventListener('click', (e) => {
-        callback(e);
-    });
-}
 
 /** Iterate an UL(HTMLCollection) and doStuff per LI */
 export function iterateUl(ul: any, doStuff: Callback<HTMLElement, void>): void {
@@ -72,6 +65,13 @@ export function toggleCssClass(id: string, cssClass: string): void {
 }
 
 export function getFilters(): {} {
-    let filters: any = JSON.parse(getHashValue().split("/")[1]);
+    const hashValue = getHashValue();
+    let filters: {};
+    if (hashValue.search("/") !== -1) {
+        filters = JSON.parse(hashValue.split("/")[1]);
+    }
+    else {
+        filters = hashValue;
+    }
     return filters;
 }

@@ -4,7 +4,7 @@ import { startPage } from './startPage';
 import { setPreview } from './setPreview';
 import { RenderService } from '../modules/services/renderService';
 
-export const templates = (rService: RenderService) => [{
+const templates = (rService: RenderService): Template[] => [{
     id: 'start-page',
     where: 'afterbegin',
     html: startPage(rService, config.data)
@@ -18,10 +18,12 @@ export const templates = (rService: RenderService) => [{
 
 export class TemplateHandler {
 
-    templates: Template[];
+    private rService: RenderService;
+    private templates: Template[];
 
-    constructor(templates: Template[]) {
-        this.templates = templates;
+    constructor(rService: RenderService) {
+        this.rService = rService;
+        this.templates = templates(this.rService);
     }
 
     /** Inserts a template after a specified element */
@@ -30,8 +32,8 @@ export class TemplateHandler {
     }
 
     /** Inserts all templates of the passed array */
-    insertAllTemplates = (templates: Template[]): void => {
-        for (let template of templates) {
+    insertAllTemplates = (): void => {
+        for (let template of this.templates) {
             this.insertTemplate(template)
         }
     }

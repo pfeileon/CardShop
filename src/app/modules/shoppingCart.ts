@@ -1,3 +1,4 @@
+import { Shopable } from "../types/types";
 import { PseudoSingleton } from './abstracts/pseudoSingleton'
 import * as Utils from './utilities'
 import { Customer } from './customer'
@@ -14,10 +15,12 @@ export class ShoppingCart extends PseudoSingleton {
         message: `${ShoppingCart.name}: ${PseudoSingleton.message}`
     };
 
-
     private customer: Customer;
     /** All items in the cart */
-    items: {}[] = new Array<{}>();
+    private items: Shopable[] = new Array<Shopable>();
+
+    public get Items() { return this.items; }
+    public set Items(Items) { this.items = Items }
 
     //Constructor
     /** Warns after first instantiation */
@@ -26,17 +29,16 @@ export class ShoppingCart extends PseudoSingleton {
     }
 
     //Methods
-    /** Adds an item to the cart
-     * @param {{}} item - The item to be added.
-    */
-    pushToCart = (item: {}): void => {
-        this.items.push(item);
-    }
 
-    /** Removes an item from the cart
-     * @param {number} i - Position of the item to be removed.
-    */
-    spliceFromCart = (i: number): void => {
-        this.items.splice(i, 1);
+    /**
+     * Fills the ShoppingCart with items and returns them
+     * @param {{}} item - The type of item to be put into the cart
+     * @param {number} amount - The amount of this item to be put into the cart
+     * */
+    fillCart = (item: Shopable, amount: number): Shopable[] => {
+        for (let i: number = 0; i < amount; i++) {
+            this.items.push(item);
+        }
+        return this.items;
     }
 }

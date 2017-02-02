@@ -9,10 +9,11 @@ export abstract class PseudoSingleton {
         this.existsCheck(ctorArg);
     }
 
-    existsCheck(ctorArg: {exists: boolean, message: string}): void {
+    existsCheck(ctorArg: {exists: boolean, message: string}): this {
         if (ctorArg.exists === true) {
             console.log(ctorArg.message);
         }
         ctorArg.exists = true;
+        return this;
     }
 }
