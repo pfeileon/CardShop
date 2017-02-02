@@ -3,7 +3,7 @@ import { Shopable } from "../types/types";
 import * as Utils from "../modules/utilities";
 import { CardPack } from "../modules/cardPack";
 import { Callback } from "../types/types";
-import { ShopButtonHandler } from "./ShopButtonHandler";
+import { ShopButtonHandler } from "./shopButtonHandler";
 
 "use strict";
 
