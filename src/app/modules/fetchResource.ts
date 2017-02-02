@@ -13,9 +13,9 @@ export class FetchResource {
     }
 
     getCardData = (filter: {}): Promise<Init> => {
-        let setName = filter["cardSet"];
-        let hero = filter["hero"];
-        let cardName = filter["cardName"] || filter["cardId"];
+        const setName = filter["cardSet"];
+        const hero = filter["hero"];
+        const cardName = filter["cardName"] || filter["cardId"];
 
         if (cardName !== undefined) {
             return this.getSingleCard(cardName);
@@ -28,25 +28,26 @@ export class FetchResource {
         }
     }
 
+    /** Returns all the cards */
     getAllCards = (): Promise<Init> => {
         return this.fService.query(config.api.url);
     }
 
     /** Returns single card data from the hearthstoneAPI */
     getSingleCard = (cardName: string): Promise<Init> => {
-        let url = config.api.url + '/' + cardName;
+        const url = config.api.url + '/' + cardName;
         return this.fService.query(url);
     }
 
     /** Returns card data of a cardSet from the hearthstoneAPI */
     getCardSet = (setName: string): Promise<Init> => {
-        let url = config.api.url + '/sets/' + setName;
+        const url = config.api.url + '/sets/' + setName;
         return this.fService.query(url);
     }
 
     /** Returns card data of a heroClass from the hearthstoneAPI */
     getClassCards = (className: string): Promise<Init> => {
-        let url = config.api.url + '/classes/' + className;
+        const url = config.api.url + '/classes/' + className;
         return this.fService.query(url);
     }
 }
