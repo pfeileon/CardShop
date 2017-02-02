@@ -16,18 +16,18 @@ export class CardShop extends SinglePageApplication {
     //Properties
     protected content: any;
     protected fResource: FetchResource;
+    protected bHandler: ButtonHandler;
     protected tHandler: TemplateHandler;
     protected rService: RenderService;
 
     private cart: ShoppingCart;
-    private bHandler: ButtonHandler;
 
     /** Warns after first instantiation */
     constructor(tHandler: TemplateHandler, bHandler: ButtonHandler) {
         super(tHandler);
 
-        this.bHandler = bHandler;
         this.tHandler = tHandler;
+        this.bHandler = bHandler;
         this.cart = bHandler.Cart;
     }
 

@@ -1,7 +1,7 @@
 import { config } from '../../config/config';
 import * as Utils from '../utilities';
 import { FetchResource } from "../fetchResource";
-import { CardPack } from "../cardPack";
+import { Shopable } from "../../types/types";
 
 'use strict';
 
@@ -118,9 +118,12 @@ export class RenderService {
         }
     }
 
-    /** Adds dynamically generated content to the StartPage */
+    /**
+     * Adds dynamically generated content to the startPageData
+     * 
+     * and returns the card set heading as string */
     renderStart(): string {
-        
+
         // TODO
         // Implement dynamic rendering of items in cart
         // For now: see ShoppingCart.fillCart()
@@ -135,7 +138,9 @@ export class RenderService {
         }
     }
 
-    /** Adds dynamically generated content to the PreviewPage */
+    /** Adds dynamically generated content to the PreviewPage
+     * 
+     * and returns the card set heading as string */
     renderPreview(): string {
         const filters: {} = Utils.getFilters();
 
@@ -146,12 +151,13 @@ export class RenderService {
         }
 
         const setName: string = filters["cardSet"];
-        const filterString: string = `${setName}`;
 
+        //const filterString: string = `${setName}`;
         // let manaCost: string = filter["manaCost"];
         // if (manaCost !== undefined) {
         //     filterString += `&cost=${manaCost}`;
         // }
+
         if (this.lastSetName === setName && setName !== undefined) {
             this.showCards(this.lastCardData);
         }
@@ -185,7 +191,7 @@ export class RenderService {
     }
 
     /** Inserts the images of the cards of a fetch call */
-    showCards(cardData: any) {
+    showCards(cardData: any): void {
 
         let manaFilter: string = Utils.getFilters()["manaCost"];
         let heroFilter: string = Utils.getFilters()["hero"];
@@ -240,31 +246,35 @@ export class RenderService {
     }
 
     /**
-     * Displays the CardPacks
+     * Displays the CardPacks in the cart
      * 
      * @param {CardPack} pack - The CardPack to be displayed
     */
-    showPacks(pack: CardPack): void {
-        let packLink: string;
-
-        switch (pack["setName"]) {
-            case "Classic":
-                packLink = "http://www.hearthcards.net/packs/images/pack.png";
-                break;
-            case "The Grand Tournament":
-                packLink = "http://www.hearthcards.net/packs/images/packtgt.png";
-                break;
-            case "Whispers of the Old Gods":
-                packLink = "http://www.hearthcards.net/packs/images/packwotog.png";
-                break;
-            case "Mean Streets of Gadgetzan":
-                packLink = "http://www.hearthcards.net/packs/images/packmsog.png";
-                break;
-            default:
-                break;
-        }
+    showItems(items: Shopable[]): void {
+        // First remove all shown packs
+        document.getElementById("start-main").innerText = "";
         
-        //document.getElementById("start-main").innerText = "";
-        document.getElementById("start-main").insertAdjacentHTML("beforeend", `<img src="${packLink}" />`);
+        for (let item of items) {
+            let packLink: string;
+
+            switch (item["setName"]) {
+                case "Classic":
+                    packLink = "http://www.hearthcards.net/packs/images/pack.png";
+                    break;
+                case "The Grand Tournament":
+                    packLink = "http://www.hearthcards.net/packs/images/packtgt.png";
+                    break;
+                case "Whispers of the Old Gods":
+                    packLink = "http://www.hearthcards.net/packs/images/packwotog.png";
+                    break;
+                case "Mean Streets of Gadgetzan":
+                    packLink = "http://www.hearthcards.net/packs/images/packmsog.png";
+                    break;
+                default:
+                    break;
+            }
+            
+            document.getElementById("start-main").insertAdjacentHTML("beforeend", `<img src="${packLink}" />`);
+        }
     }
 }

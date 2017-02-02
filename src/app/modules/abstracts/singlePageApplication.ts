@@ -3,6 +3,7 @@ import * as Utils from '../utilities';
 import { FetchResource } from '../fetchResource';
 import { TemplateHandler } from '../../templates/templateHandler';
 import { RenderService } from '../services/renderService';
+import { ButtonHandler } from '../../buttons/buttonHandler';
 
 'use strict';
 

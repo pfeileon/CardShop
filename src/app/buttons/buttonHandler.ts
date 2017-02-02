@@ -17,6 +17,7 @@ export class ButtonHandler {
     private cart: ShoppingCart;
 
     public get Cart() { return this.cart; }
+    public get RService() { return this.rService; }
 
     constructor(rService: RenderService, cart: ShoppingCart) {
         this.rService = rService;
@@ -25,26 +26,26 @@ export class ButtonHandler {
     }
 
     /** What happens when you click the Preview Card Set Button */
-    previewCardSet = (): void => {
-        document.getElementById('preview-card-set-btn').onclick = Buttons.previewBtn.bind(this, this);
+    previewCardSet(): void {
+        document.getElementById('preview-card-set-btn').onclick = Buttons.previewBtn["click"];
     }
 
     /** What happens when you click the Return Button */
     return(): void {
-        document.getElementById('return-btn').onclick = Buttons.returnBtn;
+        document.getElementById('return-btn').onclick = Buttons.returnBtn["click"];
     }
 
     /** What happens when you click the Add To Cart Button */
-    addToCart = (): void => {
+    addToCart(): void {
         for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
-            item.onclick = Buttons.addToCartBtn.bind(this, this);
+            item.onclick = Buttons.addToCartBtn["click"].bind(this, this);
         }
     }
 
     /** Not implemented, yet */
-    gotoCart = (): void => {
+    gotoCart(): void {
         for (let item of <any>document.getElementsByClassName("goto-cart-btn")) {
-            item.onclick = Buttons.gotoCartBtn;
+            item.onclick = Buttons.gotoCartBtn["click"];
         }
     }
 
@@ -71,17 +72,17 @@ export class ButtonHandler {
 
     /** Selects the CardSet on the StartPage */
     selectCardSet(cardSet: HTMLElement): void {
-        cardSet.onclick = Buttons.setCardSetBtn;
+        cardSet.onclick = Buttons.setCardSetBtn["click"];
     }
 
     /** Select the Hero from the hero-filter-list */
     selectHero(hero: HTMLElement): void {
-        hero.onclick = Buttons.setHeroBtn;
+        hero.onclick = Buttons.setHeroBtn["click"];
     }
 
     /** Selects the mana-cost- from the filter */
     selectManaCost(mana: HTMLElement): void {
-        mana.onclick = Buttons.setManaCostBtn;
+        mana.onclick = Buttons.setManaCostBtn["click"];
     }
 
     /** unused stuff

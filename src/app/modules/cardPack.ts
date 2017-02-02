@@ -1,10 +1,11 @@
+import { Shopable } from "../types/types";
 import { Card } from './card';
 import { FetchResource } from './fetchResource';
 
 'use strict';
 
 /** Five Cards, randomly selected from a specific CardSet */
-export class CardPack {
+export class CardPack implements Shopable {
 
     //Properties
     private setName: string;

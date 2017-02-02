@@ -17,7 +17,7 @@ const templates = (rService: RenderService): Template[] => [{
 /** All templates with exact position */
 
 export class TemplateHandler {
-    
+
     private rService: RenderService;
     private templates: Template[];
 
