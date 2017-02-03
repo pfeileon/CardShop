@@ -9,6 +9,11 @@ import * as Buttons from "./buttons";
 
 "use strict";
 
+interface Filters {
+    id: string[];
+    do: Callback<HTMLElement, void>[];
+}
+
 export class ShopButtonHandler extends ButtonHandler {
     // PROPERTIES
     // - OWN
@@ -20,9 +25,9 @@ export class ShopButtonHandler extends ButtonHandler {
         super(rService);
         this.cart = cart;
     }
-    
+
     // METHODS
-    
+
     // - FORCED
     buttonInit(): void {
         // Filters
@@ -42,25 +47,27 @@ export class ShopButtonHandler extends ButtonHandler {
     // - OWN
     /** Activates the filters */
     iterateFilters(): void {
-        const filters: string[] = ["set", "hero", "mana"];
-        const doFilters: Callback<HTMLElement, void>[] = [
-            this.selectCardSet,
-            this.selectHero,
-            this.selectManaCost
-        ]
+        const filters: Filters = {
+            id: ["set", "hero", "mana"],
+            do: [
+                this.selectCardSet,
+                this.selectHero,
+                this.selectManaCost
+            ]
+        }
 
-        for (let i: number = 0; i < filters.length; i++) {
-            if (filters[i] === "set") {
-                for (let item of <any>document.getElementsByClassName(`${filters[i]}-filter`)) {
-                    Utils.iterateUl(item.children[1].children, doFilters[i]);
+        for (let i: number = 0; i < filters["id"].length; i++) {
+            if (filters["id"][i] === "set") {
+                for (let item of <any>document.getElementsByClassName(`${filters["id"][i]}-filter`)) {
+                    Utils.iterateUl(item.children[1].children, filters["do"][i]);
                 }
             }
             else {
-                Utils.iterateUl(document.getElementById(`${filters[i]}-filter`).children[1].children, doFilters[i]);
+                Utils.iterateUl(document.getElementById(`${filters["id"][i]}-filter`).children[1].children, filters["do"][i]);
             }
         }
     }
-    
+
     /** What happens when you click the Return Button */
     return(): void {
         const returnBtn: Buttons.ReturnButton = new Buttons.ReturnButton("return-btn");
