@@ -10,40 +10,18 @@ import * as Buttons from "./buttons";
 "use strict";
 
 export class ShopButtonHandler extends ButtonHandler {
-    protected fResource: FetchResource;
-    protected rService: RenderService;
-    
+    // PROPERTIES
     private cart: ShoppingCart;
     public get Cart() { return this.cart; }
-
+    // CONSTRUCTOR
     constructor(rService: RenderService, cart: ShoppingCart) {
         super(rService);
         this.cart = cart;
     }
 
-    /** What happens when you click the Preview Card Set Button */
-    previewCardSet(): void {
-        document.getElementById('preview-card-set-btn').onclick = Buttons.previewBtn["click"];
-    }
+    // METHODS
 
-    /** What happens when you click the Return Button */
-    return(): void {
-        document.getElementById('return-btn').onclick = Buttons.returnBtn["click"];
-    }
-
-    /** What happens when you click the Add To Cart Button */
-    addToCart(): void {
-        for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
-            item.onclick = Buttons.addToCartBtn["click"].bind(this, this);
-        }
-    }
-
-    /** Not implemented, yet */
-    gotoCart(): void {
-        for (let item of <any>document.getElementsByClassName("goto-cart-btn")) {
-            item.onclick = Buttons.gotoCartBtn["click"];
-        }
-    }
+    // - FORCED
 
     /** Activates the filters */
     iterateFilters(): void {
@@ -63,6 +41,31 @@ export class ShopButtonHandler extends ButtonHandler {
             else {
                 Utils.iterateUl(document.getElementById(`${filters[i]}-filter`).children[1].children, doFilters[i]);
             }
+        }
+    }
+    /** What happens when you click the Return Button */
+    return(): void {
+        document.getElementById('return-btn').onclick = Buttons.returnBtn["click"];
+    }
+
+    // - OWN
+
+    /** What happens when you click the Preview Card Set Button */
+    previewCardSet(): void {
+        document.getElementById('preview-card-set-btn').onclick = Buttons.previewBtn["click"];
+    }
+
+    /** What happens when you click the Add To Cart Button */
+    addToCart(): void {
+        for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
+            item.onclick = Buttons.addToCartBtn["click"].bind(this, this);
+        }
+    }
+
+    /** Not implemented, yet */
+    gotoCart(): void {
+        for (let item of <any>document.getElementsByClassName("goto-cart-btn")) {
+            item.onclick = Buttons.gotoCartBtn["click"];
         }
     }
 

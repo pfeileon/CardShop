@@ -13,26 +13,24 @@ import * as Buttons from '../buttons/buttons';
 
 /** Start via inherited method "start()" */
 export class CardShop extends SinglePageApplication {
-
-    //Properties
-    protected content: any;
-    protected fResource: FetchResource;
+    // PROPERTIES
+    // - FORCED
     protected bHandler: ShopButtonHandler;
-    protected tHandler: TemplateHandler;
-    protected rService: RenderService;
-
+    // - OWN
     private cart: ShoppingCart;
-
+    
+    // CONSTRUCTOR
     /** Warns after first instantiation */
     constructor(tHandler: TemplateHandler, bHandler: ShopButtonHandler) {
         super(tHandler, bHandler);
-
         this.tHandler = tHandler;
         this.bHandler = bHandler;
         this.cart = bHandler.Cart;
     }
 
-    // Methods
+    // METHODS
+    
+    // - FORCED
     
     /** Called by SinglePageApplication.start() */
     loadSpecifics = (): void => {
