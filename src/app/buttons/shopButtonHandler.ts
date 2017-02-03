@@ -24,7 +24,7 @@ export class ShopButtonHandler extends ButtonHandler {
     // METHODS
     
     // - FORCED
-    buttonInit() {
+    buttonInit(): void {
         // Filters
         this.iterateFilters();
 
@@ -60,6 +60,7 @@ export class ShopButtonHandler extends ButtonHandler {
             }
         }
     }
+    
     /** What happens when you click the Return Button */
     return(): void {
         const returnBtn: Buttons.ReturnButton = new Buttons.ReturnButton("return-btn");

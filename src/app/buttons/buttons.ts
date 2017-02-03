@@ -61,6 +61,7 @@ export class AddToCartButton extends Button {
 
                 // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
                 if (hashValue !== undefined || "" || null) {
+
                     if (hashValue.search("/") !== -1 && filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
                         setName = filters["cardSet"];
 
@@ -70,16 +71,18 @@ export class AddToCartButton extends Button {
                     }
                     else {
                         alert("Please choose a Card Set first!");
+                        return;
                     }
                 }
                 else {
                     alert("Please choose a Card Set first!");
+                    return;
                 }
 
                 const pack: CardPack = new CardPack(setName || "Classic");
 
                 let amountOfPacks: number;
-                if (Utils.getHashValue().search("/") === -1) {
+                if (hashValue.search("/") === -1) {
                     amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[0]).value;
                 }
                 else {
