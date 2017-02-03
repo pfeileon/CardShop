@@ -7,143 +7,157 @@ import { ShopButtonHandler } from "./shopButtonHandler";
 
 "use strict";
 
-interface Button {
-    id: string;
-    click: Callback<MouseEvent | ShopButtonHandler, Shopable[] | void>;
+abstract class Button {
+    protected id: string;
+    protected abstract click: Callback<HTMLElement | ShopButtonHandler | void, void>;
+    constructor(id: string) {
+        this.id = id;
+    }
 }
 
-export const previewBtn: Button = {
-    id: "Preview",
-    click: (): void => {
-        const hashValue: string = Utils.getHashValue();
-        let cardSetName: string;
+export class ReturnButton extends Button {
+    click = (): void => {
+        document.getElementById(this.id).onclick = () => {
+            Utils.createHash(Utils.getFilters()["cardSet"])
+        };
+    }
+}
 
-        if (hashValue === undefined || "") {
-            config.data.setPreviewData.cardSetName = "Classic";
-            Utils.createHash("Classic");
-        }
+export class PreviewButton extends Button {
+    click = (): void => {
+        document.getElementById(this.id).onclick = () => {
+            const hashValue: string = Utils.getHashValue();
+            let cardSetName: string;
 
-        if (config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
-            cardSetName = hashValue;
-        }
-        else {
-            alert(`
+            if (hashValue === undefined || "") {
+                config.data.setPreviewData.cardSetName = "Classic";
+                Utils.createHash("Classic");
+            }
+
+            if (config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
+                cardSetName = hashValue;
+            }
+            else {
+                alert(`
                 "${hashValue}": Invalid Card Set.
                 Showing "Classic" instead.
             `)
-            cardSetName = "Classic";
-        }
+                cardSetName = "Classic";
+            }
 
-        config.data.setPreviewData.cardSetName = cardSetName;
-        Utils.createHash(`filters/{"cardSet":"${cardSetName}","hero":"Druid"}`);
+            config.data.setPreviewData.cardSetName = cardSetName;
+            Utils.createHash(`filters/{"cardSet":"${cardSetName}","hero":"Druid"}`);
+        }
     }
 }
 
-export const returnBtn: Button = {
-    id: "ReturnButton",
-    click: () => { Utils.createHash(Utils.getFilters()["cardSet"]) }
-}
+export class AddToCartButton extends Button {
+    click = (that: ShopButtonHandler): void => {
+        for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
+            item.onclick = () => {
+                let setName: string;
+                const hashValue: string = Utils.getHashValue();
+                const filters: {} = Utils.getFilters();
 
-export const addToCartBtn: Button = {
-    id: "AdToCart",
-    click: (that: ShopButtonHandler) => {
-        let setName: string;
-        const hashValue: string = Utils.getHashValue();
-        const filters: {} = Utils.getFilters();
+                // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
+                if (hashValue !== undefined || "" || null) {
+                    if (hashValue.search("/") !== -1 && filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
+                        setName = filters["cardSet"];
 
-        // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
-        if (hashValue !== undefined || "" || null) {
-            if (hashValue.search("/") !== -1 && filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
-                setName = filters["cardSet"];
+                    }
+                    else if (hashValue.search("/") === -1 && config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
+                        setName = hashValue;
+                    }
+                    else {
+                        alert("Please choose a Card Set first!");
+                    }
+                }
+                else {
+                    alert("Please choose a Card Set first!");
+                }
 
+                const pack: CardPack = new CardPack(setName || "Classic");
+
+                let amountOfPacks: number;
+                if (Utils.getHashValue().search("/") === -1) {
+                    amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[0]).value;
+                }
+                else {
+                    amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[1]).value;
+                }
+
+                return that.RService.showItems(that.Cart.fillCart(pack, amountOfPacks));
             }
-            else if (hashValue.search("/") === -1 && config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
-                setName = hashValue;
-            }
-            else {
-                alert("Please choose a Card Set first!");
-            }
         }
-        else {
-            alert("Please choose a Card Set first!");
-        }
-
-        const pack: CardPack = new CardPack(setName || "Classic");
-
-        let amountOfPacks: number;
-        if (Utils.getHashValue().search("/") === -1) {
-            amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[0]).value;
-        }
-        else {
-            amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[1]).value;
-        }
-
-        return that.RService.showItems(that.Cart.fillCart(pack, amountOfPacks));
     }
 }
 
-export const gotoCartBtn: Button = {
-    id: "GotoCart",
-    click: (e): void => {
-        alert("Not implemented, yet");
+export class GotoCartButton extends Button {
+    click = (): void => {
+        for (let item of <any>document.getElementsByClassName(this.id)) {
+            item.onclick = () => alert("Not implemented, yet");
+        }
     }
 }
 
 /** Sets the hash-value according to the selected CardSet */
-export const setCardSetBtn: Button = {
-    id: "SetCardSet",
-    click: (e: MouseEvent): void => {
-        const cardSetName: string = e.srcElement.attributes[0].value;
-        config.data.setPreviewData.cardSetName = cardSetName;
+export class SetCardSetButton extends Button {
+    click = (cardSet: HTMLElement): void => {
+        cardSet.onclick = (e: MouseEvent): void => {
+            const cardSetName: string = e.srcElement.attributes[0].value;
+            config.data.setPreviewData.cardSetName = cardSetName;
 
-        // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
-        if (Utils.getHashValue() !== undefined && Utils.getHashValue().search("/") !== -1) {
-            let filter = Utils.getFilters();
-            if (filter["cardSet"] !== undefined && filter["cardSet"] === cardSetName && filter["hero"] !== undefined) {
-                delete (filter["cardSet"]);
+            // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
+            if (Utils.getHashValue() !== undefined && Utils.getHashValue().search("/") !== -1) {
+                let filter = Utils.getFilters();
+                if (filter["cardSet"] !== undefined && filter["cardSet"] === cardSetName && filter["hero"] !== undefined) {
+                    delete (filter["cardSet"]);
+                }
+                else {
+                    filter["cardSet"] = cardSetName;
+                }
+                Utils.createHash(`filters/${JSON.stringify(filter)}`);
             }
             else {
-                filter["cardSet"] = cardSetName;
+                Utils.createHash(cardSetName);
             }
-            Utils.createHash(`filters/${JSON.stringify(filter)}`);
-        }
-        else {
-            Utils.createHash(cardSetName);
         }
     }
 }
 
 /** Sets the hash according to the selected hero */
-export const setHeroBtn: Button = {
-    id: "SetHero",
-    click: (e: MouseEvent): void => {
-        const heroValue: string = e.srcElement.attributes[0].value;
+export class SetHeroButton extends Button {
+    click = (hero: HTMLElement) => {
+        hero.onclick = (e: MouseEvent): void => {
+            const heroValue: string = e.srcElement.attributes[0].value;
 
-        let filter = Utils.getFilters();
-        if (filter["hero"] !== undefined && filter["hero"] === heroValue && filter["cardSet"] !== undefined) {
-            delete (filter["hero"]);
+            let filter = Utils.getFilters();
+            if (filter["hero"] !== undefined && filter["hero"] === heroValue && filter["cardSet"] !== undefined) {
+                delete (filter["hero"]);
+            }
+            else {
+                filter["hero"] = heroValue;
+            }
+            Utils.createHash(`filters/${JSON.stringify(filter)}`);
         }
-        else {
-            filter["hero"] = heroValue;
-        }
-        Utils.createHash(`filters/${JSON.stringify(filter)}`);
     }
 }
 
 /** Sets the hash according to the selected mana-cost */
-export const setManaCostBtn: Button = {
-    id: "SetManaCost",
-    click: (e: MouseEvent): void => {
-        const manaCostValue: string = e.srcElement.attributes[0].value;
+export class SetManaCostButton extends Button {
+    click = (manaCost: HTMLElement): void => {
+        manaCost.onclick = (e: MouseEvent): void => {
+            const manaCostValue: string = e.srcElement.attributes[0].value;
 
-        let filter = Utils.getFilters();
-        if (filter["manaCost"] !== undefined && filter["manaCost"] === manaCostValue) {
-            delete (filter["manaCost"]);
-        }
-        else {
-            filter["manaCost"] = manaCostValue;
-        }
+            let filter = Utils.getFilters();
+            if (filter["manaCost"] !== undefined && filter["manaCost"] === manaCostValue) {
+                delete (filter["manaCost"]);
+            }
+            else {
+                filter["manaCost"] = manaCostValue;
+            }
 
-        Utils.createHash(`filters/${JSON.stringify(filter)}`);
+            Utils.createHash(`filters/${JSON.stringify(filter)}`);
+        }
     }
 }

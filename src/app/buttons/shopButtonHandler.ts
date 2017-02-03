@@ -11,18 +11,35 @@ import * as Buttons from "./buttons";
 
 export class ShopButtonHandler extends ButtonHandler {
     // PROPERTIES
+    // - OWN
     private cart: ShoppingCart;
     public get Cart() { return this.cart; }
+
     // CONSTRUCTOR
     constructor(rService: RenderService, cart: ShoppingCart) {
         super(rService);
         this.cart = cart;
     }
-
+    
     // METHODS
-
+    
     // - FORCED
+    buttonInit() {
+        // Filters
+        this.iterateFilters();
 
+        // Preview Card Set
+        this.previewCardSet();
+
+        // Return
+        this.return();
+
+        // Cart
+        this.addToCart();
+        this.gotoCart();
+    }
+
+    // - OWN
     /** Activates the filters */
     iterateFilters(): void {
         const filters: string[] = ["set", "hero", "mana"];
@@ -45,43 +62,44 @@ export class ShopButtonHandler extends ButtonHandler {
     }
     /** What happens when you click the Return Button */
     return(): void {
-        document.getElementById('return-btn').onclick = Buttons.returnBtn["click"];
+        const returnBtn: Buttons.ReturnButton = new Buttons.ReturnButton("return-btn");
+        returnBtn.click();
     }
-
-    // - OWN
 
     /** What happens when you click the Preview Card Set Button */
     previewCardSet(): void {
-        document.getElementById('preview-card-set-btn').onclick = Buttons.previewBtn["click"];
+        const previewBtn: Buttons.PreviewButton = new Buttons.PreviewButton("preview-card-set-btn");
+        previewBtn.click();
     }
 
     /** What happens when you click the Add To Cart Button */
     addToCart(): void {
-        for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
-            item.onclick = Buttons.addToCartBtn["click"].bind(this, this);
-        }
+        const addToCartBtn: Buttons.AddToCartButton = new Buttons.AddToCartButton("add-to-cart-btn");
+        addToCartBtn.click(this);
     }
 
     /** Not implemented, yet */
     gotoCart(): void {
-        for (let item of <any>document.getElementsByClassName("goto-cart-btn")) {
-            item.onclick = Buttons.gotoCartBtn["click"];
-        }
+        const gotoCartBtn: Buttons.GotoCartButton = new Buttons.GotoCartButton("goto-cart-btn");
+        gotoCartBtn.click();
     }
 
     /** Selects the CardSet on the StartPage */
     selectCardSet(cardSet: HTMLElement): void {
-        cardSet.onclick = Buttons.setCardSetBtn["click"];
+        const setCardSetBtn: Buttons.SetCardSetButton = new Buttons.SetCardSetButton("set-card-set-btn");
+        setCardSetBtn.click(cardSet);
     }
 
     /** Select the Hero from the hero-filter-list */
     selectHero(hero: HTMLElement): void {
-        hero.onclick = Buttons.setHeroBtn["click"];
+        const setHeroBtn: Buttons.SetHeroButton = new Buttons.SetHeroButton("set-hero-set-btn");
+        setHeroBtn.click(hero);
     }
 
     /** Selects the mana-cost- from the filter */
-    selectManaCost(mana: HTMLElement): void {
-        mana.onclick = Buttons.setManaCostBtn["click"];
+    selectManaCost(manaCost: HTMLElement): void {
+        const setManaCostBtn: Buttons.SetManaCostButton = new Buttons.SetManaCostButton("set-mana-set-btn");
+        setManaCostBtn.click(manaCost);
     }
 
     /** unused stuff
