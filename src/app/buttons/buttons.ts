@@ -1,19 +1,15 @@
+import { Button } from "./button";
+import { ShopButtonHandler } from "./shopButtonHandler";
 import { config } from "../config/config";
-import { Shopable } from "../types/types";
+import { Callback } from "../types/types";
 import * as Utils from "../modules/utilities";
 import { CardPack } from "../modules/cardPack";
-import { Callback } from "../types/types";
-import { ShopButtonHandler } from "./shopButtonHandler";
+
+abstract class ShopButton extends Button {
+    protected bHandler: ShopButtonHandler = this.bHandler;
+}
 
 "use strict";
-
-abstract class Button {
-    protected id: string;
-    protected abstract click: Callback<HTMLElement | ShopButtonHandler | void, void>;
-    constructor(id: string) {
-        this.id = id;
-    }
-}
 
 export class ReturnButton extends Button {
     click = (): void => {
@@ -51,8 +47,8 @@ export class PreviewButton extends Button {
     }
 }
 
-export class AddToCartButton extends Button {
-    click = (that: ShopButtonHandler): void => {
+export class AddToCartButton extends ShopButton {
+    click = (): void => {
         for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
             item.onclick = () => {
                 let setName: string;
@@ -89,13 +85,13 @@ export class AddToCartButton extends Button {
                     amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[1]).value;
                 }
 
-                return that.RService.showItems(that.Cart.fillCart(pack, amountOfPacks));
+                return this.bHandler.RService.showItems(this.bHandler.Cart.fillCart(pack, amountOfPacks));
             }
         }
     }
 }
 
-export class GotoCartButton extends Button {
+export class GotoCartButton extends ShopButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.onclick = () => alert("Not implemented, yet");

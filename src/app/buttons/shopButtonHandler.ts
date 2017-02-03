@@ -70,43 +70,43 @@ export class ShopButtonHandler extends ButtonHandler {
 
     /** What happens when you click the Return Button */
     return(): void {
-        const returnBtn: Buttons.ReturnButton = new Buttons.ReturnButton("return-btn");
+        const returnBtn: Buttons.ReturnButton = new Buttons.ReturnButton("return-btn", this);
         returnBtn.click();
     }
 
     /** What happens when you click the Preview Card Set Button */
     previewCardSet(): void {
-        const previewBtn: Buttons.PreviewButton = new Buttons.PreviewButton("preview-card-set-btn");
+        const previewBtn: Buttons.PreviewButton = new Buttons.PreviewButton("preview-card-set-btn", this);
         previewBtn.click();
     }
 
     /** What happens when you click the Add To Cart Button */
     addToCart(): void {
-        const addToCartBtn: Buttons.AddToCartButton = new Buttons.AddToCartButton("add-to-cart-btn");
-        addToCartBtn.click(this);
+        const addToCartBtn: Buttons.AddToCartButton = new Buttons.AddToCartButton("add-to-cart-btn", this);
+        addToCartBtn.click();
     }
 
     /** Not implemented, yet */
     gotoCart(): void {
-        const gotoCartBtn: Buttons.GotoCartButton = new Buttons.GotoCartButton("goto-cart-btn");
+        const gotoCartBtn: Buttons.GotoCartButton = new Buttons.GotoCartButton("goto-cart-btn", this);
         gotoCartBtn.click();
     }
 
     /** Selects the CardSet on the StartPage */
     selectCardSet(cardSet: HTMLElement): void {
-        const setCardSetBtn: Buttons.SetCardSetButton = new Buttons.SetCardSetButton("set-card-set-btn");
+        const setCardSetBtn: Buttons.SetCardSetButton = new Buttons.SetCardSetButton("set-card-set-btn", this);
         setCardSetBtn.click(cardSet);
     }
 
     /** Select the Hero from the hero-filter-list */
     selectHero(hero: HTMLElement): void {
-        const setHeroBtn: Buttons.SetHeroButton = new Buttons.SetHeroButton("set-hero-set-btn");
+        const setHeroBtn: Buttons.SetHeroButton = new Buttons.SetHeroButton("set-hero-set-btn", this);
         setHeroBtn.click(hero);
     }
 
     /** Selects the mana-cost- from the filter */
     selectManaCost(manaCost: HTMLElement): void {
-        const setManaCostBtn: Buttons.SetManaCostButton = new Buttons.SetManaCostButton("set-mana-set-btn");
+        const setManaCostBtn: Buttons.SetManaCostButton = new Buttons.SetManaCostButton("set-mana-set-btn", this);
         setManaCostBtn.click(manaCost);
     }
 
