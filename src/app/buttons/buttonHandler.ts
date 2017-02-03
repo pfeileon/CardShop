@@ -4,14 +4,16 @@ import { RenderService } from '../modules/services/renderService';
 'use strict';
 
 export abstract class ButtonHandler {
-
-    protected abstract fResource: FetchResource;
-    protected abstract rService: RenderService;
-    
+    //PROPERTIES
+    protected fResource: FetchResource;
+    protected rService: RenderService;
     public get RService() { return this.rService; }
-
+    //CONSTRUCTOR
     constructor(rService: RenderService) {
         this.rService = rService;
         this.fResource = rService.FResource;
     }
+    //METHODS
+    abstract iterateFilters();
+    abstract return();
 }

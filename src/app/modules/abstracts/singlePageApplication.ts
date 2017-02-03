@@ -9,7 +9,9 @@ import { ButtonHandler } from '../../buttons/buttonHandler';
 
 /** Abstract basis for the SPA */
 export abstract class SinglePageApplication extends PseudoSingleton {
+    // PROPERTIES
 
+    // - STATIC
     private static name: string;
     private static exists: boolean = false;
     private static ctorArg: { exists: boolean, message: string } = {
@@ -17,12 +19,16 @@ export abstract class SinglePageApplication extends PseudoSingleton {
         message: `${SinglePageApplication.name}: ${PseudoSingleton.message}`
     };
 
-    protected abstract content: any;
-    protected abstract fResource: FetchResource;
-    protected abstract rService: RenderService;
-    protected abstract tHandler: TemplateHandler;
+    // - OWN
+    protected content: any;
+    protected fResource: FetchResource;
+    protected rService: RenderService;
+    protected tHandler: TemplateHandler;
+    
+    // - ABSTRACT
     protected abstract bHandler: ButtonHandler;
 
+    // CONSTRUCTOR
     /** Warns after first instantiation */
     constructor(tHandler: TemplateHandler, bHandler: ButtonHandler) {
         super(SinglePageApplication.ctorArg);
@@ -30,7 +36,9 @@ export abstract class SinglePageApplication extends PseudoSingleton {
         this.fResource = this.rService.FResource;
     }
 
-    // Methods
+    // METHODS
+
+    // - OWN
     /** Start the app */
     start(): void {
         // Render App
@@ -49,6 +57,7 @@ export abstract class SinglePageApplication extends PseudoSingleton {
         history.replaceState(this.content, "CardShop");
     };
 
+    // - ABSTRACT
     /** Implements a call of all methods needed at start-up for the specific implementation of SinglePageApplication  */
     abstract loadSpecifics = (): void => { }
 }
