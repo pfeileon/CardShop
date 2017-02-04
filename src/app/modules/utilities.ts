@@ -67,7 +67,7 @@ export function toggleCssClass(id: string, cssClass: string): void {
 export function getFilters(): {} {
     const hashValue = getHashValue();
     let filters: {};
-    if (hashValue.search("/") !== -1) {
+    if (hashValue !== undefined && hashValue.search("/") !== -1) {
         filters = JSON.parse(hashValue.split("/")[1]);
     }
     else {
