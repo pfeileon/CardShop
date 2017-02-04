@@ -9,10 +9,17 @@ import * as Buttons from "./buttons";
 
 "use strict";
 
+interface Filters {
+    id: string[];
+    do: Callback<HTMLElement, void>[];
+}
+
 export class ShopButtonHandler extends ButtonHandler {
     // PROPERTIES
+    // - OWN
     private cart: ShoppingCart;
     public get Cart() { return this.cart; }
+
     // CONSTRUCTOR
     constructor(rService: RenderService, cart: ShoppingCart) {
         super(rService);
@@ -22,66 +29,85 @@ export class ShopButtonHandler extends ButtonHandler {
     // METHODS
 
     // - FORCED
+    buttonInit(): void {
+        // Filters
+        this.iterateFilters();
 
-    /** Activates the filters */
-    iterateFilters(): void {
-        const filters: string[] = ["set", "hero", "mana"];
-        const doFilters: Callback<HTMLElement, void>[] = [
-            this.selectCardSet,
-            this.selectHero,
-            this.selectManaCost
-        ]
+        // Preview Card Set
+        this.previewCardSet();
 
-        for (let i: number = 0; i < filters.length; i++) {
-            if (filters[i] === "set") {
-                for (let item of <any>document.getElementsByClassName(`${filters[i]}-filter`)) {
-                    Utils.iterateUl(item.children[1].children, doFilters[i]);
-                }
-            }
-            else {
-                Utils.iterateUl(document.getElementById(`${filters[i]}-filter`).children[1].children, doFilters[i]);
-            }
-        }
-    }
-    /** What happens when you click the Return Button */
-    return(): void {
-        document.getElementById('return-btn').onclick = Buttons.returnBtn["click"];
+        // Return
+        this.return();
+
+        // Cart
+        this.addToCart();
+        this.gotoCart();
     }
 
     // - OWN
+    /** Activates the filters */
+    iterateFilters(): void {
+        const filters: Filters = {
+            id: ["set", "hero", "mana"],
+            do: [
+                this.selectCardSet,
+                this.selectHero,
+                this.selectManaCost
+            ]
+        }
+
+        for (let i: number = 0; i < filters["id"].length; i++) {
+            if (filters["id"][i] === "set") {
+                for (let item of <any>document.getElementsByClassName(`${filters["id"][i]}-filter`)) {
+                    Utils.iterateUl(item.children[1].children, filters["do"][i]);
+                }
+            }
+            else {
+                Utils.iterateUl(document.getElementById(`${filters["id"][i]}-filter`).children[1].children, filters["do"][i]);
+            }
+        }
+    }
+
+    /** What happens when you click the Return Button */
+    return(): void {
+        const returnBtn: Buttons.ReturnButton = new Buttons.ReturnButton("return-btn", this);
+        returnBtn.click();
+    }
 
     /** What happens when you click the Preview Card Set Button */
     previewCardSet(): void {
-        document.getElementById('preview-card-set-btn').onclick = Buttons.previewBtn["click"];
+        const previewBtn: Buttons.PreviewButton = new Buttons.PreviewButton("preview-card-set-btn", this);
+        previewBtn.click();
     }
 
     /** What happens when you click the Add To Cart Button */
     addToCart(): void {
-        for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
-            item.onclick = Buttons.addToCartBtn["click"].bind(this, this);
-        }
+        const addToCartBtn: Buttons.AddToCartButton = new Buttons.AddToCartButton("add-to-cart-btn", this);
+        addToCartBtn.click();
     }
 
     /** Not implemented, yet */
     gotoCart(): void {
-        for (let item of <any>document.getElementsByClassName("goto-cart-btn")) {
-            item.onclick = Buttons.gotoCartBtn["click"];
-        }
+        const gotoCartBtn: Buttons.GotoCartButton = new Buttons.GotoCartButton("goto-cart-btn", this);
+        gotoCartBtn.click();
     }
 
     /** Selects the CardSet on the StartPage */
     selectCardSet(cardSet: HTMLElement): void {
-        cardSet.onclick = Buttons.setCardSetBtn["click"];
+        const setCardSetBtn: Buttons.SetCardSetButton = new Buttons.SetCardSetButton("set-card-set-btn", this);
+        setCardSetBtn.click(cardSet);
     }
 
     /** Select the Hero from the hero-filter-list */
     selectHero(hero: HTMLElement): void {
-        hero.onclick = Buttons.setHeroBtn["click"];
+        const setHeroBtn: Buttons.SetHeroButton = new Buttons.SetHeroButton("set-hero-set-btn", this);
+        setHeroBtn.click(hero);
     }
 
     /** Selects the mana-cost- from the filter */
-    selectManaCost(mana: HTMLElement): void {
-        mana.onclick = Buttons.setManaCostBtn["click"];
+    selectManaCost(manaCost: HTMLElement): void {
+        const setManaCostBtn: Buttons.SetManaCostButton = new Buttons.SetManaCostButton("set-mana-set-btn", this);
+        setManaCostBtn.click(manaCost);
     }
 
     /** unused stuff

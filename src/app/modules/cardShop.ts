@@ -34,17 +34,5 @@ export class CardShop extends SinglePageApplication {
     
     /** Called by SinglePageApplication.start() */
     loadSpecifics = (): void => {
-        // Filters
-        this.bHandler.iterateFilters();
-
-        // Preview Card Set
-        this.bHandler.previewCardSet();
-
-        // Return
-        this.bHandler.return();
-
-        // Cart
-        this.bHandler.addToCart();
-        this.bHandler.gotoCart();
     }
 }

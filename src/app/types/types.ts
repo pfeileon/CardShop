@@ -1,4 +1,3 @@
-import * as Utils from '../modules/utilities'
 'use strict';
 
 /**
@@ -13,7 +12,7 @@ export interface Callback<T, TResult> {
 export interface Shopable {
 }
 
-// Hack for fetch-API
+// HACK FOR FETCH-API
 export interface Headers { }
 export interface Request { url: string, init?: Init }
 export interface Response { json(); }
