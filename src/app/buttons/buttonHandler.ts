@@ -1,3 +1,4 @@
+import { SinglePageApplication } from '../modules/abstracts/singlePageApplication';
 import { FetchResource } from '../modules/fetchResource';
 import { RenderService } from '../modules/services/renderService';
 
@@ -16,5 +17,5 @@ export abstract class ButtonHandler {
     }
 
     // METHODS
-    abstract buttonInit();
+    abstract buttonInit(spApp: SinglePageApplication);
 }

@@ -10,6 +10,7 @@ export interface Callback<T, TResult> {
 }
 
 export interface Shopable {
+    Key: string;
 }
 
 // HACK FOR FETCH-API

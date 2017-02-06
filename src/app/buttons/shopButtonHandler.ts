@@ -4,6 +4,7 @@ import * as Utils from '../modules/utilities';
 import { ButtonHandler } from "./buttonHandler";
 import { FetchResource } from '../modules/fetchResource';
 import { RenderService } from "../modules/services/renderService";
+import { CardShop } from "../modules/cardShop";
 import { ShoppingCart } from "../modules/shoppingCart";
 import * as Buttons from "./buttons";
 
@@ -16,20 +17,16 @@ interface Filters {
 
 export class ShopButtonHandler extends ButtonHandler {
     // PROPERTIES
-    // - OWN
-    private cart: ShoppingCart;
-    public get Cart() { return this.cart; }
-
     // CONSTRUCTOR
-    constructor(rService: RenderService, cart: ShoppingCart) {
+    constructor(rService: RenderService) {
         super(rService);
-        this.cart = cart;
     }
 
     // METHODS
 
     // - FORCED
-    buttonInit(): void {
+    buttonInit(shop: CardShop): void {
+
         // Filters
         this.iterateFilters();
 
@@ -40,8 +37,8 @@ export class ShopButtonHandler extends ButtonHandler {
         this.return();
 
         // Cart
-        this.addToCart();
-        this.gotoCart();
+        this.addToCart(shop.Cart);
+        this.gotoCart(shop.Cart);
     }
 
     // - OWN
@@ -81,14 +78,14 @@ export class ShopButtonHandler extends ButtonHandler {
     }
 
     /** What happens when you click the Add To Cart Button */
-    addToCart(): void {
-        const addToCartBtn: Buttons.AddToCartButton = new Buttons.AddToCartButton("add-to-cart-btn", this);
+    addToCart(cart: ShoppingCart): void {
+        const addToCartBtn: Buttons.AddToCartButton = new Buttons.AddToCartButton("add-to-cart-btn", this, cart);
         addToCartBtn.click();
     }
 
     /** Not implemented, yet */
-    gotoCart(): void {
-        const gotoCartBtn: Buttons.GotoCartButton = new Buttons.GotoCartButton("goto-cart-btn", this);
+    gotoCart(cart: ShoppingCart): void {
+        const gotoCartBtn: Buttons.GotoCartButton = new Buttons.GotoCartButton("goto-cart-btn", this, cart);
         gotoCartBtn.click();
     }
 

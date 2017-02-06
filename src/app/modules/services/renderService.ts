@@ -253,10 +253,8 @@ export class RenderService {
     showItems(items: Shopable[]): void {
         // First remove all shown packs
         document.getElementById("start-main").innerText = "";
-        
         for (let item of items) {
             let packLink: string;
-
             switch (item["setName"]) {
                 case "Classic":
                     packLink = "http://www.hearthcards.net/packs/images/pack.png";
@@ -273,7 +271,7 @@ export class RenderService {
                 default:
                     break;
             }
-            
+
             document.getElementById("start-main").insertAdjacentHTML("beforeend", `<img src="${packLink}" />`);
         }
     }

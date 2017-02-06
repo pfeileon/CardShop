@@ -1,6 +1,7 @@
 import { Shopable } from "../types/types";
 import { PseudoSingleton } from './abstracts/pseudoSingleton'
 import * as Utils from './utilities'
+import { StorageService } from './services/storageService';
 import { Customer } from './customer'
 
 'use strict';
@@ -15,6 +16,9 @@ export class ShoppingCart extends PseudoSingleton {
         message: `${ShoppingCart.name}: ${PseudoSingleton.message}`
     };
 
+    private sService: StorageService;
+    public get SService() { return this.sService; }
+
     private customer: Customer;
     /** All items in the cart */
     private items: Shopable[] = new Array<Shopable>();
@@ -24,8 +28,9 @@ export class ShoppingCart extends PseudoSingleton {
 
     //Constructor
     /** Warns after first instantiation */
-    constructor() {
+    constructor(sService: StorageService) {
         super(ShoppingCart.pseudoSingletonArg);
+        this.sService = sService;
     }
 
     //Methods
@@ -39,6 +44,7 @@ export class ShoppingCart extends PseudoSingleton {
         for (let i: number = 0; i < amount; i++) {
             this.items.push(item);
         }
+        this.sService.populateStorage(this.items);
         return this.items;
     }
 }

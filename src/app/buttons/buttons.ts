@@ -3,10 +3,17 @@ import { ShopButtonHandler } from "./shopButtonHandler";
 import { config } from "../config/config";
 import { Callback } from "../types/types";
 import * as Utils from "../modules/utilities";
+import { ShoppingCart } from "../modules/shoppingCart";
 import { CardPack } from "../modules/cardPack";
 
 abstract class ShopButton extends Button {
-    protected bHandler: ShopButtonHandler = this.bHandler;
+    // PROPERTIES
+    protected cart: ShoppingCart;
+    // CONSTRUCTOR
+    constructor(id: string, bHandler: ShopButtonHandler, cart: ShoppingCart) {
+        super(id, bHandler);
+        this.cart = cart;
+    }
 }
 
 "use strict";
@@ -85,7 +92,7 @@ export class AddToCartButton extends ShopButton {
                     amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[1]).value;
                 }
 
-                return this.bHandler.RService.showItems(this.bHandler.Cart.fillCart(pack, amountOfPacks));
+                return this.bHandler.RService.showItems(this.cart.fillCart(pack, amountOfPacks));
             }
         }
     }
@@ -94,7 +101,19 @@ export class AddToCartButton extends ShopButton {
 export class GotoCartButton extends ShopButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
-            item.onclick = () => alert("Not implemented, yet");
+            item.onclick = () => {
+                let itemStorage: {} = this.cart.Items.reduce(
+                    function (countMap, word) {
+                        countMap[word.Key] = ++countMap[word.Key] || 1; return countMap
+                    }, {});
+
+                console.log(itemStorage);
+
+                for (let item of Object.keys(itemStorage)) {
+                    localStorage.setItem(item, itemStorage[item]);
+                }
+                console.log(localStorage);
+            }
         }
     }
 }
