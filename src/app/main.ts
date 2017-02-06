@@ -5,6 +5,7 @@ import { RenderService } from './modules/services/renderService';
 import { TemplateHandler } from './templates/templateHandler';
 import { ShoppingCart } from './modules/shoppingCart';
 import { ShopButtonHandler } from './buttons/shopButtonHandler';
+import { StorageService } from './modules/services/storageService';
 import { CardShop } from './modules/cardShop';
 
 import { testing } from './modules/tests';
@@ -18,11 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const fResource: FetchResource = new FetchResource(fService);
     const rService: RenderService = new RenderService(fResource);
     const tHandler: TemplateHandler = new TemplateHandler(rService);
+    const bHandler: ShopButtonHandler = new ShopButtonHandler(rService);
 
-    const cart: ShoppingCart = new ShoppingCart();
-    const bHandler: ShopButtonHandler = new ShopButtonHandler(rService, cart);
-
-    const shop: CardShop = new CardShop(tHandler, bHandler);
+    const sService: StorageService = new StorageService();
+    const cart: ShoppingCart = new ShoppingCart(sService);
+    const shop: CardShop = new CardShop(tHandler, bHandler, cart);
 
     // Start Application
     shop.start();
