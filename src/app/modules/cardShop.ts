@@ -41,7 +41,6 @@ export class CardShop extends SinglePageApplication {
         this.sService.storageInit(this.cart);
         this.rService.showItems(this.cart.Items);
         window.onstorage = (e) => {
-            console.log("HALLO");
             this.rService.showItems(this.cart.Items);
         };
         // localStorage.clear();

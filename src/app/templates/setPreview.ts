@@ -1,6 +1,6 @@
 import { RenderService } from '../modules/services/renderService';
 
-'use strict'
+'use strict';
 
 /** Set Preview Template */
 export const setPreview = (rService: RenderService, data: { setPreviewData }) => {
