@@ -46,7 +46,7 @@ export abstract class SinglePageApplication extends PseudoSingleton {
         this.rService.render(this.content);
 
         // Initialize all buttons
-        this.bHandler.buttonInit();
+        this.bHandler.buttonInit(this);
 
         // Implementation-specific methods are called
         this.loadSpecifics();
