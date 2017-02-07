@@ -34,11 +34,12 @@ export class ShopButtonHandler extends ButtonHandler {
         this.previewCardSet();
 
         // Return
-        this.return();
+        this.goBack();
 
         // Cart
-        this.addToCart(shop.Cart);
-        this.gotoCart(shop.Cart);
+        this.addToCart(shop);
+        this.gotoCart(shop);
+        this.clearCart();
     }
 
     // - OWN
@@ -65,8 +66,13 @@ export class ShopButtonHandler extends ButtonHandler {
         }
     }
 
+    clearCart(): void {
+        const clearBtn: Buttons.ClearButton = new Buttons.ClearButton("cart-clear-btn", this);
+        clearBtn.click();
+    }
+
     /** What happens when you click the Return Button */
-    return(): void {
+    goBack(): void {
         const returnBtn: Buttons.ReturnButton = new Buttons.ReturnButton("return-btn", this);
         returnBtn.click();
     }
@@ -78,14 +84,14 @@ export class ShopButtonHandler extends ButtonHandler {
     }
 
     /** What happens when you click the Add To Cart Button */
-    addToCart(cart: ShoppingCart): void {
-        const addToCartBtn: Buttons.AddToCartButton = new Buttons.AddToCartButton("add-to-cart-btn", this, cart);
+    addToCart(shop: CardShop): void {
+        const addToCartBtn: Buttons.AddToCartButton = new Buttons.AddToCartButton("add-to-cart-btn", this, shop);
         addToCartBtn.click();
     }
 
     /** Not implemented, yet */
-    gotoCart(cart: ShoppingCart): void {
-        const gotoCartBtn: Buttons.GotoCartButton = new Buttons.GotoCartButton("goto-cart-btn", this, cart);
+    gotoCart(shop: CardShop): void {
+        const gotoCartBtn: Buttons.GotoCartButton = new Buttons.GotoCartButton("goto-cart-btn", this, shop);
         gotoCartBtn.click();
     }
 

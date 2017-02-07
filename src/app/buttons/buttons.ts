@@ -3,26 +3,42 @@ import { ShopButtonHandler } from "./shopButtonHandler";
 import { config } from "../config/config";
 import { Callback } from "../types/types";
 import * as Utils from "../modules/utilities";
-import { ShoppingCart } from "../modules/shoppingCart";
+import { CardShop } from "../modules/cardShop";
 import { CardPack } from "../modules/cardPack";
 
 "use strict";
 
 abstract class ShopButton extends Button {
     // PROPERTIES
-    protected cart: ShoppingCart;
+    protected shop: CardShop;
     // CONSTRUCTOR
-    constructor(id: string, bHandler: ShopButtonHandler, cart: ShoppingCart) {
+    constructor(id: string, bHandler: ShopButtonHandler, shop: CardShop) {
         super(id, bHandler);
-        this.cart = cart;
+        this.shop = shop;
+    }
+}
+
+export class ClearButton extends Button {
+    click = (): void => {
+        document.getElementById(this.id).addEventListener("click", (e) => {
+            localStorage.removeItem("cart");
+        });
     }
 }
 
 export class ReturnButton extends Button {
     click = (): void => {
-        document.getElementById(this.id).addEventListener("click", (e) => {
-            Utils.createHash(Utils.getFilters()["cardSet"])
-        });
+        for (let item of <any>document.getElementsByClassName(this.id)) {
+            item.addEventListener("click", (e) => {
+                if (Utils.getHashValue().search("cart/") !== -1) {
+                    Utils.createHash(localStorage.getItem("lastHash"));
+                }
+                else {
+                    let temp = Utils.getFilters()["cardSet"];
+                    Utils.createHash(temp);
+                }
+            });
+        }
     }
 }
 
@@ -92,7 +108,7 @@ export class AddToCartButton extends ShopButton {
                     amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[1]).value;
                 }
 
-                return this.bHandler.RService.showItems(this.cart.fillCart(pack, amountOfPacks));
+                return this.bHandler.RService.showItems(this.shop.Cart.fillCart(pack, amountOfPacks));
             });
         }
     }
@@ -102,7 +118,8 @@ export class GotoCartButton extends ShopButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
-                console.log(this.cart.Items);
+                localStorage.setItem("lastHash", Utils.getHashValue());
+                Utils.createHash("cart/" + localStorage.getItem("cart"));
             });
         }
     }
@@ -111,7 +128,7 @@ export class GotoCartButton extends ShopButton {
 /** Sets the hash-value according to the selected CardSet */
 export class SetCardSetButton extends Button {
     click = (cardSet: HTMLElement): void => {
-        cardSet.onclick = (e: MouseEvent): void => {
+        cardSet.addEventListener("click", (e: MouseEvent): void => {
             const cardSetName: string = e.srcElement.attributes[0].value;
             config.data.setPreviewData.cardSetName = cardSetName;
 
@@ -129,7 +146,7 @@ export class SetCardSetButton extends Button {
             else {
                 Utils.createHash(cardSetName);
             }
-        }
+        });
     }
 }
 
@@ -147,7 +164,7 @@ export class SetHeroButton extends Button {
                 filter["hero"] = heroValue;
             }
             Utils.createHash(`filters/${JSON.stringify(filter)}`);
-        })
+        });
     }
 }
 
@@ -166,6 +183,6 @@ export class SetManaCostButton extends Button {
             }
 
             Utils.createHash(`filters/${JSON.stringify(filter)}`);
-        })
+        });
     }
 }

@@ -28,11 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start Application
     shop.start();
 
-    console.log(sService.itemStorage(cart.Items));
-    let obj = sService.itemStorage(cart.Items);
-    let bla = Object.keys(obj).map(k => obj[k]);
-    console.log(bla);
-
     //Testing
     // testing();
 });

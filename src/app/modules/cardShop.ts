@@ -22,6 +22,8 @@ export class CardShop extends SinglePageApplication {
     public get Cart() { return this.cart; }
     private sService: StorageService;
 
+    public get THandler() { return this.tHandler; }
+
     // CONSTRUCTOR
     /** Warns after first instantiation */
     constructor(tHandler: TemplateHandler, bHandler: ShopButtonHandler, cart: ShoppingCart) {

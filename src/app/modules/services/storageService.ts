@@ -6,7 +6,7 @@ import { CardPack } from "../cardPack";
 
 export class StorageService {
     // METHODS
-    itemStorage = (items: Shopable[]): {} => {
+    cartItemsToObject = (items: Shopable[]): {} => {
         return items.reduce((itemMap: any, item: Shopable) => {
             itemMap[item.Key] = ++itemMap[item.Key] || 1;
             return itemMap;
@@ -14,7 +14,7 @@ export class StorageService {
     }
 
     populateStorage(items: Shopable[]) {
-        localStorage.setItem("cart", JSON.stringify(this.itemStorage(items)));
+        localStorage.setItem("cart", JSON.stringify(this.cartItemsToObject(items)));
     }
 
     setCart(cart: ShoppingCart) {
@@ -27,7 +27,7 @@ export class StorageService {
     }
 
     storageInit(cart: ShoppingCart) {
-        if (localStorage.length === 0) {
+        if (localStorage.getItem("cart") === null || undefined) {
             if (cart.Items.length !== 0) {
                 this.populateStorage(cart.Items);
             }
