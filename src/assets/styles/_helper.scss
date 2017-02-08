@@ -14,3 +14,7 @@
         display: inline;
         list-style-type: none;
 }
+
+#cart-content > * {
+    border: 1px solid black !important;
+}

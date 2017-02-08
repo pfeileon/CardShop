@@ -3,32 +3,63 @@ import { ShopButtonHandler } from "./shopButtonHandler";
 import { config } from "../config/config";
 import { Callback } from "../types/types";
 import * as Utils from "../modules/utilities";
-import { ShoppingCart } from "../modules/shoppingCart";
+import { CardShop } from "../modules/cardShop";
 import { CardPack } from "../modules/cardPack";
-
-abstract class ShopButton extends Button {
-    // PROPERTIES
-    protected cart: ShoppingCart;
-    // CONSTRUCTOR
-    constructor(id: string, bHandler: ShopButtonHandler, cart: ShoppingCart) {
-        super(id, bHandler);
-        this.cart = cart;
-    }
-}
 
 "use strict";
 
+abstract class ShopButton extends Button {
+    // PROPERTIES
+    protected shop: CardShop;
+    // CONSTRUCTOR
+    constructor(id: string, bHandler: ShopButtonHandler, shop: CardShop) {
+        super(id, bHandler);
+        this.shop = shop;
+    }
+}
+
+export class ClearButton extends ShopButton {
+    click = (): void => {
+        document.getElementById(this.id).addEventListener("click", (e) => {
+            localStorage.removeItem("cart");
+            this.shop.Cart.Items = [];
+        });
+    }
+}
+
+export class DeleteButton extends ShopButton {
+    click = (): void => {
+        for (let item of <any>document.getElementsByClassName(this.id)) {
+            item.addEventListener("click", (e) => {
+                console.log(e);
+                let items = JSON.parse(localStorage.getItem("cart"));
+                console.log(items);
+                delete items[`${item.id.split("-del")[0]}`];
+                localStorage.setItem("cart", JSON.stringify(items));
+            });
+        }
+    }
+}
+
 export class ReturnButton extends Button {
     click = (): void => {
-        document.getElementById(this.id).onclick = () => {
-            Utils.createHash(Utils.getFilters()["cardSet"])
-        };
+        for (let item of <any>document.getElementsByClassName(this.id)) {
+            item.addEventListener("click", (e) => {
+                if (Utils.getHashValue().search("cart/") !== -1) {
+                    Utils.createHash(localStorage.getItem("lastHash"));
+                }
+                else {
+                    let temp = Utils.getFilters()["cardSet"];
+                    Utils.createHash(temp);
+                }
+            });
+        }
     }
 }
 
 export class PreviewButton extends Button {
     click = (): void => {
-        document.getElementById(this.id).onclick = () => {
+        document.getElementById(this.id).addEventListener("click", (e) => {
             const hashValue: string = Utils.getHashValue();
             let cardSetName: string;
 
@@ -50,14 +81,14 @@ export class PreviewButton extends Button {
 
             config.data.setPreviewData.cardSetName = cardSetName;
             Utils.createHash(`filters/{"cardSet":"${cardSetName}","hero":"Druid"}`);
-        }
+        });
     }
 }
 
 export class AddToCartButton extends ShopButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
-            item.onclick = () => {
+            item.addEventListener("click", (e) => {
                 let setName: string;
                 const hashValue: string = Utils.getHashValue();
                 const filters: {} = Utils.getFilters();
@@ -92,8 +123,10 @@ export class AddToCartButton extends ShopButton {
                     amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[1]).value;
                 }
 
-                return this.bHandler.RService.showItems(this.cart.fillCart(pack, amountOfPacks));
-            }
+                Utils.fakeHashchange();
+
+                this.shop.Cart.fillCart(pack, amountOfPacks);
+            });
         }
     }
 }
@@ -101,19 +134,10 @@ export class AddToCartButton extends ShopButton {
 export class GotoCartButton extends ShopButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
-            item.onclick = () => {
-                let itemStorage: {} = this.cart.Items.reduce(
-                    function (countMap, word) {
-                        countMap[word.Key] = ++countMap[word.Key] || 1; return countMap
-                    }, {});
-
-                console.log(itemStorage);
-
-                for (let item of Object.keys(itemStorage)) {
-                    localStorage.setItem(item, itemStorage[item]);
-                }
-                console.log(localStorage);
-            }
+            item.addEventListener("click", (e) => {
+                localStorage.setItem("lastHash", Utils.getHashValue());
+                Utils.createHash("cart/" + localStorage.getItem("cart"));
+            });
         }
     }
 }
@@ -121,7 +145,7 @@ export class GotoCartButton extends ShopButton {
 /** Sets the hash-value according to the selected CardSet */
 export class SetCardSetButton extends Button {
     click = (cardSet: HTMLElement): void => {
-        cardSet.onclick = (e: MouseEvent): void => {
+        cardSet.addEventListener("click", (e: MouseEvent): void => {
             const cardSetName: string = e.srcElement.attributes[0].value;
             config.data.setPreviewData.cardSetName = cardSetName;
 
@@ -139,14 +163,14 @@ export class SetCardSetButton extends Button {
             else {
                 Utils.createHash(cardSetName);
             }
-        }
+        });
     }
 }
 
 /** Sets the hash according to the selected hero */
 export class SetHeroButton extends Button {
     click = (hero: HTMLElement) => {
-        hero.onclick = (e: MouseEvent): void => {
+        hero.addEventListener("click", (e: MouseEvent): void => {
             const heroValue: string = e.srcElement.attributes[0].value;
 
             let filter = Utils.getFilters();
@@ -157,14 +181,14 @@ export class SetHeroButton extends Button {
                 filter["hero"] = heroValue;
             }
             Utils.createHash(`filters/${JSON.stringify(filter)}`);
-        }
+        });
     }
 }
 
 /** Sets the hash according to the selected mana-cost */
 export class SetManaCostButton extends Button {
     click = (manaCost: HTMLElement): void => {
-        manaCost.onclick = (e: MouseEvent): void => {
+        manaCost.addEventListener("click", (e: MouseEvent): void => {
             const manaCostValue: string = e.srcElement.attributes[0].value;
 
             let filter = Utils.getFilters();
@@ -176,6 +200,6 @@ export class SetManaCostButton extends Button {
             }
 
             Utils.createHash(`filters/${JSON.stringify(filter)}`);
-        }
+        });
     }
 }

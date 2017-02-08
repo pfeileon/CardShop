@@ -3,6 +3,9 @@ import { config } from '../config/config';
 import { startPage } from './startPage';
 import { setPreview } from './setPreview';
 import { RenderService } from '../modules/services/renderService';
+import { cartTemplate } from "../templates/cartTemplate";
+import { ShoppingCart } from "../modules/shoppingCart";
+import { StorageService } from "../modules/services/storageService";
 
 const templates = (rService: RenderService): Template[] => [{
     id: 'start-page',
@@ -12,6 +15,10 @@ const templates = (rService: RenderService): Template[] => [{
     id: 'set-preview',
     where: 'afterbegin',
     html: setPreview(rService, config.data)
+}, {
+    id: "shopping-cart",
+    where: "afterbegin",
+    html: cartTemplate(rService)
 }]
 
 /** All templates with exact position */

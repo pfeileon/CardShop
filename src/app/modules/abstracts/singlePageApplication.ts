@@ -52,9 +52,9 @@ export abstract class SinglePageApplication extends PseudoSingleton {
         this.loadSpecifics();
 
         // User input is processed
-        window.onhashchange = (e) => {
+        window.addEventListener("hashchange", (e) => {
             this.rService.render(this.content);
-        }
+        });
 
         // Enable browser-history
         history.replaceState(this.content, "CardShop");

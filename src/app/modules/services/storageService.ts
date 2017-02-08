@@ -1,3 +1,4 @@
+import { Shopable } from "../../types/types";
 import { ShoppingCart } from "../shoppingCart";
 import { CardPack } from "../cardPack";
 
@@ -5,29 +6,52 @@ import { CardPack } from "../cardPack";
 
 export class StorageService {
     // METHODS
-    populateStorage(items) {
-        let itemStorage: {} = items.reduce(
-            function (countMap, word) {
-                countMap[word.Key] = ++countMap[word.Key] || 1; return countMap
-            }, {});
+    cartItemsToObject = (items: Shopable[]): {} => {
+        return items.reduce((itemMap: any, item: Shopable) => {
+            itemMap[item.Key] = ++itemMap[item.Key] || 1;
+            return itemMap;
+        }, {});
+    }
 
-        for (let item of Object.keys(itemStorage)) {
-            localStorage.setItem(item, itemStorage[item]);
+    storageCartItemsToArray = (): Shopable[] => {
+        let items: Shopable[] = [];
+        if (localStorage.getItem("cart") !== null || undefined) {
+            let temp: {} = JSON.parse(localStorage.getItem("cart"));
+            let help: string[][] = [Object.keys(temp), (<any>Object).values(temp)];
+            for (let i = 0; i < help[0].length; i++) {
+                for (let j = 0; j < +help[1][i]; j++) {
+                    items.push(new CardPack(help[0][i]));
+                }
+            }
+        }
+        return items;
+    }
+
+    populateStorage(items: Shopable[]) {
+        localStorage.setItem("cart", JSON.stringify(this.cartItemsToObject(items)));
+    }
+
+    populateCart(cart: ShoppingCart) {
+        let itemStorage: {} = JSON.parse(localStorage.getItem("cart"));
+
+        for (let i: number = 0; i < Object.keys(itemStorage).length; i++) {
+            let setName: string = Object.keys(itemStorage)[i];
+            cart.fillCart(new CardPack(setName), +itemStorage[setName]);
         }
     }
 
     setCart(cart: ShoppingCart) {
-        for (let i: number = 0; i < localStorage.length; i++) {
-            cart.fillCart(new CardPack(localStorage.key(i)), +localStorage.getItem(localStorage.key(i)));
-        }
+        cart.Items = this.storageCartItemsToArray();
     }
 
     storageInit(cart: ShoppingCart) {
-        if (localStorage.length === 0) {
-            this.populateStorage(cart.Items);
+        if (localStorage.getItem("cart") === null || undefined) {
+            if (cart.Items.length !== 0) {
+                this.populateStorage(cart.Items);
+            }
         }
         else {
-            this.setCart(cart);
+            this.populateCart(cart);
         }
     }
 }
