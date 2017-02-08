@@ -75,3 +75,10 @@ export function getFilters(): {} {
     }
     return filters;
 }
+
+/** Fakes a hashchange in order to update the content */
+export function fakeHashchange(): void {
+    let hashValue: string = getHashValue();
+    createHash(hashValue + "fake");
+    createHash(hashValue);
+}

@@ -9,6 +9,7 @@ export class CardPack implements Shopable {
     // Properties
     private setName: string;
     private cardPack: Card[];
+    public get Key() { return this.setName; }
     // Constructor
     /** Creates an instance of a CardPack of a specific CardSet */
     constructor(setName: string) {

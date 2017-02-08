@@ -9,6 +9,18 @@ const record = (item) => {
     return `<li data-id="${item}"><button data-id="${item}" type="button" class="btn btn-default">${item}</button></li>`;
 };
 
+const deleteRecord = (item) => {
+    return `<li data-id="${item}-del-btn"><button id="${item}-del-btn" data-id="${item}-del-btn" type="button" class="cart-del-btn well btn btn-default">delete</button></li>`;
+}
+
+const inputPack = (item) => {
+    return `<li data-id="${item}"><div class="well">${item}</div></li>`;
+};
+
+const inputAmount = (item) => {
+    return `<li data-id="${item}"><input class="input-amount well" type="number" name ="amount" value="${item}" min="1" max="100" /></li>`
+}
+
 export class RenderService {
 
     private lastSetName: string;
@@ -30,7 +42,9 @@ export class RenderService {
         if (decodeURI(window.location.hash).search("/") !== -1) {
             hashValue = decodeURI(window.location.hash.split("/")[0]);
         }
-        else hashValue = "";
+        else {
+            hashValue = "";
+        }
 
         switch (hashValue) {
             case undefined:
@@ -49,6 +63,10 @@ export class RenderService {
                 this.displayCheck("preview");
                 break;
 
+            case "#cart":
+                this.displayCheck("cart");
+                break;
+
             default:
                 this.displayCheck("error");
                 break;
@@ -58,9 +76,9 @@ export class RenderService {
     }
 
     /** Inserts an <ul> with the passed array as <li>-elements */
-    insertList(list: any[]): string {
-        return `<ul>${list.map(item => record(item)).join('')}</ul>`;
-    };
+    insertList(list: any[], Record: any = record): string {
+        return `<ul>${list.map(item => Record(item)).join('')}</ul>`;
+    }
 
     /**
      * Decides which parts of the site have to be displayed or not, depending on the state
@@ -72,6 +90,7 @@ export class RenderService {
 
         let startPageShown: boolean = !document.getElementById("start-page").classList.contains("noDisplay");
         let setPreviewShown: boolean = !document.getElementById("set-preview").classList.contains("noDisplay");
+        let cartShown: boolean = !document.getElementById("shopping-cart").classList.contains("noDisplay");
         let errorPageShown: boolean = !document.getElementById("error-page").classList.contains("noDisplay");
 
         switch (selector) {
@@ -83,6 +102,9 @@ export class RenderService {
                 }
                 if (setPreviewShown) {
                     Utils.toggleCssClass("set-preview", "noDisplay");
+                }
+                if (cartShown) {
+                    Utils.toggleCssClass("shopping-cart", "noDisplay");
                 }
                 if (errorPageShown) {
                     Utils.toggleCssClass("error-page", "noDisplay");
@@ -97,6 +119,25 @@ export class RenderService {
                 }
                 if (startPageShown) {
                     Utils.toggleCssClass("start-page", "noDisplay");
+                }
+                if (cartShown) {
+                    Utils.toggleCssClass("shopping-cart", "noDisplay");
+                }
+                if (errorPageShown) {
+                    Utils.toggleCssClass("error-page", "noDisplay");
+                }
+                break;
+            }
+            case "cart": {
+                this.renderCart();
+                if (!cartShown) {
+                    Utils.toggleCssClass("shopping-cart", "noDisplay");
+                }
+                if (startPageShown) {
+                    Utils.toggleCssClass("start-page", "noDisplay");
+                }
+                if (setPreviewShown) {
+                    Utils.toggleCssClass("set-preview", "noDisplay");
                 }
                 if (errorPageShown) {
                     Utils.toggleCssClass("error-page", "noDisplay");
@@ -113,8 +154,49 @@ export class RenderService {
                 if (setPreviewShown) {
                     Utils.toggleCssClass("set-preview", "noDisplay");
                 }
+                if (cartShown) {
+                    Utils.toggleCssClass("shopping-cart", "noDisplay");
+                }
                 break;
             }
+        }
+    }
+
+    renderCart(): void {
+        if (localStorage.getItem("cart") !== null || undefined) {
+            let temp: {} = JSON.parse(localStorage.getItem("cart"));
+            let help: string[][] = [Object.keys(temp), (<any>Object).values(temp)];
+
+            let deleteList: string[] = [];
+            for (let i = 0; i < help[0].length; i++) {
+                deleteList.push(help[0][i]);
+            }
+
+            document.getElementById("cart-content-packs").innerHTML = `${this.insertList((<any>Array).from(help[0]), inputPack)}`;
+            document.getElementById("cart-content-amount").innerHTML = `${this.insertList((<any>Array).from(help[1]), inputAmount)}`;
+            document.getElementById("cart-content-delete").innerHTML = `${this.insertList(deleteList, deleteRecord)}`;
+
+            let inputAmountHelper: HTMLCollectionOf<Element> = document.getElementsByClassName("input-amount well")
+            let i: number = 0;
+            for (let item of <any>inputAmountHelper) {
+                item.id = `cart-input-amount-${i}`;
+                item.addEventListener("click", (e) => {
+                    let amountOfPacks: number;
+                    amountOfPacks = +(<HTMLInputElement>item).value;
+                    let cartStorage = JSON.parse(localStorage.getItem("cart"));
+
+                    let prop = (<any>Object).keys(cartStorage);
+                    cartStorage[prop[+(item.id.substring(18))]] = amountOfPacks;
+
+                    localStorage.setItem("cart", JSON.stringify(cartStorage));
+                });
+                i++;
+            }
+        }
+        else {
+            document.getElementById("cart-content-packs").innerHTML = `<div class="well">Your cart is empty!</div>`;
+            document.getElementById("cart-content-amount").innerHTML = "";
+            document.getElementById("cart-content-delete").innerHTML = "";
         }
     }
 
@@ -136,6 +218,9 @@ export class RenderService {
         else {
             return "";
         }
+
+        // TODO
+        //this.showItems();
     }
 
     /** Adds dynamically generated content to the PreviewPage
@@ -253,10 +338,8 @@ export class RenderService {
     showItems(items: Shopable[]): void {
         // First remove all shown packs
         document.getElementById("start-main").innerText = "";
-        
         for (let item of items) {
             let packLink: string;
-
             switch (item["setName"]) {
                 case "Classic":
                     packLink = "http://www.hearthcards.net/packs/images/pack.png";
@@ -273,7 +356,7 @@ export class RenderService {
                 default:
                     break;
             }
-            
+
             document.getElementById("start-main").insertAdjacentHTML("beforeend", `<img src="${packLink}" />`);
         }
     }

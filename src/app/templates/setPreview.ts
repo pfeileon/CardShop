@@ -1,6 +1,6 @@
 import { RenderService } from '../modules/services/renderService';
 
-'use strict'
+'use strict';
 
 /** Set Preview Template */
 export const setPreview = (rService: RenderService, data: { setPreviewData }) => {
@@ -11,11 +11,11 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
          <div class="btn-group-justified" role="group" aria-label="CardSets">
             ${rService.insertList(data["startPageData"][Object.keys(data["startPageData"])[0]])}
         </div>
-        <button id="return-btn" type="button" class="btn btn-default">Return</button>
+        <button id="set-return-btn" type="button" class="btn btn-default return-btn">Return</button>
         <input class="input-amount" type="number" name ="amount" value="1" min="1" max="100" />
         <button class="add-to-cart-btn btn btn-default" type="button">Add to Cart</button>
         <img src="https://openclipart.org/image/2400px/svg_to_png/60139/cart.png" alt="Shopping Cart" width="30px" />
-        <button class="goto-cart-btn btn btn-default" type="button">Goto Cart </button>
+        <button class="goto-cart-btn btn btn-default" data-toggle="modal" data-target=".cart-modal" type="button">Goto Cart</button>
     </header>
 
     <section id="preview-filters">

@@ -46,15 +46,15 @@ export abstract class SinglePageApplication extends PseudoSingleton {
         this.rService.render(this.content);
 
         // Initialize all buttons
-        this.bHandler.buttonInit();
+        this.bHandler.buttonInit(this);
 
         // Implementation-specific methods are called
         this.loadSpecifics();
 
         // User input is processed
-        window.onhashchange = (e) => {
+        window.addEventListener("hashchange", (e) => {
             this.rService.render(this.content);
-        }
+        });
 
         // Enable browser-history
         history.replaceState(this.content, "CardShop");
