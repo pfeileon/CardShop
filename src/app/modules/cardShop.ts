@@ -15,14 +15,9 @@ import * as Buttons from '../buttons/buttons';
 /** Start via inherited method "start()" */
 export class CardShop extends SinglePageApplication {
     // PROPERTIES
-    // - FORCED
-    protected bHandler: ShopButtonHandler;
-    protected rService: RenderService;
-
-    // - OWN
     private cart: ShoppingCart;
     public get Cart() { return this.cart; }
-    
+
     private sService: StorageService;
     public get SService() { return this.sService; }
 

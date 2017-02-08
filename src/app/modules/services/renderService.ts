@@ -1,3 +1,4 @@
+import { Renderer } from "./renderer";
 import { Shopable } from "../../types/types";
 import { config } from '../../config/config';
 import * as Utils from '../utilities';
@@ -22,20 +23,17 @@ const inputAmount = (item) => {
     return `<li data-id="${item}"><input class="input-amount well" type="number" name ="amount" value="${item}" min="1" max="100" /></li>`
 }
 
-export class RenderService {
+export class RenderService extends Renderer {
 
     private lastSetName: string;
     private lastCardData: any;
-    private fResource: FetchResource;
-
-    public get FResource() { return this.fResource; }
 
     constructor(fResource: FetchResource) {
-        this.fResource = fResource;
+        super(fResource);
     }
 
     /** Renders the page according to the hash */
-    render(shop: any): any {
+    render(shop: CardShop): void {
 
         let hashValue;
 
@@ -72,8 +70,6 @@ export class RenderService {
                 this.displayCheck("error");
                 break;
         }
-
-        return `${shop}`;
     }
 
     /** Inserts an <ul> with the passed array as <li>-elements */

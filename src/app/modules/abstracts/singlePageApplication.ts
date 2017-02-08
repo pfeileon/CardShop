@@ -3,7 +3,9 @@ import * as Utils from '../utilities';
 import { FetchResource } from '../fetchResource';
 import { TemplateHandler } from '../../templates/templateHandler';
 import { RenderService } from '../services/renderService';
+import { Renderer } from '../services/renderer';
 import { ButtonHandler } from '../../buttons/buttonHandler';
+
 
 'use strict';
 
@@ -23,17 +25,16 @@ export abstract class SinglePageApplication extends PseudoSingleton {
     protected content: any;
     protected fResource: FetchResource;
     protected tHandler: TemplateHandler;
-    
-    // - ABSTRACT
-    protected abstract rService: RenderService;
-    protected abstract bHandler: ButtonHandler;
+    protected renderer: Renderer;
+    protected bHandler: ButtonHandler;
 
     // CONSTRUCTOR
     /** Warns after first instantiation */
     constructor(tHandler: TemplateHandler, bHandler: ButtonHandler) {
         super(SinglePageApplication.ctorArg);
-        this.rService = bHandler.RService;
-        this.fResource = this.rService.FResource;
+        this.bHandler = bHandler;
+        this.renderer = bHandler.RService;
+        this.fResource = this.renderer.FResource;
         this.content = tHandler.insertAllTemplates();
     }
 
@@ -46,14 +47,14 @@ export abstract class SinglePageApplication extends PseudoSingleton {
         this.loadSpecifics();
 
         // Render App
-        this.rService.render(this);
+        this.renderer.render(this);
 
         // Initialize all buttons
         this.bHandler.buttonInit(this);
 
         // User input is processed
         window.addEventListener("hashchange", (e) => {
-            this.rService.render(this);
+            this.renderer.render(this);
         });
 
         // Enable browser-history
