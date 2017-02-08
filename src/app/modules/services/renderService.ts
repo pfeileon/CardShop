@@ -175,9 +175,6 @@ export class RenderService {
                     amountOfPacks = +(<HTMLInputElement>item).value;
                     let cartStorage = JSON.parse(localStorage.getItem("cart"));
 
-                    // TODO
-                    // update start-page showpacks() oder sp
-
                     let prop = (<any>Object).keys(cartStorage);
                     cartStorage[prop[+(item.id.substring(18))]] = amountOfPacks;
 
@@ -187,9 +184,9 @@ export class RenderService {
             }
         }
         else {
-            document.getElementById("cart-content").innerHTML = "Your cart is empty!";
+            document.getElementById("cart-content-packs").innerHTML = `<div class="well">Your cart is empty!</div>`;
+            document.getElementById("cart-content-amount").innerHTML = "";
         }
-        // sService.itemStorage(cart.Items)
     }
 
     /**

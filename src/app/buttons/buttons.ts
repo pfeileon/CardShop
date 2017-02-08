@@ -18,10 +18,12 @@ abstract class ShopButton extends Button {
     }
 }
 
-export class ClearButton extends Button {
+export class ClearButton extends ShopButton {
     click = (): void => {
         document.getElementById(this.id).addEventListener("click", (e) => {
             localStorage.removeItem("cart");
+            this.shop.Cart.Items = [];
+            console.log(this.shop.Cart.Items);
         });
     }
 }
@@ -108,7 +110,9 @@ export class AddToCartButton extends ShopButton {
                     amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[1]).value;
                 }
 
-                return this.bHandler.RService.showItems(this.shop.Cart.fillCart(pack, amountOfPacks));
+                Utils.fakeHashchange();
+
+                this.shop.Cart.fillCart(pack, amountOfPacks);
             });
         }
     }

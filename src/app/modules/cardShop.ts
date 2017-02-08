@@ -21,6 +21,7 @@ export class CardShop extends SinglePageApplication {
     private cart: ShoppingCart;
     public get Cart() { return this.cart; }
     private sService: StorageService;
+    public get SService() { return this.sService; }
 
     public get THandler() { return this.tHandler; }
 
@@ -42,9 +43,13 @@ export class CardShop extends SinglePageApplication {
     loadSpecifics = (): void => {
         this.sService.storageInit(this.cart);
         this.rService.showItems(this.cart.Items);
-        window.onstorage = (e) => {
+        window.addEventListener("hashchange", (e) => {
+            this.sService.setCart(this.cart);
             this.rService.showItems(this.cart.Items);
-        };
-        // localStorage.clear();
+        });
+        window.addEventListener("storage", (e) => {
+            //this.cart.Items = this.sService.setCart(this.cart.Items);
+            this.rService.showItems(this.cart.Items);
+        });
     }
 }

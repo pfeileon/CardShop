@@ -39,7 +39,7 @@ export class ShopButtonHandler extends ButtonHandler {
         // Cart
         this.addToCart(shop);
         this.gotoCart(shop);
-        this.clearCart();
+        this.clearCart(shop);
     }
 
     // - OWN
@@ -66,8 +66,8 @@ export class ShopButtonHandler extends ButtonHandler {
         }
     }
 
-    clearCart(): void {
-        const clearBtn: Buttons.ClearButton = new Buttons.ClearButton("cart-clear-btn", this);
+    clearCart(shop: CardShop): void {
+        const clearBtn: Buttons.ClearButton = new Buttons.ClearButton("cart-clear-btn", this, shop);
         clearBtn.click();
     }
 
