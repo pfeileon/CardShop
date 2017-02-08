@@ -22,10 +22,10 @@ export abstract class SinglePageApplication extends PseudoSingleton {
     // - OWN
     protected content: any;
     protected fResource: FetchResource;
-    protected rService: RenderService;
     protected tHandler: TemplateHandler;
     
     // - ABSTRACT
+    protected abstract rService: RenderService;
     protected abstract bHandler: ButtonHandler;
 
     // CONSTRUCTOR
@@ -34,6 +34,7 @@ export abstract class SinglePageApplication extends PseudoSingleton {
         super(SinglePageApplication.ctorArg);
         this.rService = bHandler.RService;
         this.fResource = this.rService.FResource;
+        this.content = tHandler.insertAllTemplates();
     }
 
     // METHODS
@@ -41,19 +42,18 @@ export abstract class SinglePageApplication extends PseudoSingleton {
     // - OWN
     /** Start the app */
     start(): void {
+        // Implementation-specific methods are called
+        this.loadSpecifics();
+
         // Render App
-        this.content = this.tHandler.insertAllTemplates();
-        this.rService.render(this.content);
+        this.rService.render(this);
 
         // Initialize all buttons
         this.bHandler.buttonInit(this);
 
-        // Implementation-specific methods are called
-        this.loadSpecifics();
-
         // User input is processed
         window.addEventListener("hashchange", (e) => {
-            this.rService.render(this.content);
+            this.rService.render(this);
         });
 
         // Enable browser-history

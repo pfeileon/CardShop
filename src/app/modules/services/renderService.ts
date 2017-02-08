@@ -1,7 +1,8 @@
+import { Shopable } from "../../types/types";
 import { config } from '../../config/config';
 import * as Utils from '../utilities';
+import {CardShop} from "../cardShop";
 import { FetchResource } from "../fetchResource";
-import { Shopable } from "../../types/types";
 
 'use strict';
 
@@ -10,7 +11,7 @@ const record = (item) => {
 };
 
 const deleteRecord = (item) => {
-    return `<li data-id="${item}-del-btn"><button id="${item}-del-btn" data-id="${item}-del-btn" type="button" class="cart-del-btn well btn btn-default">delete</button></li>`;
+    return `<li data-id="${item}-del-btn"><button id="${item.replace(/ /gi, "-")}-del-btn" data-id="${item}-del-btn" type="button" class="cart-del-btn well btn btn-default">delete</button></li>`;
 }
 
 const inputPack = (item) => {
@@ -34,7 +35,7 @@ export class RenderService {
     }
 
     /** Renders the page according to the hash */
-    render(content: any): any {
+    render(shop: any): any {
 
         let hashValue;
 
@@ -48,15 +49,15 @@ export class RenderService {
 
         switch (hashValue) {
             case undefined:
-                this.displayCheck("start");
+                this.displayCheck("start", shop);
                 break;
 
             case "":
-                this.displayCheck("start");
+                this.displayCheck("start", shop);
                 break;
 
             case "#":
-                this.displayCheck("start");
+                this.displayCheck("start", shop);
                 break;
 
             case "#filters":
@@ -72,7 +73,7 @@ export class RenderService {
                 break;
         }
 
-        return `${content}`;
+        return `${shop}`;
     }
 
     /** Inserts an <ul> with the passed array as <li>-elements */
@@ -85,7 +86,7 @@ export class RenderService {
      * 
      * @param {string} selector - The state of the site
      */
-    displayCheck(selector: string): void {
+    displayCheck(selector: string, shop?: CardShop): void {
         let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
 
         let startPageShown: boolean = !document.getElementById("start-page").classList.contains("noDisplay");
@@ -95,7 +96,7 @@ export class RenderService {
 
         switch (selector) {
             case "start": {
-                shownCardSetHeader[0].textContent = this.renderStart();
+                shownCardSetHeader[0].textContent = this.renderStart(shop);
 
                 if (!startPageShown) {
                     Utils.toggleCssClass("start-page", "noDisplay");
@@ -204,12 +205,9 @@ export class RenderService {
      * Adds dynamically generated content to the startPageData
      * 
      * and returns the card set heading as string */
-    renderStart(): string {
-
-        // TODO
-        // Implement dynamic rendering of items in cart
-        // For now: see ShoppingCart.fillCart()
-
+    renderStart(shop: CardShop): string {
+        console.log(shop.Cart.Items);
+        this.showItems(shop.Cart.Items);
         const hashValue = Utils.getHashValue();
 
         if (config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
@@ -218,9 +216,6 @@ export class RenderService {
         else {
             return "";
         }
-
-        // TODO
-        //this.showItems();
     }
 
     /** Adds dynamically generated content to the PreviewPage
@@ -356,7 +351,6 @@ export class RenderService {
                 default:
                     break;
             }
-
             document.getElementById("start-main").insertAdjacentHTML("beforeend", `<img src="${packLink}" />`);
         }
     }
