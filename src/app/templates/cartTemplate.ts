@@ -10,7 +10,8 @@ export const cartTemplate = (rService: RenderService) => {
     
     <section id="cart-content" class="row display-in-line">
         <div id="cart-content-packs" class="col-xs-3"></div>
-        <div id="cart-content-amount" class="col-xs-1"></div>
+        <div id="cart-content-amount" class="col-xs-2"></div>
+        <div id="cart-content-delete" class="col-xs-2"></div>
     </section>
 
     <button id="cart-return-btn" type="button" class="btn btn-default return-btn">Return</button>

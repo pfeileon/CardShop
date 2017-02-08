@@ -48,7 +48,7 @@ export class CardShop extends SinglePageApplication {
             this.rService.showItems(this.cart.Items);
         });
         window.addEventListener("storage", (e) => {
-            //this.cart.Items = this.sService.setCart(this.cart.Items);
+            this.sService.setCart(this.cart);
             this.rService.showItems(this.cart.Items);
         });
     }

@@ -23,8 +23,21 @@ export class ClearButton extends ShopButton {
         document.getElementById(this.id).addEventListener("click", (e) => {
             localStorage.removeItem("cart");
             this.shop.Cart.Items = [];
-            console.log(this.shop.Cart.Items);
         });
+    }
+}
+
+export class DeleteButton extends ShopButton {
+    click = (): void => {
+        for (let item of <any>document.getElementsByClassName(this.id)) {
+            item.addEventListener("click", (e) => {
+                console.log(e);
+                let items = JSON.parse(localStorage.getItem("cart"));
+                console.log(items);
+                delete items[`${item.id.split("-del")[0]}`];
+                localStorage.setItem("cart", JSON.stringify(items));
+            });
+        }
     }
 }
 

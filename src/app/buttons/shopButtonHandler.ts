@@ -40,6 +40,7 @@ export class ShopButtonHandler extends ButtonHandler {
         this.addToCart(shop);
         this.gotoCart(shop);
         this.clearCart(shop);
+        this.deleteCartPosition(shop);
     }
 
     // - OWN
@@ -64,6 +65,11 @@ export class ShopButtonHandler extends ButtonHandler {
                 Utils.iterateUl(document.getElementById(`${filters["id"][i]}-filter`).children[1].children, filters["do"][i]);
             }
         }
+    }
+
+    deleteCartPosition(shop: CardShop): void {
+        const deleteBtn: Buttons.DeleteButton = new Buttons.DeleteButton(("cart-del-btn"), this, shop);
+        deleteBtn.click();
     }
 
     clearCart(shop: CardShop): void {

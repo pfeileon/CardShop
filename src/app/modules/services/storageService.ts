@@ -13,7 +13,7 @@ export class StorageService {
         }, {});
     }
 
-    storageCartToArray = (): Shopable[] => {
+    storageCartItemsToArray = (): Shopable[] => {
         let items: Shopable[] = [];
         if (localStorage.getItem("cart") !== null || undefined) {
             let temp: {} = JSON.parse(localStorage.getItem("cart"));
@@ -41,7 +41,7 @@ export class StorageService {
     }
 
     setCart(cart: ShoppingCart) {
-        cart.Items = this.storageCartToArray();
+        cart.Items = this.storageCartItemsToArray();
     }
 
     storageInit(cart: ShoppingCart) {

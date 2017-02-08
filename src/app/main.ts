@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start Application
     shop.start();
-    sService.storageCartToArray();
 
     //Testing
     // testing();

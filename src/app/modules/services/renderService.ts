@@ -9,6 +9,10 @@ const record = (item) => {
     return `<li data-id="${item}"><button data-id="${item}" type="button" class="btn btn-default">${item}</button></li>`;
 };
 
+const deleteRecord = (item) => {
+    return `<li data-id="${item}-del-btn"><button id="${item}-del-btn" data-id="${item}-del-btn" type="button" class="cart-del-btn well btn btn-default">delete</button></li>`;
+}
+
 const inputPack = (item) => {
     return `<li data-id="${item}"><div class="well">${item}</div></li>`;
 };
@@ -163,8 +167,14 @@ export class RenderService {
             let temp: {} = JSON.parse(localStorage.getItem("cart"));
             let help: string[][] = [Object.keys(temp), (<any>Object).values(temp)];
 
+            let deleteList: string[] = [];
+            for (let i = 0; i < help[0].length; i++) {
+                deleteList.push(help[0][i]);
+            }
+
             document.getElementById("cart-content-packs").innerHTML = `${this.insertList((<any>Array).from(help[0]), inputPack)}`;
             document.getElementById("cart-content-amount").innerHTML = `${this.insertList((<any>Array).from(help[1]), inputAmount)}`;
+            document.getElementById("cart-content-delete").innerHTML = `${this.insertList(deleteList, deleteRecord)}`;
 
             let inputAmountHelper: HTMLCollectionOf<Element> = document.getElementsByClassName("input-amount well")
             let i: number = 0;
@@ -186,6 +196,7 @@ export class RenderService {
         else {
             document.getElementById("cart-content-packs").innerHTML = `<div class="well">Your cart is empty!</div>`;
             document.getElementById("cart-content-amount").innerHTML = "";
+            document.getElementById("cart-content-delete").innerHTML = "";
         }
     }
 
