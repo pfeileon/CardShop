@@ -1,8 +1,7 @@
 import { config } from '../../config/config';
 // Hack for fetch-API
 declare const fetch;
-import { Headers, Request, Response, Promise, Init } from '../../types/types'
-import { fetchAsync } from '../utilities';
+import { Headers, Request, Response, Promise, Init } from '../../types/types';
 
 'use strict';
 
@@ -22,6 +21,12 @@ export class FetchService {
             init
         }
 
-        return fetchAsync(request);
+        return this.fetchAsync(request);
+    }
+
+    /** Generic Fetch-Method */
+    fetchAsync<T extends Request>(arg: T): Promise<T> {
+        return fetch(arg.url, arg.init)
+            .then((response: Response) => response.json());
     }
 }
