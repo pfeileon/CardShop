@@ -14,11 +14,11 @@ export abstract class SinglePageApplication extends PseudoSingleton {
     // PROPERTIES
 
     // - STATIC
-    private static name: string;
+    private static namePS: string;
     private static exists: boolean = false;
     private static ctorArg: { exists: boolean, message: string } = {
         exists: SinglePageApplication.exists,
-        message: `${SinglePageApplication.name}: ${PseudoSingleton.message}`
+        message: `${SinglePageApplication.namePS}: ${PseudoSingleton.message}`
     };
 
     // - OWN
