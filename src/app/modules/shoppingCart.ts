@@ -9,11 +9,11 @@ import { Customer } from './customer'
 export class ShoppingCart extends PseudoSingleton {
 
     //Properties
-    private static name: string;
+    private static namePS: string;
     private static exists: boolean = false;
     private static pseudoSingletonArg: { exists: boolean, message: string } = {
         exists: ShoppingCart.exists,
-        message: `${ShoppingCart.name}: ${PseudoSingleton.message}`
+        message: `${ShoppingCart.namePS}: ${PseudoSingleton.message}`
     };
 
     private sService: StorageService;

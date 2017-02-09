@@ -18,11 +18,23 @@ abstract class ShopButton extends Button {
     }
 }
 
+export class CheckoutButton extends ShopButton {
+    click = (): void => {
+        document.getElementById(this.id).addEventListener("click", (e) => {
+            console.log("CHECKOUT!");
+            if (localStorage.getItem("cart") === null) {
+                alert("Your cart is empty!");
+            }
+        });
+    }
+}
+
 export class ClearButton extends ShopButton {
     click = (): void => {
         document.getElementById(this.id).addEventListener("click", (e) => {
             localStorage.removeItem("cart");
             this.shop.Cart.Items = [];
+            Utils.createHash("cart/");
         });
     }
 }
@@ -33,9 +45,16 @@ export class DeleteButton extends ShopButton {
             item.addEventListener("click", (e) => {
                 console.log(e);
                 let items = JSON.parse(localStorage.getItem("cart"));
-                console.log(items);
-                delete items[`${(item.id.split("-del")[0]).replace(/-/gi, " ")}`];
-                localStorage.setItem("cart", JSON.stringify(items));
+                if (Object.keys(items).length === 1) {
+                    console.log(Object.keys(items));
+                    localStorage.removeItem("cart");
+                    this.shop.Cart.Items = [];
+                }
+                else {
+                    delete items[`${(item.id.split("-del")[0]).replace(/-/gi, " ")}`];
+                    localStorage.setItem("cart", JSON.stringify(items));
+                }
+                Utils.createHash("cart/" + localStorage.getItem("cart"));
             });
         }
     }
@@ -63,19 +82,19 @@ export class PreviewButton extends Button {
             const hashValue: string = Utils.getHashValue();
             let cardSetName: string;
 
-            if (hashValue === undefined || "") {
-                config.data.setPreviewData.cardSetName = "Classic";
+            if (hashValue == undefined || "") {
+                cardSetName = "Classic";
                 Utils.createHash("Classic");
             }
-
-            if (config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
+            else if (hashValue.indexOf("cart/") !== -1) {
+                cardSetName = document.getElementById(this.id).innerText;
+            }
+            else if (config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
                 cardSetName = hashValue;
             }
             else {
-                alert(`
-                "${hashValue}": Invalid Card Set.
-                Showing "Classic" instead.
-            `)
+                alert(`"${hashValue}": Invalid Card Set.
+                            Showing "Classic" instead.`)
                 cardSetName = "Classic";
             }
 

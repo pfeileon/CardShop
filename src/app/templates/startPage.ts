@@ -15,7 +15,7 @@ export const startPage = (rService: RenderService, data: { startPageData }) => {
         <div class="btn-group-justified" role="group" aria-label="CardSets">
             ${rService.insertList(data.startPageData[Object.keys(data.startPageData)[0]])}
         </div>
-        <button id="preview-card-set-btn" class="btn btn-default" type="button">Preview Card Set</button>
+        <button id="preview-card-set-btn" class="btn btn-info" type="button">Preview Card Set</button>
     </section>
 
     <section id="start-main" class="slider">
@@ -23,9 +23,9 @@ export const startPage = (rService: RenderService, data: { startPageData }) => {
 
     <footer id="start-foot">
         <input class="input-amount" type="number" name ="amount" value="1" min="1" max="100" />
-        <button class="add-to-cart-btn btn btn-default" type="button">Add to Cart</Button>
+        <button class="add-to-cart-btn btn btn-primary" type="button">Add to Cart</Button>
         <img src="https://openclipart.org/image/2400px/svg_to_png/60139/cart.png" alt="Shopping Cart" width="30px" />
-        <button class="goto-cart-btn btn btn-default" type="button">Goto Cart</Button>
+        <button class="goto-cart-btn btn btn-success" type="button">Goto Cart</Button>
     </footer>
 
 </article>`
