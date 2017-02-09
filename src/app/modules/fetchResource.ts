@@ -4,6 +4,14 @@ import { FetchService } from './services/fetchService';
 
 'use strict';
 
+const request: Request = {
+    url: "config.api.url",
+    init: {
+        headers: { 'X-Mashape-Authorization': config.api.mashApeKey },
+        method: 'GET'
+    }
+}
+
 export class FetchResource {
 
     private fService: FetchService;

@@ -34,7 +34,7 @@ export class DeleteButton extends ShopButton {
                 console.log(e);
                 let items = JSON.parse(localStorage.getItem("cart"));
                 console.log(items);
-                delete items[`${item.id.split("-del")[0]}`];
+                delete items[`${(item.id.split("-del")[0]).replace(/-/gi, " ")}`];
                 localStorage.setItem("cart", JSON.stringify(items));
             });
         }

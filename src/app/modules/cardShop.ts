@@ -15,11 +15,9 @@ import * as Buttons from '../buttons/buttons';
 /** Start via inherited method "start()" */
 export class CardShop extends SinglePageApplication {
     // PROPERTIES
-    // - FORCED
-    protected bHandler: ShopButtonHandler;
-    // - OWN
     private cart: ShoppingCart;
     public get Cart() { return this.cart; }
+
     private sService: StorageService;
     public get SService() { return this.sService; }
 
@@ -42,14 +40,11 @@ export class CardShop extends SinglePageApplication {
     /** Called by SinglePageApplication.start() */
     loadSpecifics = (): void => {
         this.sService.storageInit(this.cart);
-        this.rService.showItems(this.cart.Items);
         window.addEventListener("hashchange", (e) => {
             this.sService.setCart(this.cart);
-            this.rService.showItems(this.cart.Items);
         });
         window.addEventListener("storage", (e) => {
             this.sService.setCart(this.cart);
-            this.rService.showItems(this.cart.Items);
         });
     }
 }

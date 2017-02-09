@@ -27,12 +27,6 @@ export function getHashValue(seperator: string = "#", pos: number = 1): string {
     return decodeURI(window.location.hash).split(seperator)[pos]
 }
 
-/** Generic Fetch-Method */
-export function fetchAsync<T extends Request>(arg: T): Promise<T> {
-    return fetch(arg.url, arg.init)
-        .then((response: Response) => response.json());
-}
-
 /** The Luhn-Algorithm for CreditCard-Validation */
 export function luhnAlgorithm(value: string) {
 
