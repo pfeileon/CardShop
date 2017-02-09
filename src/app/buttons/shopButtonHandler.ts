@@ -40,7 +40,7 @@ export class ShopButtonHandler extends ButtonHandler {
         this.addToCart(shop);
         this.gotoCart(shop);
         this.clearCart(shop);
-        this.deleteCartPosition(shop);
+        this.checkout(shop);
     }
 
     // - OWN
@@ -67,37 +67,44 @@ export class ShopButtonHandler extends ButtonHandler {
         }
     }
 
-    deleteCartPosition(shop: CardShop): void {
-        const deleteBtn: Buttons.DeleteButton = new Buttons.DeleteButton(("cart-del-btn"), this, shop);
+    checkout(shop: CardShop, id = "checkout-btn"): void {
+        const checkoutBtn: Buttons.CheckoutButton = new Buttons.CheckoutButton(id, this, shop);
+        checkoutBtn.click();
+    }
+
+    /** Call this method when the ShoppingCart is rendered */
+    deleteCartPosition(shop: CardShop, id = "cart-del-btn"): void {
+        const deleteBtn: Buttons.DeleteButton = new Buttons.DeleteButton(id, this, shop);
         deleteBtn.click();
     }
 
-    clearCart(shop: CardShop): void {
-        const clearBtn: Buttons.ClearButton = new Buttons.ClearButton("cart-clear-btn", this, shop);
+    /** Clears the ShoppingCart */
+    clearCart(shop: CardShop, id = "cart-clear-btn"): void {
+        const clearBtn: Buttons.ClearButton = new Buttons.ClearButton(id, this, shop);
         clearBtn.click();
     }
 
     /** What happens when you click the Return Button */
-    goBack(): void {
-        const returnBtn: Buttons.ReturnButton = new Buttons.ReturnButton("return-btn", this);
+    goBack(id = "return-btn"): void {
+        const returnBtn: Buttons.ReturnButton = new Buttons.ReturnButton(id, this);
         returnBtn.click();
     }
 
     /** What happens when you click the Preview Card Set Button */
-    previewCardSet(): void {
-        const previewBtn: Buttons.PreviewButton = new Buttons.PreviewButton("preview-card-set-btn", this);
+    previewCardSet(id = "preview-card-set-btn"): void {
+        const previewBtn: Buttons.PreviewButton = new Buttons.PreviewButton(id, this);
         previewBtn.click();
     }
 
     /** What happens when you click the Add To Cart Button */
-    addToCart(shop: CardShop): void {
-        const addToCartBtn: Buttons.AddToCartButton = new Buttons.AddToCartButton("add-to-cart-btn", this, shop);
+    addToCart(shop: CardShop, id = "add-to-cart-btn"): void {
+        const addToCartBtn: Buttons.AddToCartButton = new Buttons.AddToCartButton(id, this, shop);
         addToCartBtn.click();
     }
 
     /** Not implemented, yet */
-    gotoCart(shop: CardShop): void {
-        const gotoCartBtn: Buttons.GotoCartButton = new Buttons.GotoCartButton("goto-cart-btn", this, shop);
+    gotoCart(shop: CardShop, id = "goto-cart-btn"): void {
+        const gotoCartBtn: Buttons.GotoCartButton = new Buttons.GotoCartButton(id, this, shop);
         gotoCartBtn.click();
     }
 

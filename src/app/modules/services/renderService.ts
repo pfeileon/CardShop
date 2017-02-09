@@ -2,7 +2,7 @@ import { Renderer } from "./renderer";
 import { Shopable } from "../../types/types";
 import { config } from '../../config/config';
 import * as Utils from '../utilities';
-import {CardShop} from "../cardShop";
+import { CardShop } from "../cardShop";
 import { FetchResource } from "../fetchResource";
 
 'use strict';
@@ -12,15 +12,15 @@ const record = (item) => {
 };
 
 const deleteRecord = (item) => {
-    return `<li data-id="${item}-del-btn"><button id="${item.replace(/ /gi, "-")}-del-btn" data-id="${item}-del-btn" type="button" class="cart-del-btn well btn btn-default">delete</button></li>`;
+    return `<li data-id="${item}-del-btn"><button id="${item.replace(/ /gi, "-")}-del-btn" data-id="${item}-del-btn" type="button" class="cart-del-btn btn btn-warning">delete</button></li>`;
 }
 
 const inputPack = (item) => {
-    return `<li data-id="${item}"><div class="well">${item}</div></li>`;
+    return `<li data-id="${item}"><div class="input-pack btn btn-primary">${item}</div></li>`;
 };
 
 const inputAmount = (item) => {
-    return `<li data-id="${item}"><input class="input-amount well" type="number" name ="amount" value="${item}" min="1" max="100" /></li>`
+    return `<li data-id="${item}"><input class="input-amount btn btn-default" type="number" name ="amount" value="${item}" min="1" max="100" /></li>`
 }
 
 export class RenderService extends Renderer {
@@ -34,7 +34,6 @@ export class RenderService extends Renderer {
 
     /** Renders the page according to the hash */
     render(shop: CardShop): void {
-
         let hashValue;
 
         // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
@@ -63,7 +62,7 @@ export class RenderService extends Renderer {
                 break;
 
             case "#cart":
-                this.displayCheck("cart");
+                this.displayCheck("cart", shop);
                 break;
 
             default:
@@ -126,7 +125,7 @@ export class RenderService extends Renderer {
                 break;
             }
             case "cart": {
-                this.renderCart();
+                this.renderCart(shop);
                 if (!cartShown) {
                     Utils.toggleCssClass("shopping-cart", "noDisplay");
                 }
@@ -159,8 +158,11 @@ export class RenderService extends Renderer {
         }
     }
 
-    renderCart(): void {
+    renderCart(shop: CardShop): void {
         if (localStorage.getItem("cart") !== null || undefined) {
+            if (!document.getElementById("checkout-btn").classList.contains("btn-success")) {
+                document.getElementById("checkout-btn").classList.toggle("btn-success");
+            }
             let temp: {} = JSON.parse(localStorage.getItem("cart"));
             let help: string[][] = [Object.keys(temp), (<any>Object).values(temp)];
 
@@ -173,8 +175,19 @@ export class RenderService extends Renderer {
             document.getElementById("cart-content-amount").innerHTML = `${this.insertList((<any>Array).from(help[1]), inputAmount)}`;
             document.getElementById("cart-content-delete").innerHTML = `${this.insertList(deleteList, deleteRecord)}`;
 
-            let inputAmountHelper: HTMLCollectionOf<Element> = document.getElementsByClassName("input-amount well")
-            let i: number = 0;
+            shop.BHandler.deleteCartPosition(shop);
+
+            let inputPackHelper: HTMLCollectionOf<Element> = document.getElementsByClassName("input-pack btn")
+            let j = 0;
+            for (let item of <any>inputPackHelper) {
+                item.id = `${item.classList[0]}-${j}`;
+                console.log(item.id);
+                shop.BHandler.previewCardSet(item.id);
+                j++;
+            }
+
+            let inputAmountHelper: HTMLCollectionOf<Element> = document.getElementsByClassName("input-amount btn");
+            let i = 0;
             for (let item of <any>inputAmountHelper) {
                 item.id = `cart-input-amount-${i}`;
                 item.addEventListener("click", (e) => {
@@ -182,15 +195,20 @@ export class RenderService extends Renderer {
                     amountOfPacks = +(<HTMLInputElement>item).value;
                     let cartStorage = JSON.parse(localStorage.getItem("cart"));
 
-                    let prop = (<any>Object).keys(cartStorage);
+                    let prop = Object.keys(cartStorage);
                     cartStorage[prop[+(item.id.substring(18))]] = amountOfPacks;
 
                     localStorage.setItem("cart", JSON.stringify(cartStorage));
+
+                    Utils.createHash("cart/" + localStorage.getItem("cart"));
                 });
                 i++;
             }
         }
         else {
+            if (document.getElementById("checkout-btn").classList.contains("btn-success")) {
+                document.getElementById("checkout-btn").classList.toggle("btn-success");
+            }
             document.getElementById("cart-content-packs").innerHTML = `<div class="well">Your cart is empty!</div>`;
             document.getElementById("cart-content-amount").innerHTML = "";
             document.getElementById("cart-content-delete").innerHTML = "";
@@ -202,7 +220,6 @@ export class RenderService extends Renderer {
      * 
      * and returns the card set heading as string */
     renderStart(shop: CardShop): string {
-        console.log(shop.Cart.Items);
         this.showItems(shop.Cart.Items);
         const hashValue = Utils.getHashValue();
 
@@ -256,8 +273,6 @@ export class RenderService extends Renderer {
             return filters["cardSet"];
         }
         else if (filters["cardSet"] !== undefined) {
-            alert("Invalid Card Set! Reverting to Classic");
-
             Utils.createHash(`filters/{"cardSet":"Classic"}`);
             return "Classic";
         }

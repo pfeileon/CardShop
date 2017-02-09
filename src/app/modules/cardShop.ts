@@ -22,6 +22,11 @@ export class CardShop extends SinglePageApplication {
     public get SService() { return this.sService; }
 
     public get THandler() { return this.tHandler; }
+    // TODO
+    // Own field or use type assertion on getter?
+    // (Needed for renderService.renderCart())
+    //protected bHandler: ShopButtonHandler;
+    public get BHandler(): ShopButtonHandler { return <ShopButtonHandler>this.bHandler; }
 
     // CONSTRUCTOR
     /** Warns after first instantiation */
