@@ -76,3 +76,12 @@ export function fakeHashchange(): void {
     createHash(hashValue + "fake");
     createHash(hashValue);
 }
+
+export function isStartPage(): boolean {
+    let hashValue = getHashValue();
+    let isStart = true;
+    if (hashValue !== undefined && hashValue.search("/") !== -1) {
+        isStart = false;
+    }
+    return isStart;
+}
