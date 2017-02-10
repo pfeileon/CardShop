@@ -69,6 +69,7 @@ export class RenderService extends Renderer {
                 this.displayCheck("error");
                 break;
         }
+        //this.resetBtnClassList();
     }
 
     /** Inserts an <ul> with the passed array as <li>-elements */
@@ -181,7 +182,6 @@ export class RenderService extends Renderer {
             let j = 0;
             for (let item of <any>inputPackHelper) {
                 item.id = `${item.classList[0]}-${j}`;
-                console.log(item.id);
                 shop.BHandler.previewCardSet(item.id);
                 j++;
             }

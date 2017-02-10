@@ -168,6 +168,8 @@ export class SetCardSetButton extends Button {
             const cardSetName: string = e.srcElement.attributes[0].value;
             config.data.setPreviewData.cardSetName = cardSetName;
 
+            this.resetBtnClassList(cardSet, e);
+
             // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
             if (Utils.getHashValue() !== undefined && Utils.getHashValue().search("/") !== -1) {
                 let filter = Utils.getFilters();
@@ -192,6 +194,8 @@ export class SetHeroButton extends Button {
         hero.addEventListener("click", (e: MouseEvent): void => {
             const heroValue: string = e.srcElement.attributes[0].value;
 
+            this.resetBtnClassList(hero, e);
+
             let filter = Utils.getFilters();
             if (filter["hero"] !== undefined && filter["hero"] === heroValue && filter["cardSet"] !== undefined) {
                 delete (filter["hero"]);
@@ -210,6 +214,8 @@ export class SetManaCostButton extends Button {
         manaCost.addEventListener("click", (e: MouseEvent): void => {
             const manaCostValue: string = e.srcElement.attributes[0].value;
 
+            this.resetBtnClassList(manaCost, e);
+
             let filter = Utils.getFilters();
             if (filter["manaCost"] !== undefined && filter["manaCost"] === manaCostValue) {
                 delete (filter["manaCost"]);
@@ -222,3 +228,4 @@ export class SetManaCostButton extends Button {
         });
     }
 }
+
