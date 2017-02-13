@@ -69,7 +69,6 @@ export class RenderService extends Renderer {
                 this.displayCheck("error");
                 break;
         }
-        //this.resetBtnClassList();
     }
 
     /** Inserts an <ul> with the passed array as <li>-elements */
@@ -93,7 +92,7 @@ export class RenderService extends Renderer {
         switch (selector) {
             case "start": {
                 shownCardSetHeader[0].textContent = this.renderStart(shop);
-
+                this.refreshButtons(selector);
                 if (!startPageShown) {
                     Utils.toggleCssClass("start-page", "noDisplay");
                 }
@@ -110,7 +109,7 @@ export class RenderService extends Renderer {
             }
             case "preview": {
                 shownCardSetHeader[1].textContent = this.renderPreview();
-
+                this.refreshButtons(selector);
                 if (!setPreviewShown) {
                     Utils.toggleCssClass("set-preview", "noDisplay");
                 }
@@ -223,12 +222,14 @@ export class RenderService extends Renderer {
         this.showItems(shop.Cart.Items);
         const hashValue = Utils.getHashValue();
 
+        let cardSet: string;
         if (config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
-            return hashValue;
+            cardSet = hashValue;
         }
         else {
-            return "";
+            cardSet = "";
         }
+        return cardSet;
     }
 
     /** Adds dynamically generated content to the PreviewPage
@@ -268,17 +269,19 @@ export class RenderService extends Renderer {
                 })
         }
 
+        let cardSet: string;
         // Set Heading
         if (filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
-            return filters["cardSet"];
+            cardSet = filters["cardSet"];
         }
         else if (filters["cardSet"] !== undefined) {
             Utils.createHash(`filters/{"cardSet":"Classic"}`);
-            return "Classic";
+            cardSet = "Classic";
         }
         else {
-            return "none chosen";
+            cardSet = "none chosen";
         }
+        return cardSet;
     }
 
     /** Inserts the images of the cards of a fetch call */
@@ -363,6 +366,39 @@ export class RenderService extends Renderer {
                     break;
             }
             document.getElementById("start-main").insertAdjacentHTML("beforeend", `<img src="${packLink}" />`);
+        }
+    }
+
+    refreshButtons(page: string) {
+        let temp = document.getElementsByClassName("btn-group-justified");
+        let btnList: HTMLCollection;
+        let i: number;
+
+        if (page === "start") {
+            i = 0;
+        }
+
+        if (page === "preview") {
+            i = 1;
+
+            btnList = temp[i+1].children[0].children;
+            this.refreshButtonsHelpFunction(btnList, Utils.getHeroFilter());
+        }
+
+        btnList = temp[i].children[0].children;
+        this.refreshButtonsHelpFunction(btnList, Utils.getCardSetFilter());
+    }
+
+    refreshButtonsHelpFunction(btnList: HTMLCollection, filter: string) {
+        for (let item of <any>btnList) {
+            if (item.attributes["data-id"].value === filter) {
+                item.children[0].classList.remove("btn-default");
+                item.children[0].classList.add("btn-primary");
+            }
+            else {
+                item.children[0].classList.add("btn-default");
+                item.children[0].classList.remove("btn-primary");
+            }
         }
     }
 }

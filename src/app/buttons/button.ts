@@ -18,8 +18,7 @@ export abstract class Button {
 
     resetBtnClassList(element: HTMLElement, e: MouseEvent) {
         localStorage.setItem("lastDataIdValue", e.srcElement.attributes["data-id"].value);
-        console.log(e.srcElement.attributes["data-id"].value);
-        console.log(localStorage.getItem("lastDataIdValue"));
+        
         let isPrimary = false;
         if (e.srcElement.attributes["data-id"].value === localStorage.getItem("lastDataIdValue") && e.srcElement.classList.contains("btn-primary")) {
             isPrimary = true;
@@ -28,12 +27,12 @@ export abstract class Button {
             item.children[0].classList.remove("btn-primary");
             item.children[0].classList.add("btn-default");
         }
-        console.log(isPrimary);
-        if (Utils.isStartPage() || !isPrimary) {
+
+        if (Utils.isStartPage() || isPrimary) {
             e.srcElement.classList.toggle("btn-default");
             e.srcElement.classList.toggle("btn-primary");
         }
-        else if (isPrimary) {
+        else if (!isPrimary) {
             e.srcElement.classList.remove("btn-primary");
         }
     }

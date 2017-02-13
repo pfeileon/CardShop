@@ -85,3 +85,19 @@ export function isStartPage(): boolean {
     }
     return isStart;
 }
+
+export function getCardSetFilter(): string {
+    let temp = JSON.stringify(getFilters());
+    if ((<any>temp).includes("{")) {
+        temp = getFilters()["cardSet"];
+    }
+    else {
+        temp = temp.replace(/"/g, "");
+    }
+    return temp;
+}
+
+export function getHeroFilter(): string {
+    let temp = getFilters()["hero"];
+    return temp;
+}
