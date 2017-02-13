@@ -212,6 +212,9 @@ export class SetHeroButton extends Button {
 export class SetManaCostButton extends Button {
     click = (manaCost: HTMLElement): void => {
         manaCost.addEventListener("click", (e: MouseEvent): void => {
+            if (e.srcElement.attributes[0] === undefined) {
+                return;
+            }
             const manaCostValue: string = e.srcElement.attributes[0].value;
 
             this.resetBtnClassList(manaCost, e);

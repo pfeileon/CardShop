@@ -383,6 +383,8 @@ export class RenderService extends Renderer {
 
             btnList = temp[i+1].children[0].children;
             this.refreshButtonsHelpFunction(btnList, Utils.getHeroFilter());
+            btnList = temp[i+2].children[0].children;
+            this.refreshButtonsHelpFunction(btnList, Utils.getManaFilter());
         }
 
         btnList = temp[i].children[0].children;
