@@ -44,7 +44,7 @@ export const checkoutTemplate = (rService: RenderService) => {
                 <input id="confirm-email" type="email" class="from-control" name="email" placeholder="Confirm email" />
             </div>
         <button id="cancel-btn" type="button" class="btn btn-danger">Cancel</button>
-        <button id="confirm-btn" type="submit" class="btn btn-success">Confirm</button>
+        <button id="confirm-btn" type="button" class="btn btn-success">Confirm</button>
     </form>
 
     </article>`

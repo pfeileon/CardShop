@@ -21,6 +21,7 @@ abstract class ShopButton extends Button {
 export class CancelButton extends Button {
     click = (): void => {
         document.getElementById(this.id).addEventListener("click", (e) => {
+            Utils.createHash("");
             Utils.createHash("cart/" + localStorage.getItem("cart"));
         });
     }
