@@ -1,6 +1,4 @@
 import { RenderService } from '../modules/services/renderService';
-import { StorageService } from '../modules/services/storageService';
-import { ShoppingCart } from "../modules/shoppingCart";
 "use strict";
 
 export const cartTemplate = (rService: RenderService) => {
@@ -14,10 +12,11 @@ export const cartTemplate = (rService: RenderService) => {
         <div id="cart-content-delete" class="col-xs-1"></div>
     </section>
     <section id="cart-btns" class="row">
-    <button id="cart-return-btn" type="button" class="btn btn-default return-btn col-xs-1">Return</button>
-    <button id="cart-clear-btn" type="button" class="btn btn-danger clear-btn col-xs-1">Clear Cart</button>
-    <span class="col-xs-3"></span>
-    <button id="checkout-btn" type="button" class="btn btn-success col-xs-2">Checkout</button>
+        <button id="cart-return-btn" type="button" class="btn btn-default return-btn col-xs-1">Return</button>
+        <button id="cart-clear-btn" type="button" class="btn btn-danger clear-btn col-xs-1">Clear Cart</button>
+        <span class="col-xs-3"></span>
+        <button id="checkout-btn" type="button" class="btn btn-success col-xs-2">Checkout</button>
+    </section>
 
     </article>`
 }

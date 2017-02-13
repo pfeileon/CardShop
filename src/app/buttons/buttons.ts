@@ -18,12 +18,30 @@ abstract class ShopButton extends Button {
     }
 }
 
+export class CancelButton extends Button {
+    click = (): void => {
+        document.getElementById(this.id).addEventListener("click", (e) => {
+            Utils.createHash("cart/" + localStorage.getItem("cart"));
+        });
+    }
+}
+
+export class ConfirmButton extends Button {
+    click = (): void => {
+        document.getElementById(this.id).addEventListener("click", (e) => {
+            console.log("CONFIRM");
+        });
+    }
+}
+
 export class CheckoutButton extends ShopButton {
     click = (): void => {
         document.getElementById(this.id).addEventListener("click", (e) => {
-            console.log("CHECKOUT!");
             if (localStorage.getItem("cart") === null) {
                 alert("Your cart is empty!");
+            }
+            else {
+                Utils.createHash("checkout/");
             }
         });
     }
@@ -43,10 +61,8 @@ export class DeleteButton extends ShopButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
-                console.log(e);
                 let items = JSON.parse(localStorage.getItem("cart"));
                 if (Object.keys(items).length === 1) {
-                    console.log(Object.keys(items));
                     localStorage.removeItem("cart");
                     this.shop.Cart.Items = [];
                 }

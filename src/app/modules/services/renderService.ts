@@ -37,7 +37,7 @@ export class RenderService extends Renderer {
         let hashValue;
 
         // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
-        if (decodeURI(window.location.hash).search("/") !== -1) {
+        if ((<any>decodeURI(window.location.hash)).includes("/")) {
             hashValue = decodeURI(window.location.hash.split("/")[0]);
         }
         else {
@@ -65,6 +65,10 @@ export class RenderService extends Renderer {
                 this.displayCheck("cart", shop);
                 break;
 
+            case "#checkout":
+            this.displayCheck("checkout", shop)
+                break;
+
             default:
                 this.displayCheck("error");
                 break;
@@ -87,6 +91,7 @@ export class RenderService extends Renderer {
         let startPageShown: boolean = !document.getElementById("start-page").classList.contains("noDisplay");
         let setPreviewShown: boolean = !document.getElementById("set-preview").classList.contains("noDisplay");
         let cartShown: boolean = !document.getElementById("shopping-cart").classList.contains("noDisplay");
+        let checkoutShown: boolean = !document.getElementById("checkout").classList.contains("noDisplay");
         let errorPageShown: boolean = !document.getElementById("error-page").classList.contains("noDisplay");
 
         switch (selector) {
@@ -101,6 +106,9 @@ export class RenderService extends Renderer {
                 }
                 if (cartShown) {
                     Utils.toggleCssClass("shopping-cart", "noDisplay");
+                }
+                if (checkoutShown) {
+                    Utils.toggleCssClass("checkout", "noDisplay");
                 }
                 if (errorPageShown) {
                     Utils.toggleCssClass("error-page", "noDisplay");
@@ -119,6 +127,9 @@ export class RenderService extends Renderer {
                 if (cartShown) {
                     Utils.toggleCssClass("shopping-cart", "noDisplay");
                 }
+                if (checkoutShown) {
+                    Utils.toggleCssClass("checkout", "noDisplay");
+                }
                 if (errorPageShown) {
                     Utils.toggleCssClass("error-page", "noDisplay");
                 }
@@ -134,6 +145,28 @@ export class RenderService extends Renderer {
                 }
                 if (setPreviewShown) {
                     Utils.toggleCssClass("set-preview", "noDisplay");
+                }
+                if (checkoutShown) {
+                    Utils.toggleCssClass("checkout", "noDisplay");
+                }
+                if (errorPageShown) {
+                    Utils.toggleCssClass("error-page", "noDisplay");
+                }
+                break;
+            }
+            case "checkout": {
+                this.renderCart(shop);
+                if (!checkoutShown) {
+                    Utils.toggleCssClass("checkout", "noDisplay");
+                }
+                if (startPageShown) {
+                    Utils.toggleCssClass("start-page", "noDisplay");
+                }
+                if (setPreviewShown) {
+                    Utils.toggleCssClass("set-preview", "noDisplay");
+                }
+                if (cartShown) {
+                    Utils.toggleCssClass("shopping-cart", "noDisplay");
                 }
                 if (errorPageShown) {
                     Utils.toggleCssClass("error-page", "noDisplay");
@@ -153,6 +186,9 @@ export class RenderService extends Renderer {
                 if (cartShown) {
                     Utils.toggleCssClass("shopping-cart", "noDisplay");
                 }
+                if (checkoutShown) {
+                    Utils.toggleCssClass("checkout", "noDisplay");
+                }
                 break;
             }
         }
@@ -160,9 +196,11 @@ export class RenderService extends Renderer {
 
     renderCart(shop: CardShop): void {
         if (localStorage.getItem("cart") !== null || undefined) {
+
             if (!document.getElementById("checkout-btn").classList.contains("btn-success")) {
                 document.getElementById("checkout-btn").classList.toggle("btn-success");
             }
+
             let temp: {} = JSON.parse(localStorage.getItem("cart"));
             let help: string[][] = [Object.keys(temp), (<any>Object).values(temp)];
 
@@ -381,9 +419,9 @@ export class RenderService extends Renderer {
         if (page === "preview") {
             i = 1;
 
-            btnList = temp[i+1].children[0].children;
+            btnList = temp[i + 1].children[0].children;
             this.refreshButtonsHelpFunction(btnList, Utils.getHeroFilter());
-            btnList = temp[i+2].children[0].children;
+            btnList = temp[i + 2].children[0].children;
             this.refreshButtonsHelpFunction(btnList, Utils.getManaFilter());
         }
 
