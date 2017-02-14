@@ -20,17 +20,27 @@ abstract class ShopButton extends Button {
 
 export class CancelButton extends Button {
     click = (): void => {
-        document.getElementById(this.id).addEventListener("click", (e) => {
-            Utils.createHash("");
-            Utils.createHash("cart/" + localStorage.getItem("cart"));
-        });
+        for (let item of <any>document.getElementsByClassName(this.id)) {
+            item.addEventListener("click", (e) => {
+                console.log(item.id);
+                if (item.id === "cancelPD") {
+                    Utils.createHash("");
+                    Utils.createHash("cart/" + localStorage.getItem("cart"));
+                }
+                if (item.id === "cancelCCD") {
+                    document.getElementById("collapsePD").classList.add("in");
+                    document.getElementById("collapseCCD").classList.remove("in");
+                }
+            });
+        }
     }
 }
 
 export class ConfirmButton extends Button {
     click = (): void => {
         document.getElementById(this.id).addEventListener("click", (e) => {
-            console.log("CONFIRM");
+            document.getElementById("collapsePD").classList.remove("in");
+            document.getElementById("collapseCCD").classList.add("in");
         });
     }
 }
