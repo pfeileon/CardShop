@@ -130,7 +130,7 @@ export const checkoutTemplate = (rService: RenderService) => {
 
                     <button id="cancelCCD" data-toggle="collapse" data-target="#collapseCCD" type="button" class="btn btn-danger cancel-btn" aria-expanded="false" aria-controls="collapseCCD">Cancel</button>
 
-                    <button data-parent="#accordion" id="confirmCCD" type="submit" class="btn btn-success confirm-btn">
+                    <button data-toggle="modal" data-target="#myModal" data-parent="#accordion" id="confirmCCD" type="submit" class="btn btn-success confirm-btn">
                         Confirm
                     </button>
                 
@@ -139,6 +139,25 @@ export const checkoutTemplate = (rService: RenderService) => {
         </div>
     </div>
     
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ${localStorage.getItem("customer")}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Buy!</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 

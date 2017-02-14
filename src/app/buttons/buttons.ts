@@ -43,7 +43,7 @@ export class ConfirmButton extends ShopButton {
             item.addEventListener("click", (e) => {
                 let customer: Customer;
                 if (item.id === "confirmPD") {
-                    customer = new Customer();
+                    customer = new Customer(this.shop.Cart.Items);
                     customer.FName = (<HTMLInputElement>document.getElementById("firstName")).value;
                     customer.LName = (<HTMLInputElement>document.getElementById("lastName")).value;
                     customer.Address = (<HTMLInputElement>document.getElementById("address")).value;
@@ -70,8 +70,10 @@ export class ConfirmButton extends ShopButton {
                     
                     console.log(creditCard);
                     this.shop.Customer.CreditCard = creditCard;
+                    localStorage.setItem("customer", JSON.stringify(this.shop.Customer));
                 }
                 console.log(this.shop.Customer);
+                
             });
         }
     }
