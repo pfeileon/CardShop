@@ -28,8 +28,7 @@ export class CancelButton extends Button {
                     Utils.createHash("cart/" + localStorage.getItem("cart"));
                 }
                 if (item.id === "cancelCCD") {
-                    document.getElementById("collapsePD").classList.add("in");
-                    document.getElementById("collapseCCD").classList.remove("in");
+                    document.getElementById("personalDataHeading").click();
                 }
             });
         }
@@ -38,10 +37,18 @@ export class CancelButton extends Button {
 
 export class ConfirmButton extends Button {
     click = (): void => {
-        document.getElementById(this.id).addEventListener("click", (e) => {
-            document.getElementById("collapsePD").classList.remove("in");
-            document.getElementById("collapseCCD").classList.add("in");
-        });
+        for (let item of <any>document.getElementsByClassName(this.id)) {
+            item.addEventListener("click", (e) => {
+                if (item.id === "confirmPD") {
+                    document.getElementById("personalDataHeading").setAttribute("data-target", "#collapsePD")
+                    document.getElementById("creditCardDataHeading").setAttribute("data-target", "#collapseCCD")
+                    document.getElementById("creditCardDataHeading").click();
+                }
+                if (item.id === "confirmPD") {
+                    console.log("b la");
+                }
+            });
+        }
     }
 }
 
