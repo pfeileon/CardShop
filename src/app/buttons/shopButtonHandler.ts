@@ -42,7 +42,7 @@ export class ShopButtonHandler extends ButtonHandler {
         this.clearCart(shop);
         this.checkout(shop);
         this.cancelCheckout();
-        this.confirmCheckout();
+        this.confirmCheckout(shop);
     }
 
     // - OWN
@@ -74,8 +74,8 @@ export class ShopButtonHandler extends ButtonHandler {
         cancelBtn.click();
     }
 
-    confirmCheckout(id = "confirm-btn"): void {
-        const confirmBtn: Buttons.ConfirmButton = new Buttons.ConfirmButton(id, this);
+    confirmCheckout(shop: CardShop, id = "confirm-btn"): void {
+        const confirmBtn: Buttons.ConfirmButton = new Buttons.ConfirmButton(id, this, shop);
         confirmBtn.click();
     }
 

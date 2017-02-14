@@ -35,12 +35,12 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
 
     <section id="preview-main" class="container-fluid">
         <div class="col-1">
-            <button id="previous-cards-shown" class="btn btn-default" type="button">back</button>
+            <button id="previous-cards-shown" class="btn btn-default" type="button" disabled>back</button>
         </div>
         <div id="card-images" class="col-xs-10 slider">
         </div>
         <div class="col-1">
-            <button id="next-cards-shown" class="btn btn-default" type="button">next</button>
+            <button id="next-cards-shown" class="btn btn-default" type="button" disabled>next</button>
         </div>
     </section>
 

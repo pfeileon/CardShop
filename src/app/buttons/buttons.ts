@@ -5,6 +5,8 @@ import { Callback } from "../types/types";
 import * as Utils from "../modules/utilities";
 import { CardShop } from "../modules/cardShop";
 import { CardPack } from "../modules/cardPack";
+import { Customer } from "../modules/customer";
+import { CreditCard } from "../modules/creditCard";
 
 "use strict";
 
@@ -35,18 +37,41 @@ export class CancelButton extends Button {
     }
 }
 
-export class ConfirmButton extends Button {
+export class ConfirmButton extends ShopButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
+                let customer: Customer;
                 if (item.id === "confirmPD") {
+                    customer = new Customer();
+                    customer.FName = (<HTMLInputElement>document.getElementById("firstName")).value;
+                    customer.LName = (<HTMLInputElement>document.getElementById("lastName")).value;
+                    customer.Address = (<HTMLInputElement>document.getElementById("address")).value;
+                    customer.City = (<HTMLInputElement>document.getElementById("city")).value;
+                    customer.Country = (<HTMLInputElement>document.getElementById("country")).value;
+                    customer.ZipCode = (<HTMLInputElement>document.getElementById("zipCode")).value;
+                    customer.Tel = (<HTMLInputElement>document.getElementById("telephone")).value;
+                    customer.Email = (<HTMLInputElement>document.getElementById("confirmEmail")).value;
+
                     document.getElementById("personalDataHeading").setAttribute("data-target", "#collapsePD")
                     document.getElementById("creditCardDataHeading").setAttribute("data-target", "#collapseCCD")
                     document.getElementById("creditCardDataHeading").click();
+
+                    this.shop.Customer = customer;
                 }
-                if (item.id === "confirmPD") {
-                    console.log("b la");
+                if (item.id === "confirmCCD") {
+                    let creditCard: CreditCard = new CreditCard();
+                    creditCard.Owner = (<HTMLInputElement>document.getElementById("cardOwner")).value;
+                    creditCard.CardNumber = (<HTMLInputElement>document.getElementById("cardNumber")).value;
+                    creditCard.ValidThru = new Date();
+                    creditCard.ValidThru.setMonth((<HTMLInputElement>document.getElementById("expiryMonth")).attributes["value"]);
+                    creditCard.ValidThru.setFullYear(+(<HTMLInputElement>document.getElementById("expiryYear")).value);
+                    creditCard.CardSecCode = +(<HTMLInputElement>document.getElementById("cVV")).value;
+                    
+                    console.log(creditCard);
+                    this.shop.Customer.CreditCard = creditCard;
                 }
+                console.log(this.shop.Customer);
             });
         }
     }

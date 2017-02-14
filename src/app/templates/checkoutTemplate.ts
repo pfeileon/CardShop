@@ -48,8 +48,8 @@ export const checkoutTemplate = (rService: RenderService) => {
                         <input id="telephone" type="phone" class="form-control" name="telephone" placeholder="Telephone" required />
                     </div>
                     <div class="form-group">
-                        <label for="checkoutCmail">Email</label>
-                        <input id="checkoutCmail" type="email" class="form-control" name="checkoutEmail" placeholder="Email" required />
+                        <label for="checkoutEmail">Email</label>
+                        <input id="checkoutEmail" type="email" class="form-control" name="checkoutEmail" placeholder="Email" required />
                     </div>
                     <div class="form-group">
                         <label for="confirmEmail">Confirm Email</label>
@@ -80,7 +80,7 @@ export const checkoutTemplate = (rService: RenderService) => {
             <div class="panel-body">
                 <form onsubmit="return false" id="creditCardData" role="form" data-toggle="validator" data-disable="true">
                     <div class="form-group">
-                        <label class="control-label" for="cardOwner">Card Number</label>
+                        <label class="control-label" for="cardOwner">Card Owner</label>
                         <input id="cardOwner" type="text" class="form-control" name="cardOwner" placeholder="Card holder's name" required />
                     </div>
 
@@ -90,10 +90,9 @@ export const checkoutTemplate = (rService: RenderService) => {
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label" for="expiry-month">Expiration Date</label>
+                        <label class="control-label" for="expiryMonth">Expiration Date</label>
                         <div class="row">
-                            <div class="col-xs-3">
-                            <select class="form-control col-sm-2" name="expiry-month" id="expiry-month" required>
+                            <select class="form-control name="expiryMonth" id="expiryMonth" required>
                                 <option>Month</option>
                                 <option value="01">Jan (01)</option>
                                 <option value="02">Feb (02)</option>
@@ -108,9 +107,7 @@ export const checkoutTemplate = (rService: RenderService) => {
                                 <option value="11">Nov (11)</option>
                                 <option value="12">Dec (12)</option>
                             </select>
-                            </div>
-                            <div class="col-xs-3">
-                            <select class="form-control" name="expiry-year" required>
+                            <select class="form-control" name="expiryYear" id="expiryYear" required>
                                 <option value="17">2017</option>
                                 <option value="18">2018</option>
                                 <option value="19">2019</option>
@@ -123,13 +120,12 @@ export const checkoutTemplate = (rService: RenderService) => {
                                 <option value="26">2023</option>
                                 <option value="27">2023</option>
                             </select>
-                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                    <label class="col-sm-3 control-label" for="cvv">Card CVV</label>
-                        <input type="text" class="form-control" name="cvv" id="cvv" placeholder="Security code" required />
+                    <label class="col-sm-3 control-label" for="cVV">Card CVV</label>
+                        <input type="text" class="form-control" name="cVV" id="cVV" placeholder="Security code" required />
                     </div>
 
                     <button id="cancelCCD" data-toggle="collapse" data-target="#collapseCCD" type="button" class="btn btn-danger cancel-btn" aria-expanded="false" aria-controls="collapseCCD">Cancel</button>

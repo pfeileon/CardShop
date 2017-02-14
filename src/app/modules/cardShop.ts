@@ -8,6 +8,7 @@ import { SinglePageApplication } from './abstracts/singlePageApplication';
 import { ButtonHandler } from '../buttons/buttonHandler';
 import { ShopButtonHandler } from '../buttons/shopButtonHandler';
 import { StorageService } from './services/storageService';
+import { Customer } from "./customer";
 import * as Buttons from '../buttons/buttons';
 
 'use strict';
@@ -17,6 +18,10 @@ export class CardShop extends SinglePageApplication {
     // PROPERTIES
     private cart: ShoppingCart;
     public get Cart() { return this.cart; }
+
+    private customer: Customer;
+    public get Customer() { return this.customer; }
+    public set Customer(customer) { this.customer = customer; }
 
     private sService: StorageService;
     public get SService() { return this.sService; }

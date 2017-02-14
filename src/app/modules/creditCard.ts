@@ -10,6 +10,18 @@ export class CreditCard {
     private validThru: Date;
     private cardSecCode: number;
 
+    public get Owner() { return this.owner; }
+    public set Owner(owner) { this.owner = owner; }
+
+    public get CardNumber() { return this.cardNumber; }
+    public set CardNumber(cardNumber) { this.cardNumber = cardNumber; }
+
+    public get ValidThru() { return this.validThru; }
+    public set ValidThru(validThru) { this.validThru = validThru; }
+
+    public get CardSecCode() { return this.cardSecCode; }
+    public set CardSecCode(cardSecCode) { this.cardSecCode = cardSecCode; }
+
     //Methods
     /** Carges the CreditCard */
     chargeCard(amount: number): void {
