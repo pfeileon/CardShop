@@ -8,6 +8,7 @@ import { SinglePageApplication } from './abstracts/singlePageApplication';
 import { ButtonHandler } from '../buttons/buttonHandler';
 import { ShopButtonHandler } from '../buttons/shopButtonHandler';
 import { StorageService } from './services/storageService';
+import { Customer } from "./customer";
 import * as Buttons from '../buttons/buttons';
 
 'use strict';
@@ -17,6 +18,10 @@ export class CardShop extends SinglePageApplication {
     // PROPERTIES
     private cart: ShoppingCart;
     public get Cart() { return this.cart; }
+
+    private customer: Customer;
+    public get Customer() { return this.customer; }
+    public set Customer(customer) { this.customer = customer; }
 
     private sService: StorageService;
     public get SService() { return this.sService; }
@@ -51,5 +56,17 @@ export class CardShop extends SinglePageApplication {
         window.addEventListener("storage", (e) => {
             this.sService.setCart(this.cart);
         });
+    }
+
+    setCustomer(customer: Customer): void {
+        customer.FName = (<HTMLInputElement>document.getElementById("firstName")).value;
+        customer.LName = (<HTMLInputElement>document.getElementById("lastName")).value;
+        customer.Address = (<HTMLInputElement>document.getElementById("address")).value;
+        customer.City = (<HTMLInputElement>document.getElementById("city")).value;
+        customer.Country = (<HTMLInputElement>document.getElementById("country")).value;
+        customer.ZipCode = (<HTMLInputElement>document.getElementById("zipCode")).value;
+        customer.Tel = (<HTMLInputElement>document.getElementById("telephone")).value;
+        customer.Email = (<HTMLInputElement>document.getElementById("confirmEmail")).value;
+        this.customer = customer;
     }
 }

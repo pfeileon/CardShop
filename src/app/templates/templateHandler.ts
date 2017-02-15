@@ -4,8 +4,11 @@ import { startPage } from './startPage';
 import { setPreview } from './setPreview';
 import { RenderService } from '../modules/services/renderService';
 import { cartTemplate } from "../templates/cartTemplate";
+import { checkoutTemplate } from "../templates/checkoutTemplate";
 import { ShoppingCart } from "../modules/shoppingCart";
 import { StorageService } from "../modules/services/storageService";
+
+import { validate } from "../modules/customJQ";
 
 const templates = (rService: RenderService): Template[] => [{
     id: 'start-page',
@@ -19,6 +22,10 @@ const templates = (rService: RenderService): Template[] => [{
     id: "shopping-cart",
     where: "afterbegin",
     html: cartTemplate(rService)
+}, {
+    id: "checkout",
+    where: "afterbegin",
+    html: checkoutTemplate(rService)
 }]
 
 /** All templates with exact position */
@@ -43,5 +50,6 @@ export class TemplateHandler {
         for (let template of this.templates) {
             this.insertTemplate(template)
         }
+        validate();
     }
 }
