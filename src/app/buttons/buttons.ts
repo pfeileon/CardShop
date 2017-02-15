@@ -7,6 +7,7 @@ import { CardShop } from "../modules/cardShop";
 import { CardPack } from "../modules/cardPack";
 import { Customer } from "../modules/customer";
 import { CreditCard } from "../modules/creditCard";
+import { RenderService, checkoutModal } from "../modules/services/renderService";
 
 "use strict";
 
@@ -22,7 +23,7 @@ abstract class ShopButton extends Button {
 
 export class BuyButton extends Button {
     click = (): void => {
-        document.getElementById("buyBtn").addEventListener("click", (e) => {
+        document.getElementById(this.id).addEventListener("click", (e) => {
             alert("We did it!");
         });
     }
@@ -63,6 +64,8 @@ export class ConfirmButton extends ShopButton {
                     this.shop.Customer.setCreditCard(creditCard);
 
                     localStorage.setItem("customer", JSON.stringify(this.shop.Customer));
+                    document.getElementById("checkoutModal").insertAdjacentHTML("afterbegin", checkoutModal(this.shop.Customer));
+                    this.shop.BHandler.buy();
                 }
                 console.log(this.shop.Customer);
             });
