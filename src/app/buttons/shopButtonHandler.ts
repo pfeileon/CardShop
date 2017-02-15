@@ -43,6 +43,7 @@ export class ShopButtonHandler extends ButtonHandler {
         this.checkout(shop);
         this.cancelCheckout();
         this.confirmCheckout(shop);
+        this.buy();
     }
 
     // - OWN
@@ -67,6 +68,11 @@ export class ShopButtonHandler extends ButtonHandler {
                 Utils.iterateUl(document.getElementById(`${filters["id"][i]}-filter`).children[1].children, filters["do"][i]);
             }
         }
+    }
+
+    buy(id = "buyBtn") {
+        const buyBtn: Buttons.BuyButton = new Buttons.BuyButton(id, this);
+        buyBtn.click();
     }
 
     cancelCheckout(id = "cancel-btn"): void {

@@ -57,4 +57,16 @@ export class CardShop extends SinglePageApplication {
             this.sService.setCart(this.cart);
         });
     }
+
+    setCustomer(customer: Customer): void {
+        customer.FName = (<HTMLInputElement>document.getElementById("firstName")).value;
+        customer.LName = (<HTMLInputElement>document.getElementById("lastName")).value;
+        customer.Address = (<HTMLInputElement>document.getElementById("address")).value;
+        customer.City = (<HTMLInputElement>document.getElementById("city")).value;
+        customer.Country = (<HTMLInputElement>document.getElementById("country")).value;
+        customer.ZipCode = (<HTMLInputElement>document.getElementById("zipCode")).value;
+        customer.Tel = (<HTMLInputElement>document.getElementById("telephone")).value;
+        customer.Email = (<HTMLInputElement>document.getElementById("confirmEmail")).value;
+        this.customer = customer;
+    }
 }

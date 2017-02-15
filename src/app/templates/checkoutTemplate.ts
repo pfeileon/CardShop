@@ -1,8 +1,12 @@
 import { RenderService } from '../modules/services/renderService';
+import { luhnAlgorithm } from "../modules/utilities";
+
 "use strict";
 
 export const checkoutTemplate = (rService: RenderService) => {
+    let customer = JSON.parse(localStorage.getItem("customer"));
     return `<article class="container">
+
 
     <h1 class="well">Checkout</h1>
 
@@ -18,7 +22,7 @@ export const checkoutTemplate = (rService: RenderService) => {
 
         <div id="collapsePD" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="titlePD">
             <div class="panel-body">
-                <form onsubmit="return false" id="personalData" role="form" data-toggle="validator" data-disable="true">
+                <form onsubmit="return false" id="personalData" role="form" data-disable="true">
                     <div class="form-group">
                         <label for="firstName">First Name</label>
                         <input id="firstName" type="text" class="form-control" name="firstName" placeholder="First name" required />
@@ -78,7 +82,7 @@ export const checkoutTemplate = (rService: RenderService) => {
 
         <div id="collapseCCD" class="panel-collapse collapse">
             <div class="panel-body">
-                <form onsubmit="return false" id="creditCardData" role="form" data-toggle="validator" data-disable="true">
+                <form onsubmit="return false" id="creditCardData" role="form" data-disable="true">
                     <div class="form-group">
                         <label class="control-label" for="cardOwner">Card Owner</label>
                         <input id="cardOwner" type="text" class="form-control" name="cardOwner" placeholder="Card holder's name" required />
@@ -86,7 +90,7 @@ export const checkoutTemplate = (rService: RenderService) => {
 
                     <div class="form-group">
                         <label for="cardNumber">Card Number</label>
-                        <input id="cardNumber" type="text" class="form-control" name="cardNumber" placeholder="Card number" required />
+                        <input id="cardNumber" type="text" class="form-control" name="cardNumber" placeholder="Card number" data-luhn="luhn" required />
                     </div>
 
                     <div class="form-group">
@@ -130,7 +134,7 @@ export const checkoutTemplate = (rService: RenderService) => {
 
                     <button id="cancelCCD" data-toggle="collapse" data-target="#collapseCCD" type="button" class="btn btn-danger cancel-btn" aria-expanded="false" aria-controls="collapseCCD">Cancel</button>
 
-                    <button data-toggle="modal" data-target="#myModal" data-parent="#accordion" id="confirmCCD" type="submit" class="btn btn-success confirm-btn">
+                    <button data-toggle="modal" data-target="#checkoutModal" data-parent="#accordion" id="confirmCCD" type="submit" class="btn btn-success confirm-btn">
                         Confirm
                     </button>
                 
@@ -142,19 +146,29 @@ export const checkoutTemplate = (rService: RenderService) => {
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="checkoutModal" tabindex="-1" role="dialog" aria-labelledby="checkoutModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        <h4 class="modal-title" id="checkoutModalLabel">Please confirm before buying:</h4>
       </div>
       <div class="modal-body">
-        ${localStorage.getItem("customer")}
+        <table>
+            <tr>
+                <td>Name:</td><td>${customer.fName + " " + customer.lName}</td>
+            </tr>
+            <tr>
+                <td>Address:</td><td>${customer.address + ", " + customer.zipCode + " " + customer.city + ", " + customer.country}</td>
+            </tr>
+            <tr>
+                <td>Credit card:</td><td>${customer.creditCard.owner + ", " + customer.creditCard.cardNumber + ", " + customer.creditCard.validThru}</td>
+            </tr>
+        </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Buy!</button>
+        <button id="buyBtn" type="button" class="btn btn-primary">Buy!</button>
       </div>
     </div>
   </div>

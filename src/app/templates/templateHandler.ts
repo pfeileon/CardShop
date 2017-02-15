@@ -8,6 +8,8 @@ import { checkoutTemplate } from "../templates/checkoutTemplate";
 import { ShoppingCart } from "../modules/shoppingCart";
 import { StorageService } from "../modules/services/storageService";
 
+import { validate } from "../modules/validation";
+
 const templates = (rService: RenderService): Template[] => [{
     id: 'start-page',
     where: 'afterbegin',
@@ -48,5 +50,6 @@ export class TemplateHandler {
         for (let template of this.templates) {
             this.insertTemplate(template)
         }
+        validate();
     }
 }

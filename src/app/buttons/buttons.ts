@@ -20,6 +20,14 @@ abstract class ShopButton extends Button {
     }
 }
 
+export class BuyButton extends Button {
+    click = (): void => {
+        document.getElementById("buyBtn").addEventListener("click", (e) => {
+            alert("We did it!");
+        });
+    }
+}
+
 export class CancelButton extends Button {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
@@ -44,36 +52,19 @@ export class ConfirmButton extends ShopButton {
                 let customer: Customer;
                 if (item.id === "confirmPD") {
                     customer = new Customer(this.shop.Cart.Items);
-                    customer.FName = (<HTMLInputElement>document.getElementById("firstName")).value;
-                    customer.LName = (<HTMLInputElement>document.getElementById("lastName")).value;
-                    customer.Address = (<HTMLInputElement>document.getElementById("address")).value;
-                    customer.City = (<HTMLInputElement>document.getElementById("city")).value;
-                    customer.Country = (<HTMLInputElement>document.getElementById("country")).value;
-                    customer.ZipCode = (<HTMLInputElement>document.getElementById("zipCode")).value;
-                    customer.Tel = (<HTMLInputElement>document.getElementById("telephone")).value;
-                    customer.Email = (<HTMLInputElement>document.getElementById("confirmEmail")).value;
+                    this.shop.setCustomer(customer);
 
                     document.getElementById("personalDataHeading").setAttribute("data-target", "#collapsePD")
                     document.getElementById("creditCardDataHeading").setAttribute("data-target", "#collapseCCD")
                     document.getElementById("creditCardDataHeading").click();
-
-                    this.shop.Customer = customer;
                 }
                 if (item.id === "confirmCCD") {
                     let creditCard: CreditCard = new CreditCard();
-                    creditCard.Owner = (<HTMLInputElement>document.getElementById("cardOwner")).value;
-                    creditCard.CardNumber = (<HTMLInputElement>document.getElementById("cardNumber")).value;
-                    creditCard.ValidThru = new Date();
-                    creditCard.ValidThru.setMonth((<HTMLInputElement>document.getElementById("expiryMonth")).attributes["value"]);
-                    creditCard.ValidThru.setFullYear(+(<HTMLInputElement>document.getElementById("expiryYear")).value);
-                    creditCard.CardSecCode = +(<HTMLInputElement>document.getElementById("cVV")).value;
-                    
-                    console.log(creditCard);
-                    this.shop.Customer.CreditCard = creditCard;
+                    this.shop.Customer.setCreditCard(creditCard);
+
                     localStorage.setItem("customer", JSON.stringify(this.shop.Customer));
                 }
                 console.log(this.shop.Customer);
-                
             });
         }
     }

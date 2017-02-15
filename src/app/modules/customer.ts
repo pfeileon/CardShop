@@ -1,3 +1,4 @@
+import { luhnAlgorithm } from "./utilities";
 import { CreditCard } from './creditCard';
 import { Shopable } from '../types/types';
 
@@ -49,5 +50,15 @@ export class Customer {
 
     constructor(items: Shopable[]) {
         this.items = items;
+    }
+
+    setCreditCard(creditCard: CreditCard) {
+        creditCard.Owner = (<HTMLInputElement>document.getElementById("cardOwner")).value;
+        creditCard.CardNumber = (<HTMLInputElement>document.getElementById("cardNumber")).value;
+        creditCard.ValidThru = new Date();
+        creditCard.ValidThru.setMonth((<HTMLInputElement>document.getElementById("expiryMonth")).attributes["value"]);
+        creditCard.ValidThru.setFullYear(+(<HTMLInputElement>document.getElementById("expiryYear")).value);
+        creditCard.CardSecCode = +(<HTMLInputElement>document.getElementById("cVV")).value;
+        this.creditCard = creditCard;
     }
 }
