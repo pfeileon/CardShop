@@ -337,7 +337,8 @@ export class RenderService extends Renderer {
         let i: number = 0;
 
         // First remove old code
-        document.getElementById("cardImages").innerText = "";
+        document.getElementById("carouselCardWrapper").innerText = "";
+        document.getElementById("carouselInd").innerText = "";
 
         // Iterate the list of cards
         for (card of cardData) {
@@ -367,12 +368,9 @@ export class RenderService extends Renderer {
                         )))
 
                 if (heroFilterPassed && manaFilterPassed) {
-                    // Render card image
-                    document.getElementById("cardImages").insertAdjacentHTML("beforeend", `<img id="card_${i}" class="noDisplay" src="${card.img}" alt = "${card.name}" />`);
-
                     //Testing carousel
-                    renderCarousel(card, i);
-                    
+                    this.renderCarousel(card, i);
+
                     i++;
                 }
             }
@@ -445,23 +443,27 @@ export class RenderService extends Renderer {
             }
         }
     }
-}
 
-function renderCarousel(card, i: number) {
-    let j = Math.floor(i / 3);
-    console.log(i, j);
+    renderCarousel(card, i: number) {
+        let j = Math.floor(i / 3);
 
-    // else if (i !== 0 || i+1 % 3) {
-    document.getElementById("carouselCardWrapper").insertAdjacentHTML("beforeend", `<div class="item"><div id="carouselCardHelp${i}" class="text-center"</div></div>`)
-    document.getElementById(`carouselCardHelp${j}`).insertAdjacentHTML("beforeend", `<img src="${card.img}" alt = "${card.name}" />`);
+        if (i === 0 || i % 3 === 0) {
+            document.getElementById("carouselCardWrapper").insertAdjacentHTML("beforeend", `<div id="carouselItem${j}" class="item"></div>`);
+        }
+        
+        document.getElementById(`carouselItem${j}`).insertAdjacentHTML("beforeend", `<div id="carouselCardHelp${j}" class="text-center"</div>`);
 
-    if (i === 0) {
-        document.getElementById("carouselCardWrapper").children[0].classList.add("active");
+        // Render card image
+        document.getElementById(`carouselCardHelp${j}`).insertAdjacentHTML("beforeend", `<img src="${card.img}" alt = "${card.name}" />`);
+
+        if (i === 0) {
+            document.getElementById("carouselItem0").classList.add("active");
+        }
     }
 }
 
 export const checkoutModal = (customer) => {
-        return `
+    return `
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">

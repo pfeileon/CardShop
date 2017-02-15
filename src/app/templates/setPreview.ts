@@ -4,21 +4,23 @@ import { genCarouselInd } from "../modules/customJQ";
 'use strict';
 
 const wrapper = `<div id="carouselCardWrapper" class="carousel-inner" role="listbox"></div>`;
-const controls = `<a class="left carousel-control" href="#previewCarousel" role="button" data-slide="prev">
+
+const controls = `<a class="left carousel-control" data-target="#previewCarousel" role="button" data-slide="prev">
         <span class="icon-prev" aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
     </a>
-    <a class="right carousel-control" href="#previewCarousel" role="button" data-slide="next">
+    <a class="right carousel-control" data-target="#previewCarousel" role="button" data-slide="next">
         <span class="icon-next" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
     </a>`;
 
 const carousel = `<div id="previewCarousel" class="carousel slide" data-ride="carousel" data-interval="false">  
-  <!-- Wrapper for slides -->
+    <!-- Indicators -->
+    <ol id="carouselInd" class="carousel-indicators"></ol>
+    <!-- Wrapper for slides -->
     ${wrapper}
-  <!-- Controls -->
-  ${controls}
-  <!-- Indicators -->
+    <!-- Controls -->
+    ${controls}
 </div>`;
 
 /** Set Preview Template */
@@ -53,18 +55,10 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
     </section>
 
     <section id="preview-main" class="container-fluid">
-        <div class="col-1">
-            <button id="previous-cards-shown" class="btn btn-default" type="button" disabled>back</button>
-        </div>
-        <div id="cardImages" class="col-xs-10 slider">
-        </div>
-        <div class="col-1">
-            <button id="next-cards-shown" class="btn btn-default" type="button" disabled>next</button>
-        </div>
+        ${carousel}
     </section>
 
     <footer id="preview-foot">
-        ${carousel}
     </footer>
 
 </article>`

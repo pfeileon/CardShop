@@ -22,19 +22,13 @@ export function validate() {
 }
 
 export function genCarouselInd() {
-    let myCarousel = $(".carousel");
-    myCarousel.append("<ol class='carousel-indicators'></ol>");
+    let carInd = document.getElementById("carouselInd");
     
-    let indicators = $(".carousel-indicators");
-
-    let myCar = myCarousel.find(".carousel-inner");
-    let len = myCar.children(".item").length / 3;
+    let carWrap = document.getElementById("carouselCardWrapper");
+    let len = carWrap.children.length;
 
     for (let i = 0; i < len; i++) {
-          indicators.append("<li data-target='#previewCarousel' data-slide-to='" + i + "'></li>");
+        carInd.insertAdjacentHTML("beforeend", `<li id="indicator${i}" data-target='#previewCarousel' data-slide-to="${i}" class=""></li>`);
     }
-    
-    myCar.children[0].classList.add('active');
-    
-    $('.carousel').carousel();
+    document.getElementById("indicator0").classList.add("active");
 }
