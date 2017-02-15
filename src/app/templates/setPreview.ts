@@ -4,20 +4,20 @@ import { genCarouselInd } from "../modules/customJQ";
 'use strict';
 
 const wrapper = `<div id="carouselCardWrapper" class="carousel-inner" role="listbox"></div>`;
+const controls = `<a class="left carousel-control" href="#previewCarousel" role="button" data-slide="prev">
+        <span class="icon-prev" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#previewCarousel" role="button" data-slide="next">
+        <span class="icon-next" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>`;
 
 const carousel = `<div id="previewCarousel" class="carousel slide" data-ride="carousel" data-interval="false">  
   <!-- Wrapper for slides -->
     ${wrapper}
-
   <!-- Controls -->
-  <a class="left carousel-control" href="#previewCarousel" role="button" data-slide="prev">
-    <span class="icon-prev" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#previewCarousel" role="button" data-slide="next">
-    <span class="icon-next" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
+  ${controls}
   <!-- Indicators -->
 </div>`;
 
