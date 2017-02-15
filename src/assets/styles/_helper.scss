@@ -22,3 +22,8 @@
 .confirm-btn.disabled {
     pointer-events: none;
 }
+
+#previewCarousel img {
+    display: inline;
+    max-width: 300px;
+}

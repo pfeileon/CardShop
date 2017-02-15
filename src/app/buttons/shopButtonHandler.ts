@@ -43,7 +43,6 @@ export class ShopButtonHandler extends ButtonHandler {
         this.checkout(shop);
         this.cancelCheckout();
         this.confirmCheckout(shop);
-        this.buy();
     }
 
     // - OWN

@@ -22,28 +22,13 @@ export function validate() {
 }
 
 export function genCarouselInd() {
-    let helper: boolean = false;
-    let myCarousel = $(".carousel");
-    myCarousel.append("<ol class='carousel-indicators'></ol>");
-    let indicators = $(".carousel-indicators");
-
-    let myCar = myCarousel.find(".carousel-inner");
-    let len = myCar.children(".item").length / 3;
-
-    console.log('len', len);
+    let carInd = document.getElementById("carouselInd");
+    
+    let carWrap = document.getElementById("carouselCardWrapper");
+    let len = carWrap.children.length;
 
     for (let i = 0; i < len; i++) {
-          indicators.append("<li data-target='#previewCarousel' data-slide-to='" + i + "'></li>");
+        carInd.insertAdjacentHTML("beforeend", `<li id="indicator${i}" data-target='#previewCarousel' data-slide-to="${i}" class=""></li>`);
     }
-    console.log(myCar);
-    myCar.children[0].classList.add('active');
-
-    // myCar.children(".item").each(function (index) {
-    //     let i = Math.floor(index/3);
-    //     console.log(index, i);
-    //     (i === 0) ?
-    //         indicators.append("<li data-target='#previewCarousel' data-slide-to='" + i + "' class='active'></li>") :
-    //         indicators.append("<li data-target='#previewCarousel' data-slide-to='" + i + "'></li>");
-    // });
-    $('.carousel').carousel();
+    document.getElementById("indicator0").classList.add("active");
 }
