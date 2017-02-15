@@ -8,7 +8,7 @@ import { checkoutTemplate } from "../templates/checkoutTemplate";
 import { ShoppingCart } from "../modules/shoppingCart";
 import { StorageService } from "../modules/services/storageService";
 
-import { validate } from "../modules/validation";
+import { validate } from "../modules/customJQ";
 
 const templates = (rService: RenderService): Template[] => [{
     id: 'start-page',

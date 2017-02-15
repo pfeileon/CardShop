@@ -1,10 +1,29 @@
 import { RenderService } from '../modules/services/renderService';
+import { genCarouselInd } from "../modules/customJQ";
 
 'use strict';
 
+const wrapper = `<div id="carouselCardWrapper" class="carousel-inner" role="listbox"></div>`;
+
+const carousel = `<div id="previewCarousel" class="carousel slide" data-ride="carousel" data-interval="false">  
+  <!-- Wrapper for slides -->
+    ${wrapper}
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#previewCarousel" role="button" data-slide="prev">
+    <span class="icon-prev" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#previewCarousel" role="button" data-slide="next">
+    <span class="icon-next" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+  <!-- Indicators -->
+</div>`;
+
 /** Set Preview Template */
 export const setPreview = (rService: RenderService, data: { setPreviewData }) => {
-    return `<article>
+    return `<article class="container">
 
     <header id="preview-head" class="set-filter display-in-line">
         <h1>Preview Card Set: <span class="card-set-name">${data.setPreviewData[Object.keys(data.setPreviewData)[0]]}</span></h1>
@@ -37,7 +56,7 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
         <div class="col-1">
             <button id="previous-cards-shown" class="btn btn-default" type="button" disabled>back</button>
         </div>
-        <div id="card-images" class="col-xs-10 slider">
+        <div id="cardImages" class="col-xs-10 slider">
         </div>
         <div class="col-1">
             <button id="next-cards-shown" class="btn btn-default" type="button" disabled>next</button>
@@ -45,6 +64,7 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
     </section>
 
     <footer id="preview-foot">
+        ${carousel}
     </footer>
 
 </article>`

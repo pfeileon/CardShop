@@ -4,6 +4,7 @@ import { config } from '../../config/config';
 import * as Utils from '../utilities';
 import { CardShop } from "../cardShop";
 import { FetchResource } from "../fetchResource";
+import { genCarouselInd } from "../customJQ";
 
 'use strict';
 
@@ -66,7 +67,7 @@ export class RenderService extends Renderer {
                 break;
 
             case "#checkout":
-            this.displayCheck("checkout", shop)
+                this.displayCheck("checkout", shop)
                 break;
 
             default:
@@ -333,10 +334,10 @@ export class RenderService extends Renderer {
         let heroFilterPassed: boolean;
         let manaFilterPassed: boolean;
         let setFilterPassed: boolean;
-        let i: number = 1;
+        let i: number = 0;
 
         // First remove old code
-        document.getElementById("card-images").innerText = "";
+        document.getElementById("cardImages").innerText = "";
 
         // Iterate the list of cards
         for (card of cardData) {
@@ -367,14 +368,17 @@ export class RenderService extends Renderer {
 
                 if (heroFilterPassed && manaFilterPassed) {
                     // Render card image
-                    document.getElementById("card-images").insertAdjacentHTML("beforeend", `<img id="card_${i}" class="noDisplay" src="${card.img}" alt = "${card.name}" />`);
-                    if (i < 9) {
-                        Utils.toggleCssClass(`card_${i}`, "noDisplay");
-                    }
+                    document.getElementById("cardImages").insertAdjacentHTML("beforeend", `<img id="card_${i}" class="noDisplay" src="${card.img}" alt = "${card.name}" />`);
+
+                    //Testing carousel
+                    renderCarousel(card, i);
+                    
                     i++;
                 }
             }
         }
+        // auto-generate bootstrap carousel indicators
+        genCarouselInd();
     }
 
     /**
@@ -440,5 +444,18 @@ export class RenderService extends Renderer {
                 item.children[0].classList.remove("btn-primary");
             }
         }
+    }
+}
+
+function renderCarousel(card, i: number) {
+    let j = Math.floor(i / 3);
+    console.log(i, j);
+
+    // else if (i !== 0 || i+1 % 3) {
+    document.getElementById("carouselCardWrapper").insertAdjacentHTML("beforeend", `<div class="item"><div id="carouselCardHelp${i}" class="text-center"</div></div>`)
+    document.getElementById(`carouselCardHelp${j}`).insertAdjacentHTML("beforeend", `<img src="${card.img}" alt = "${card.name}" />`);
+
+    if (i === 0) {
+        document.getElementById("carouselCardWrapper").children[0].classList.add("active");
     }
 }
