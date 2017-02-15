@@ -1,5 +1,5 @@
 .noDisplay {
-    display: none;
+    display: none !important;
 }
 
 .slider {
@@ -18,3 +18,7 @@
 // #cart-content, #cart-btns > * {
 //     border: 1px solid black !important;
 // }
+
+.confirm-btn.disabled {
+    pointer-events: none;
+}

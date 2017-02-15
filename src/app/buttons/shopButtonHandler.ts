@@ -41,6 +41,9 @@ export class ShopButtonHandler extends ButtonHandler {
         this.gotoCart(shop);
         this.clearCart(shop);
         this.checkout(shop);
+        this.cancelCheckout();
+        this.confirmCheckout(shop);
+        this.buy();
     }
 
     // - OWN
@@ -65,6 +68,21 @@ export class ShopButtonHandler extends ButtonHandler {
                 Utils.iterateUl(document.getElementById(`${filters["id"][i]}-filter`).children[1].children, filters["do"][i]);
             }
         }
+    }
+
+    buy(id = "buyBtn") {
+        const buyBtn: Buttons.BuyButton = new Buttons.BuyButton(id, this);
+        buyBtn.click();
+    }
+
+    cancelCheckout(id = "cancel-btn"): void {
+        const cancelBtn: Buttons.CancelButton = new Buttons.CancelButton(id, this);
+        cancelBtn.click();
+    }
+
+    confirmCheckout(shop: CardShop, id = "confirm-btn"): void {
+        const confirmBtn: Buttons.ConfirmButton = new Buttons.ConfirmButton(id, this, shop);
+        confirmBtn.click();
     }
 
     checkout(shop: CardShop, id = "checkout-btn"): void {

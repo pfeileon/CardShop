@@ -4,7 +4,7 @@ import { RenderService } from '../modules/services/renderService';
 
 /** Start Page Template */
 export const startPage = (rService: RenderService, data: { startPageData }) => {
-    return `<article>
+    return `<article class="container">
 
     <header id="start-head">
         <h1>Welcome to the Hearthstone Card Shop</h1>

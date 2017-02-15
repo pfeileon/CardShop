@@ -61,7 +61,7 @@ export function toggleCssClass(id: string, cssClass: string): void {
 export function getFilters(): {} {
     const hashValue = getHashValue();
     let filters: {};
-    if (hashValue !== undefined && hashValue.search("/") !== -1) {
+    if (hashValue !== undefined && (<any>hashValue).includes("/{")) {
         filters = JSON.parse(hashValue.split("/")[1]);
     }
     else {
@@ -84,4 +84,27 @@ export function isStartPage(): boolean {
         isStart = false;
     }
     return isStart;
+}
+
+export function getCardSetFilter(): string {
+    let temp = JSON.stringify(getFilters());
+    if (temp !== undefined) {
+        if ((<any>temp).includes("{")) {
+            temp = getFilters()["cardSet"];
+        }
+        else {
+            temp = temp.replace(/"/g, "");
+        }
+    }
+    return temp;
+}
+
+export function getHeroFilter(): string {
+    let temp = getFilters()["hero"];
+    return temp;
+}
+
+export function getManaFilter(): string {
+    let temp = getFilters()["manaCost"];
+    return temp;
 }

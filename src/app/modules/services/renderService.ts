@@ -4,6 +4,7 @@ import { config } from '../../config/config';
 import * as Utils from '../utilities';
 import { CardShop } from "../cardShop";
 import { FetchResource } from "../fetchResource";
+import { genCarouselInd } from "../customJQ";
 
 'use strict';
 
@@ -37,7 +38,7 @@ export class RenderService extends Renderer {
         let hashValue;
 
         // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
-        if (decodeURI(window.location.hash).search("/") !== -1) {
+        if ((<any>decodeURI(window.location.hash)).includes("/")) {
             hashValue = decodeURI(window.location.hash.split("/")[0]);
         }
         else {
@@ -65,11 +66,14 @@ export class RenderService extends Renderer {
                 this.displayCheck("cart", shop);
                 break;
 
+            case "#checkout":
+                this.displayCheck("checkout", shop)
+                break;
+
             default:
                 this.displayCheck("error");
                 break;
         }
-        //this.resetBtnClassList();
     }
 
     /** Inserts an <ul> with the passed array as <li>-elements */
@@ -88,12 +92,13 @@ export class RenderService extends Renderer {
         let startPageShown: boolean = !document.getElementById("start-page").classList.contains("noDisplay");
         let setPreviewShown: boolean = !document.getElementById("set-preview").classList.contains("noDisplay");
         let cartShown: boolean = !document.getElementById("shopping-cart").classList.contains("noDisplay");
+        let checkoutShown: boolean = !document.getElementById("checkout").classList.contains("noDisplay");
         let errorPageShown: boolean = !document.getElementById("error-page").classList.contains("noDisplay");
 
         switch (selector) {
             case "start": {
                 shownCardSetHeader[0].textContent = this.renderStart(shop);
-
+                this.refreshButtons(selector);
                 if (!startPageShown) {
                     Utils.toggleCssClass("start-page", "noDisplay");
                 }
@@ -103,6 +108,9 @@ export class RenderService extends Renderer {
                 if (cartShown) {
                     Utils.toggleCssClass("shopping-cart", "noDisplay");
                 }
+                if (checkoutShown) {
+                    Utils.toggleCssClass("checkout", "noDisplay");
+                }
                 if (errorPageShown) {
                     Utils.toggleCssClass("error-page", "noDisplay");
                 }
@@ -110,7 +118,7 @@ export class RenderService extends Renderer {
             }
             case "preview": {
                 shownCardSetHeader[1].textContent = this.renderPreview();
-
+                this.refreshButtons(selector);
                 if (!setPreviewShown) {
                     Utils.toggleCssClass("set-preview", "noDisplay");
                 }
@@ -119,6 +127,9 @@ export class RenderService extends Renderer {
                 }
                 if (cartShown) {
                     Utils.toggleCssClass("shopping-cart", "noDisplay");
+                }
+                if (checkoutShown) {
+                    Utils.toggleCssClass("checkout", "noDisplay");
                 }
                 if (errorPageShown) {
                     Utils.toggleCssClass("error-page", "noDisplay");
@@ -135,6 +146,28 @@ export class RenderService extends Renderer {
                 }
                 if (setPreviewShown) {
                     Utils.toggleCssClass("set-preview", "noDisplay");
+                }
+                if (checkoutShown) {
+                    Utils.toggleCssClass("checkout", "noDisplay");
+                }
+                if (errorPageShown) {
+                    Utils.toggleCssClass("error-page", "noDisplay");
+                }
+                break;
+            }
+            case "checkout": {
+                this.renderCart(shop);
+                if (!checkoutShown) {
+                    Utils.toggleCssClass("checkout", "noDisplay");
+                }
+                if (startPageShown) {
+                    Utils.toggleCssClass("start-page", "noDisplay");
+                }
+                if (setPreviewShown) {
+                    Utils.toggleCssClass("set-preview", "noDisplay");
+                }
+                if (cartShown) {
+                    Utils.toggleCssClass("shopping-cart", "noDisplay");
                 }
                 if (errorPageShown) {
                     Utils.toggleCssClass("error-page", "noDisplay");
@@ -154,6 +187,9 @@ export class RenderService extends Renderer {
                 if (cartShown) {
                     Utils.toggleCssClass("shopping-cart", "noDisplay");
                 }
+                if (checkoutShown) {
+                    Utils.toggleCssClass("checkout", "noDisplay");
+                }
                 break;
             }
         }
@@ -161,9 +197,11 @@ export class RenderService extends Renderer {
 
     renderCart(shop: CardShop): void {
         if (localStorage.getItem("cart") !== null || undefined) {
+
             if (!document.getElementById("checkout-btn").classList.contains("btn-success")) {
                 document.getElementById("checkout-btn").classList.toggle("btn-success");
             }
+
             let temp: {} = JSON.parse(localStorage.getItem("cart"));
             let help: string[][] = [Object.keys(temp), (<any>Object).values(temp)];
 
@@ -223,12 +261,14 @@ export class RenderService extends Renderer {
         this.showItems(shop.Cart.Items);
         const hashValue = Utils.getHashValue();
 
+        let cardSet: string;
         if (config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
-            return hashValue;
+            cardSet = hashValue;
         }
         else {
-            return "";
+            cardSet = "";
         }
+        return cardSet;
     }
 
     /** Adds dynamically generated content to the PreviewPage
@@ -268,17 +308,19 @@ export class RenderService extends Renderer {
                 })
         }
 
+        let cardSet: string;
         // Set Heading
         if (filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
-            return filters["cardSet"];
+            cardSet = filters["cardSet"];
         }
         else if (filters["cardSet"] !== undefined) {
             Utils.createHash(`filters/{"cardSet":"Classic"}`);
-            return "Classic";
+            cardSet = "Classic";
         }
         else {
-            return "none chosen";
+            cardSet = "none chosen";
         }
+        return cardSet;
     }
 
     /** Inserts the images of the cards of a fetch call */
@@ -292,10 +334,10 @@ export class RenderService extends Renderer {
         let heroFilterPassed: boolean;
         let manaFilterPassed: boolean;
         let setFilterPassed: boolean;
-        let i: number = 1;
+        let i: number = 0;
 
         // First remove old code
-        document.getElementById("card-images").innerText = "";
+        document.getElementById("cardImages").innerText = "";
 
         // Iterate the list of cards
         for (card of cardData) {
@@ -326,14 +368,17 @@ export class RenderService extends Renderer {
 
                 if (heroFilterPassed && manaFilterPassed) {
                     // Render card image
-                    document.getElementById("card-images").insertAdjacentHTML("beforeend", `<img id="card_${i}" class="noDisplay" src="${card.img}" alt = "${card.name}" />`);
-                    if (i < 9) {
-                        Utils.toggleCssClass(`card_${i}`, "noDisplay");
-                    }
+                    document.getElementById("cardImages").insertAdjacentHTML("beforeend", `<img id="card_${i}" class="noDisplay" src="${card.img}" alt = "${card.name}" />`);
+
+                    //Testing carousel
+                    renderCarousel(card, i);
+                    
                     i++;
                 }
             }
         }
+        // auto-generate bootstrap carousel indicators
+        genCarouselInd();
     }
 
     /**
@@ -364,5 +409,53 @@ export class RenderService extends Renderer {
             }
             document.getElementById("start-main").insertAdjacentHTML("beforeend", `<img src="${packLink}" />`);
         }
+    }
+
+    refreshButtons(page: string) {
+        let temp = document.getElementsByClassName("btn-group-justified");
+        let btnList: HTMLCollection;
+        let i: number;
+
+        if (page === "start") {
+            i = 0;
+        }
+
+        if (page === "preview") {
+            i = 1;
+
+            btnList = temp[i + 1].children[0].children;
+            this.refreshButtonsHelpFunction(btnList, Utils.getHeroFilter());
+            btnList = temp[i + 2].children[0].children;
+            this.refreshButtonsHelpFunction(btnList, Utils.getManaFilter());
+        }
+
+        btnList = temp[i].children[0].children;
+        this.refreshButtonsHelpFunction(btnList, Utils.getCardSetFilter());
+    }
+
+    refreshButtonsHelpFunction(btnList: HTMLCollection, filter: string) {
+        for (let item of <any>btnList) {
+            if (item.attributes["data-id"].value === filter) {
+                item.children[0].classList.remove("btn-default");
+                item.children[0].classList.add("btn-primary");
+            }
+            else {
+                item.children[0].classList.add("btn-default");
+                item.children[0].classList.remove("btn-primary");
+            }
+        }
+    }
+}
+
+function renderCarousel(card, i: number) {
+    let j = Math.floor(i / 3);
+    console.log(i, j);
+
+    // else if (i !== 0 || i+1 % 3) {
+    document.getElementById("carouselCardWrapper").insertAdjacentHTML("beforeend", `<div class="item"><div id="carouselCardHelp${i}" class="text-center"</div></div>`)
+    document.getElementById(`carouselCardHelp${j}`).insertAdjacentHTML("beforeend", `<img src="${card.img}" alt = "${card.name}" />`);
+
+    if (i === 0) {
+        document.getElementById("carouselCardWrapper").children[0].classList.add("active");
     }
 }

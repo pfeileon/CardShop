@@ -5,6 +5,8 @@ import { Callback } from "../types/types";
 import * as Utils from "../modules/utilities";
 import { CardShop } from "../modules/cardShop";
 import { CardPack } from "../modules/cardPack";
+import { Customer } from "../modules/customer";
+import { CreditCard } from "../modules/creditCard";
 
 "use strict";
 
@@ -18,12 +20,64 @@ abstract class ShopButton extends Button {
     }
 }
 
+export class BuyButton extends Button {
+    click = (): void => {
+        document.getElementById("buyBtn").addEventListener("click", (e) => {
+            alert("We did it!");
+        });
+    }
+}
+
+export class CancelButton extends Button {
+    click = (): void => {
+        for (let item of <any>document.getElementsByClassName(this.id)) {
+            item.addEventListener("click", (e) => {
+                console.log(item.id);
+                if (item.id === "cancelPD") {
+                    Utils.createHash("");
+                    Utils.createHash("cart/" + localStorage.getItem("cart"));
+                }
+                if (item.id === "cancelCCD") {
+                    document.getElementById("personalDataHeading").click();
+                }
+            });
+        }
+    }
+}
+
+export class ConfirmButton extends ShopButton {
+    click = (): void => {
+        for (let item of <any>document.getElementsByClassName(this.id)) {
+            item.addEventListener("click", (e) => {
+                let customer: Customer;
+                if (item.id === "confirmPD") {
+                    customer = new Customer(this.shop.Cart.Items);
+                    this.shop.setCustomer(customer);
+
+                    document.getElementById("personalDataHeading").setAttribute("data-target", "#collapsePD")
+                    document.getElementById("creditCardDataHeading").setAttribute("data-target", "#collapseCCD")
+                    document.getElementById("creditCardDataHeading").click();
+                }
+                if (item.id === "confirmCCD") {
+                    let creditCard: CreditCard = new CreditCard();
+                    this.shop.Customer.setCreditCard(creditCard);
+
+                    localStorage.setItem("customer", JSON.stringify(this.shop.Customer));
+                }
+                console.log(this.shop.Customer);
+            });
+        }
+    }
+}
+
 export class CheckoutButton extends ShopButton {
     click = (): void => {
         document.getElementById(this.id).addEventListener("click", (e) => {
-            console.log("CHECKOUT!");
             if (localStorage.getItem("cart") === null) {
                 alert("Your cart is empty!");
+            }
+            else {
+                Utils.createHash("checkout/");
             }
         });
     }
@@ -43,10 +97,8 @@ export class DeleteButton extends ShopButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
-                console.log(e);
                 let items = JSON.parse(localStorage.getItem("cart"));
                 if (Object.keys(items).length === 1) {
-                    console.log(Object.keys(items));
                     localStorage.removeItem("cart");
                     this.shop.Cart.Items = [];
                 }
@@ -212,6 +264,9 @@ export class SetHeroButton extends Button {
 export class SetManaCostButton extends Button {
     click = (manaCost: HTMLElement): void => {
         manaCost.addEventListener("click", (e: MouseEvent): void => {
+            if (e.srcElement.attributes[0] === undefined) {
+                return;
+            }
             const manaCostValue: string = e.srcElement.attributes[0].value;
 
             this.resetBtnClassList(manaCost, e);

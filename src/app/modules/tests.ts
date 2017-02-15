@@ -7,11 +7,15 @@ import { TemplateHandler } from '../templates/templateHandler'
 import { RenderService } from './services/renderService';
 
 export function testing() {
-    let fService = new FetchService;
-    fService.query()
-        .then(data => {
-            console.log(data)
-        });
+
+    // Utils.getCardSetFilter();
+
+
+    // let fService = new FetchService;
+    // fService.query()
+    //     .then(data => {
+    //         console.log(data)
+    //     });
 
     // // For testing purposes
     // FetcherResource.getSingleCard('EX1_116')
