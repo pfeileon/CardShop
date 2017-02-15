@@ -445,9 +445,24 @@ export class RenderService extends Renderer {
     }
 
     renderCarousel(card, i: number) {
-        let j = Math.floor(i / 3);
+        let x: number;
+        let w = window.innerWidth;
+        if (w < 600) {
+            x = 1;
+        }
+        if (w >= 600) {
+            x = 2;
+        }
+        if (w >= 1200) {
+            x = 3;
+        }
+        if (w > 1920) {
+            x = 4;
+        }
 
-        if (i === 0 || i % 3 === 0) {
+        let j = Math.floor(i / x);
+
+        if (i === 0 || i % x === 0) {
             document.getElementById("carouselCardWrapper").insertAdjacentHTML("beforeend", `<div id="carouselItem${j}" class="item"></div>`);
         }
         
