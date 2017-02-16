@@ -6,7 +6,11 @@ import { RenderService } from '../modules/services/renderService';
 export const startPage = (rService: RenderService, data: { startPageData }) => {
     return `<article class="container">
 
-    <header id="start-head">
+    <header id="startHeader">
+        <input class="input-amount" type="number" name ="amount" value="1" min="1" max="100" />
+        <button class="add-to-cart-btn btn btn-primary" type="button">Add to Cart</Button>
+        <img src="https://openclipart.org/image/2400px/svg_to_png/60139/cart.png" alt="Shopping Cart" width="30px" />
+        <button class="goto-cart-btn btn btn-success" type="button">Goto Cart</Button>
         <h1>Welcome to the Hearthstone Card Shop</h1>
     </header>
 
@@ -18,14 +22,10 @@ export const startPage = (rService: RenderService, data: { startPageData }) => {
         <button id="preview-card-set-btn" class="btn btn-info" type="button">Preview Card Set</button>
     </section>
 
-    <section id="start-main" class="slider">
+    <section id="startMain" class="well start-slider">
     </section>
 
     <footer id="start-foot">
-        <input class="input-amount" type="number" name ="amount" value="1" min="1" max="100" />
-        <button class="add-to-cart-btn btn btn-primary" type="button">Add to Cart</Button>
-        <img src="https://openclipart.org/image/2400px/svg_to_png/60139/cart.png" alt="Shopping Cart" width="30px" />
-        <button class="goto-cart-btn btn btn-success" type="button">Goto Cart</Button>
     </footer>
 
 </article>`

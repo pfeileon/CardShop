@@ -4,6 +4,7 @@ import { config } from '../../config/config';
 import * as Utils from '../utilities';
 import { CardShop } from "../cardShop";
 import { FetchResource } from "../fetchResource";
+import { cardModal } from "../../templates/modals";
 
 'use strict';
 
@@ -386,7 +387,7 @@ export class RenderService extends Renderer {
     */
     showItems(items: Shopable[]): void {
         // First remove all shown packs
-        document.getElementById("start-main").innerText = "";
+        document.getElementById("startMain").innerText = "";
         for (let item of items) {
             let packLink: string;
             switch (item["setName"]) {
@@ -405,7 +406,7 @@ export class RenderService extends Renderer {
                 default:
                     break;
             }
-            document.getElementById("start-main").insertAdjacentHTML("beforeend", `<img src="${packLink}" />`);
+            document.getElementById("startMain").insertAdjacentHTML("beforeend", `<img src="${packLink}" />`);
         }
     }
 
@@ -453,10 +454,10 @@ export class RenderService extends Renderer {
         if (w >= 600) {
             x = 3;
         }
-        if (w >= 1024) {
+        if (w >= 800) {
             x = 4;
         }
-        if (w >= 1200) {
+        if (w >= 1024) {
             x = 5;
         }
         if (w > 1600) {
@@ -491,64 +492,4 @@ export class RenderService extends Renderer {
         }
         document.getElementById("indicator0").classList.add("active");
     }
-}
-
-export const checkoutModal = (customer) => {
-    return `
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="checkoutModalLabel">Please confirm before buying:</h4>
-      </div>
-      <div class="modal-body">
-        <table>
-            <tr>
-                <td>Name:</td><td>${customer.fName + " " + customer.lName}</td>
-            </tr>
-            <tr>
-                <td>Address:</td><td>${customer.address + ", " + customer.zipCode + " " + customer.city + ", " + customer.country}</td>
-            </tr>
-            <tr>
-                <td>Credit card:</td><td>${customer.creditCard.owner + ", " + customer.creditCard.cardNumber + ", " + customer.creditCard.validThru}</td>
-            </tr>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button id="buyBtn" type="button" class="btn btn-primary">Buy!</button>
-      </div>
-    </div>
-  </div>`
-};
-
-const cardModal = (card: any, i: number) => {
-    return `
-<!-- Modal -->
-<div class="modal fade" id="cardModal${i}" tabindex="-1" role="dialog" aria-labelledby="${card.name}">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="${card.name}">${card.name}</h4>
-      </div>
-      <div class="modal-body">
-        <div class="col-sm-7">
-            <img src="${card.img}" alt="${card.name}" />
-        </div>
-        <div class="col-sm-5">
-        <div class="flavor well">
-            <span>${card.flavor}</span>
-            </div>
-        </div>
-        <div class="clearfix"></div>
-      
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-`;
 }

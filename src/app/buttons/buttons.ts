@@ -7,7 +7,8 @@ import { CardShop } from "../modules/cardShop";
 import { CardPack } from "../modules/cardPack";
 import { Customer } from "../modules/customer";
 import { CreditCard } from "../modules/creditCard";
-import { RenderService, checkoutModal } from "../modules/services/renderService";
+import { RenderService } from "../modules/services/renderService";
+import { checkoutModal } from "../templates/modals";
 
 "use strict";
 

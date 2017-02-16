@@ -4,14 +4,6 @@
     display: none !important;
 }
 
-.slider {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    white-space: nowrap;
-    overflow-x: auto;
-}
-
 .display-in-line > * > * > * {
         display: inline;
         list-style-type: none;
@@ -25,9 +17,14 @@
     pointer-events: none;
 }
 
-.carousel img {
-    display: inline;
-    max-width: 150px;
+.blur {
+    filter: blur(1px);
+}
+
+.modal-open {
+    header, .filters, .carousel {
+        @extend .blur;
+    }
 }
 
 .modal {
@@ -59,14 +56,29 @@
 .carousel {
     background: linear-gradient(to right, rgba($carouselColor1, 1), rgba($carouselColor2, 1));
     border-radius: .5em;
-}
-
-.blur {
-    filter: blur(1px);
-}
-
-.modal-open {
-    header, .filters, .carousel {
-        @extend .blur;
+    img {
+        display: inline;
+        max-width: 150px;
     }
+}
+
+.start-slider {
+    display: inline-flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.slider {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+article {
+    background: linear-gradient(to right, rgba($articleColor, 0.2), white);
+    margin: 1em !important;
+    padding: 1em !important;
+    border-radius: 0.5em;
 }
