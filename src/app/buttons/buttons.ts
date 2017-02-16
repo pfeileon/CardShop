@@ -64,6 +64,7 @@ export class ConfirmButton extends ShopButton {
                     this.shop.Customer.setCreditCard(creditCard);
 
                     localStorage.setItem("customer", JSON.stringify(this.shop.Customer));
+                    document.getElementById("checkoutModal").innerText = "";
                     document.getElementById("checkoutModal").insertAdjacentHTML("afterbegin", checkoutModal(this.shop.Customer));
                     this.shop.BHandler.buy();
                 }

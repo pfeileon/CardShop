@@ -1,5 +1,4 @@
 import { RenderService } from '../modules/services/renderService';
-import { genCarouselInd } from "../modules/customJQ";
 
 'use strict';
 

@@ -4,7 +4,6 @@ import { config } from '../../config/config';
 import * as Utils from '../utilities';
 import { CardShop } from "../cardShop";
 import { FetchResource } from "../fetchResource";
-import { genCarouselInd } from "../customJQ";
 
 'use strict';
 
@@ -376,7 +375,7 @@ export class RenderService extends Renderer {
             }
         }
         // auto-generate bootstrap carousel indicators
-        genCarouselInd();
+        this.genCarouselInd();
     }
 
     /**
@@ -465,7 +464,7 @@ export class RenderService extends Renderer {
         if (i === 0 || i % x === 0) {
             document.getElementById("carouselCardWrapper").insertAdjacentHTML("beforeend", `<div id="carouselItem${j}" class="item"></div>`);
         }
-        
+
         document.getElementById(`carouselItem${j}`).insertAdjacentHTML("beforeend", `<div id="carouselCardHelp${j}" class="text-center"</div>`);
 
         // Render card image
@@ -474,6 +473,18 @@ export class RenderService extends Renderer {
         if (i === 0) {
             document.getElementById("carouselItem0").classList.add("active");
         }
+    }
+
+    genCarouselInd() {
+        let carInd = document.getElementById("carouselInd");
+
+        let carWrap = document.getElementById("carouselCardWrapper");
+        let len = carWrap.children.length;
+
+        for (let i = 0; i < len; i++) {
+            carInd.insertAdjacentHTML("beforeend", `<li id="indicator${i}" data-target='#previewCarousel' data-slide-to="${i}" class=""></li>`);
+        }
+        document.getElementById("indicator0").classList.add("active");
     }
 }
 
