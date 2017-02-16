@@ -1,3 +1,5 @@
+@import "_variables";
+
 .noDisplay {
     display: none !important;
 }
@@ -23,7 +25,48 @@
     pointer-events: none;
 }
 
-#previewCarousel img {
+.carousel img {
     display: inline;
-    max-width: 300px;
+    max-width: 150px;
+}
+
+.modal {
+    background-color: transparent;
+}
+
+.modal-content {
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+    background-color: transparent;
+    border-radius: .5em;
+    .modal-header, .modal-footer {
+        background-color: rgba($modalColor1, 0.9);
+        border-radius: .5em;
+    }
+    .flavor {
+        margin-top: 70px;
+        background-color: rgba($modalColor2, 0.9);
+    }
+}
+
+.carousel-control {
+    background: none !important;
+}
+
+.carousel {
+    background: linear-gradient(to right, rgba($carouselColor1, 1), rgba($carouselColor2, 1));
+    border-radius: .5em;
+}
+
+.blur {
+    filter: blur(1px);
+}
+
+.modal-open {
+    header, .filters, .carousel {
+        @extend .blur;
+    }
 }

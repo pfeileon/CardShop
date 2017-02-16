@@ -38,7 +38,7 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
         <button class="goto-cart-btn btn btn-success" data-toggle="modal" data-target=".cart-modal" type="button">Goto Cart</button>
     </header>
 
-    <section id="preview-filters">
+    <section id="preview-filters" class="filters">
         <section id="hero-filter" class="display-in-line">
             <h2>Select Hero:</h2>
             <div class="btn-group-justified" role="group" aria-label="Heroes">
@@ -53,11 +53,11 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
         </section>
     </section>
 
-    <section id="preview-main" class="container-fluid">
+    <section id="preview-main" class="container-fluid preview">
         ${carousel}
     </section>
 
-    <footer id="preview-foot">
+    <footer id="previewFooter">
     </footer>
 
 </article>`

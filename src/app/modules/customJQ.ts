@@ -20,3 +20,9 @@ export function validate() {
         }
     });
 }
+
+export function activatePopover() {
+    $(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+}

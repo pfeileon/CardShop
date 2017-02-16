@@ -338,6 +338,7 @@ export class RenderService extends Renderer {
         // First remove old code
         document.getElementById("carouselCardWrapper").innerText = "";
         document.getElementById("carouselInd").innerText = "";
+        document.getElementById("previewFooter").innerText = "";
 
         // Iterate the list of cards
         for (card of cardData) {
@@ -447,16 +448,19 @@ export class RenderService extends Renderer {
         let x: number;
         let w = window.innerWidth;
         if (w < 600) {
-            x = 1;
-        }
-        if (w >= 600) {
             x = 2;
         }
-        if (w >= 1200) {
+        if (w >= 600) {
             x = 3;
         }
-        if (w > 1920) {
+        if (w >= 1024) {
             x = 4;
+        }
+        if (w >= 1200) {
+            x = 5;
+        }
+        if (w > 1600) {
+            x = 6;
         }
 
         let j = Math.floor(i / x);
@@ -468,7 +472,8 @@ export class RenderService extends Renderer {
         document.getElementById(`carouselItem${j}`).insertAdjacentHTML("beforeend", `<div id="carouselCardHelp${j}" class="text-center"</div>`);
 
         // Render card image
-        document.getElementById(`carouselCardHelp${j}`).insertAdjacentHTML("beforeend", `<img src="${card.img}" alt = "${card.name}" />`);
+        document.getElementById(`carouselCardHelp${j}`).insertAdjacentHTML("beforeend", `<img role="button" data-toggle="modal" data-target="#cardModal${i}" src="${card.img}" alt="${card.name}" />`);
+        document.getElementById("previewFooter").insertAdjacentHTML("beforeend", `${cardModal(card, i)}`);
 
         if (i === 0) {
             document.getElementById("carouselItem0").classList.add("active");
@@ -516,3 +521,34 @@ export const checkoutModal = (customer) => {
     </div>
   </div>`
 };
+
+const cardModal = (card: any, i: number) => {
+    return `
+<!-- Modal -->
+<div class="modal fade" id="cardModal${i}" tabindex="-1" role="dialog" aria-labelledby="${card.name}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="${card.name}">${card.name}</h4>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-7">
+            <img src="${card.img}" alt="${card.name}" />
+        </div>
+        <div class="col-sm-5">
+        <div class="flavor well">
+            <span>${card.flavor}</span>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+}
