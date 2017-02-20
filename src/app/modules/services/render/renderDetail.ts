@@ -94,16 +94,15 @@ export class RenderDetail {
         }
     }
 
-    refreshButtons(page: string) {
+    refreshButtons(state: string) {
         let temp = document.getElementsByClassName("btn-group-justified");
         let btnList: HTMLCollection;
         let i: number;
 
-        if (page === "start") {
+        if (state === "start") {
             i = 0;
         }
-
-        if (page === "preview") {
+        else if (state === "preview") {
             i = 1;
 
             btnList = temp[i + 1].children[0].children;
@@ -173,7 +172,9 @@ export class RenderDetail {
 
         for (let i = 0; i < len; i++) {
             carInd.insertAdjacentHTML("beforeend", `<li id="indicator${i}" data-target='#previewCarousel' data-slide-to="${i}" class=""></li>`);
+            if (i === 0) {
+                document.getElementById("indicator0").classList.add("active");
+            }
         }
-        document.getElementById("indicator0").classList.add("active");
     }
 }

@@ -25,11 +25,11 @@ export class RenderResource extends RenderService {
 
     private lastSetName: string;
     private lastCardData: any;
-    private rResource: RenderDetail;
+    private rDetail: RenderDetail;
 
-    constructor(fResource: FetchResource, rResource: RenderDetail) {
+    constructor(fResource: FetchResource, rDetail: RenderDetail) {
         super(fResource);
-        this.rResource = rResource;
+        this.rDetail= rDetail;
     }
 
     /** Renders the page according to the hash */
@@ -92,7 +92,7 @@ export class RenderResource extends RenderService {
         switch (selector) {
             case "start": {
                 shownCardSetHeader[0].textContent = this.renderStart(shop);
-                this.rResource.refreshButtons(selector);
+                this.rDetail.refreshButtons(selector);
                 if (!startPageShown) {
                     Utils.toggleCssClass("start-page", "noDisplay");
                 }
@@ -112,7 +112,7 @@ export class RenderResource extends RenderService {
             }
             case "preview": {
                 shownCardSetHeader[1].textContent = this.renderPreview();
-                this.rResource.refreshButtons(selector);
+                this.rDetail.refreshButtons(selector);
                 if (!setPreviewShown) {
                     Utils.toggleCssClass("set-preview", "noDisplay");
                 }
@@ -252,7 +252,7 @@ export class RenderResource extends RenderService {
      * 
      * and returns the card set heading as string */
     renderStart(shop: CardShop): string {
-        this.rResource.showItems(shop.Cart.Items);
+        this.rDetail.showItems(shop.Cart.Items);
         const hashValue = Utils.getHashValue();
 
         let cardSet: string;
@@ -286,7 +286,7 @@ export class RenderResource extends RenderService {
         // }
 
         if (this.lastSetName === setName && setName !== undefined) {
-            this.showCards(this.lastCardData);
+            this.rDetail.showCards(this.lastCardData);
         }
         else {
             this.fResource.getCardData(filters)
@@ -298,7 +298,7 @@ export class RenderResource extends RenderService {
                             this.lastCardData = cardData;
                         }
                     }
-                    this.showCards(cardData);
+                    this.rDetail.showCards(cardData);
                 })
         }
 
@@ -315,62 +315,5 @@ export class RenderResource extends RenderService {
             cardSet = "none chosen";
         }
         return cardSet;
-    }
-
-    /** Inserts the images of the cards of a fetch call */
-    showCards(cardData: any): void {
-
-        let manaFilter: string = Utils.getFilters()["manaCost"];
-        let heroFilter: string = Utils.getFilters()["hero"];
-
-        let card: any;
-        let cardFilterPassed: boolean;
-        let heroFilterPassed: boolean;
-        let manaFilterPassed: boolean;
-        let setFilterPassed: boolean;
-        let i: number = 0;
-
-        // First remove old code
-        document.getElementById("carouselCardWrapper").innerText = "";
-        document.getElementById("carouselInd").innerText = "";
-        document.getElementById("previewFooter").innerText = "";
-
-        // Iterate the list of cards
-        for (card of cardData) {
-
-            cardFilterPassed = (
-                card.collectible &&
-                card.img !== undefined
-            )
-
-            setFilterPassed = (
-                config.data.startPageData.cardSets.indexOf(card.cardSet) !== -1
-            );
-
-            if (cardFilterPassed && setFilterPassed) {
-
-                heroFilterPassed = (
-                    heroFilter === undefined || (
-                        heroFilter !== undefined &&
-                        card.playerClass === heroFilter
-                    ))
-
-                manaFilterPassed = (
-                    manaFilter === undefined || (
-                        manaFilter !== undefined && (
-                            (card.cost == manaFilter && manaFilter <= "9") ||
-                            (manaFilter == "10" && card.cost >= "10")
-                        )))
-
-                if (heroFilterPassed && manaFilterPassed) {
-                    //Testing carousel
-                    this.rResource.renderCarousel(card, i);
-
-                    i++;
-                }
-            }
-        }
-        // auto-generate bootstrap carousel indicators
-        this.rResource.genCarouselInd();
     }
 }

@@ -4,7 +4,7 @@ import { SinglePageApplication } from "../../spa/singlePageApplication";
 "use strict";
 
 const record = (item) => {
-    return `<li data-id="${item}"><button data-id="${item}" type="button" class="btn btn-default">${item}</button></li>`;
+    return `<li data-id="${item}">${item}</li>`;
 };
 
 export abstract class RenderService {

@@ -3,28 +3,34 @@
 export const formTemplate = (id: string) => {
     let form = `<form onsubmit="return false" id="${id}" role="form" data-disable="true">`;
     let abbr: string;
+    let toggle: string;
+    let target: string;
+
     if (id === "personalData") {
-        form += personalData();
-        abbr = "PD"
+        form += personalData;
+        abbr = "PD";
+        toggle = "collapse";
+        target = toggle + abbr;
     }
     else if (id === "creditCardData") {
-        form += creditCardData();
+        form += creditCardData;
         abbr = "CCD";
+        toggle = "modal";
+        target = "checkoutModal";
     }
-    form += checkoutBtnSnippet(abbr);
-    return form;
+
+    return form + checkoutButtonTemplate(abbr, toggle, target) + "</form>";
 }
 
-const checkoutBtnSnippet = (id: string) => {
-    return `<button id="cancel${id}" type="button" class="btn btn-danger cancel-btn">Cancel</button>
-
-                    <button data-toggle="collapse" data-target="#collapse${id}" data-parent="#accordion" id="confirm${id}" type="submit" class="btn btn-success confirm-btn" aria-expanded="true" aria-controls="collapse${id}">
-                        Confirm
-                    </button>`;
+const checkoutButtonTemplate = (abbr: string, toggle: string, target: string) => {
+    return `<button id="cancel${abbr}" type="button" class="btn btn-danger cancel-btn">Cancel</button>
+    
+    <button data-toggle="${toggle}" data-target="#${target}" data-parent="#accordion" id="confirm${abbr}" type="submit" class="btn btn-success confirm-btn" aria-expanded="true" aria-controls="${toggle}${abbr}">
+        Confirm
+    </button>`;
 }
 
-const personalData = () => {
-    return `<div class="form-group">
+const personalData = `<div class="form-group">
                         <label for="firstName">First Name</label>
                         <input id="firstName" type="text" class="form-control" name="firstName" placeholder="First name" pattern="\\D{0,35}" required />
                     </div>
@@ -59,33 +65,8 @@ const personalData = () => {
                     <div class="form-group">
                         <label for="confirmEmail">Confirm Email</label>
                         <input id="confirmEmail" type="email" class="form-control" name="confirmEmail" placeholder="Confirm email" required />
-                    </div>`;
-}
-
-const creditCardData = () => {
-    return `<div class="form-group">
-                        <label class="control-label" for="cardOwner">Card Owner</label>
-                        <input id="cardOwner" type="text" class="form-control" name="cardOwner" placeholder="Card holder's name" pattern="\\D{0,35}" required />
                     </div>
-
-                    <div class="form-group">
-                        <label for="cardNumber">Card Number</label>
-                        <input id="cardNumber" type="text" class="form-control" name="cardNumber" placeholder="Card number" data-luhn="luhn" required />
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="expiryMonth">Expiration Date</label>
-                        <div class="row">
-                            ${monthOption}
-                            ${yearOption}
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label" for="cVV">Card CVV</label>
-                        <input type="text" class="form-control" name="cVV" id="cVV" placeholder="Security code" pattern="\\d{3,3}" required />
-                    </div>`;
-}
+`;
 
 const monthOption = `<select class="form-control name="expiryMonth" id="expiryMonth" required>
         <option>Month</option>
@@ -117,4 +98,28 @@ const yearOption = `<select class="form-control" name="expiryYear" id="expiryYea
         <option value="26">2023</option>
         <option value="27">2023</option>
     </select>
+`;
+
+const creditCardData = `<div class="form-group">
+                        <label class="control-label" for="cardOwner">Card Owner</label>
+                        <input id="cardOwner" type="text" class="form-control" name="cardOwner" placeholder="Card holder's name" pattern="\\D{0,35}" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input id="cardNumber" type="text" class="form-control" name="cardNumber" placeholder="Card number" data-luhn="luhn" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="expiryMonth">Expiration Date</label>
+                        <div class="row">
+                            ${monthOption}
+                            ${yearOption}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="cVV">Card CVV</label>
+                        <input type="text" class="form-control" name="cVV" id="cVV" placeholder="Security code" pattern="\\d{3,3}" required />
+                    </div>
 `;

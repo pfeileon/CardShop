@@ -16,9 +16,25 @@ abstract class ShopButton extends Button {
     // PROPERTIES
     protected shop: CardShop;
     // CONSTRUCTOR
-    constructor(id: string, bHandler: ShopButtonHandler, shop: CardShop) {
+    constructor(id: string, bHandler: ShopButtonHandler, shop?: CardShop) {
         super(id, bHandler);
         this.shop = shop;
+    }
+    
+    resetBtnClassList(element: HTMLElement, e: MouseEvent) {        
+        let isPrimary = false;
+        if (e.srcElement.classList.contains("btn-primary")) {
+            isPrimary = true;
+        }
+
+        if (Utils.isStartPage() || isPrimary) {
+            e.srcElement.classList.remove("btn-default");
+            e.srcElement.classList.add("btn-primary");
+        }
+        else if (!isPrimary) {
+            e.srcElement.classList.add("btn-default");
+            e.srcElement.classList.remove("btn-primary");
+        }
     }
 }
 
@@ -65,8 +81,8 @@ export class ConfirmButton extends ShopButton {
                     this.shop.Customer.setCreditCard(creditCard);
 
                     localStorage.setItem("customer", JSON.stringify(this.shop.Customer));
-                    document.getElementById("checkoutModal").innerText = "";
-                    document.getElementById("checkoutModal").insertAdjacentHTML("afterbegin", checkoutModal(this.shop.Customer));
+                    document.getElementById("checkoutFooter").innerText = "";
+                    document.getElementById("checkoutFooter").insertAdjacentHTML("afterbegin", checkoutModal(this.shop.Customer));
                     this.shop.BHandler.buy();
                 }
                 console.log(this.shop.Customer);
@@ -121,7 +137,7 @@ export class ReturnButton extends Button {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
-                if (Utils.getHashValue().search("cart/") !== -1) {
+                if ((<any>Utils.getHashValue()).includes("cart/")) {
                     Utils.createHash(localStorage.getItem("lastHash"));
                 }
                 else {
@@ -168,15 +184,14 @@ export class AddToCartButton extends ShopButton {
                 let setName: string;
                 const hashValue: string = Utils.getHashValue();
                 const filters: {} = Utils.getFilters();
-
-                // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
+                
                 if (hashValue !== undefined || "" || null) {
 
-                    if (hashValue.search("/") !== -1 && filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
+                    if ((<any>hashValue).includes("/") && filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
                         setName = filters["cardSet"];
 
                     }
-                    else if (hashValue.search("/") === -1 && config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
+                    else if ((<any>hashValue).includes("/") && config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
                         setName = hashValue;
                     }
                     else {
@@ -192,7 +207,7 @@ export class AddToCartButton extends ShopButton {
                 const pack: CardPack = new CardPack(setName || "Classic");
 
                 let amountOfPacks: number;
-                if (hashValue.search("/") === -1) {
+                if ((<any>hashValue).includes("/")) {
                     amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[0]).value;
                 }
                 else {
@@ -219,16 +234,15 @@ export class GotoCartButton extends ShopButton {
 }
 
 /** Sets the hash-value according to the selected CardSet */
-export class SetCardSetButton extends Button {
+export class SetCardSetButton extends ShopButton {
     click = (cardSet: HTMLElement): void => {
         cardSet.addEventListener("click", (e: MouseEvent): void => {
             const cardSetName: string = e.srcElement.attributes[0].value;
             config.data.setPreviewData.cardSetName = cardSetName;
 
             this.resetBtnClassList(cardSet, e);
-
-            // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
-            if (Utils.getHashValue() !== undefined && Utils.getHashValue().search("/") !== -1) {
+            
+            if (Utils.getHashValue() !== undefined && (<any>Utils.getHashValue()).includes("/")) {
                 let filter = Utils.getFilters();
                 if (filter["cardSet"] !== undefined && filter["cardSet"] === cardSetName && filter["hero"] !== undefined) {
                     delete (filter["cardSet"]);
@@ -246,7 +260,7 @@ export class SetCardSetButton extends Button {
 }
 
 /** Sets the hash according to the selected hero */
-export class SetHeroButton extends Button {
+export class SetHeroButton extends ShopButton {
     click = (hero: HTMLElement) => {
         hero.addEventListener("click", (e: MouseEvent): void => {
             const heroValue: string = e.srcElement.attributes[0].value;
@@ -266,7 +280,7 @@ export class SetHeroButton extends Button {
 }
 
 /** Sets the hash according to the selected mana-cost */
-export class SetManaCostButton extends Button {
+export class SetManaCostButton extends ShopButton {
     click = (manaCost: HTMLElement): void => {
         manaCost.addEventListener("click", (e: MouseEvent): void => {
             if (e.srcElement.attributes[0] === undefined) {

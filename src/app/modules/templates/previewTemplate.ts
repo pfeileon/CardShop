@@ -1,5 +1,5 @@
 import { RenderService } from '../services/render/renderService';
-import { cartButtonTemplate } from "./snippets";
+import { cartButtonTemplate, btnRecord } from "./snippets";
 import { carousel } from "./carouselTemplate";
 
 'use strict';
@@ -15,7 +15,7 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
     <section id="previewSetSelection" class="set-filter display-in-line">
         <h1>Preview Card Set: <span class="card-set-name">${data.setPreviewData[Object.keys(data.setPreviewData)[0]]}</span></h1>
          <div class="btn-group-justified" role="group" aria-label="CardSets">
-            ${rService.insertList(data["startPageData"][Object.keys(data["startPageData"])[0]])}
+            ${rService.insertList(data["startPageData"][Object.keys(data["startPageData"])[0]], btnRecord)}
         </div>
     </section>
 
@@ -23,13 +23,13 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
         <section id="hero-filter" class="display-in-line">
             <h2>Select Hero:</h2>
             <div class="btn-group-justified" role="group" aria-label="Heroes">
-                ${rService.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[1]])}
+                ${rService.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[1]], btnRecord)}
             </div>
         </section>
         <section id ="mana-filter" class="display-in-line">
             <h2>Mana Cost:</h2>
             <div class="btn-group-justified" role="group" aria-label="Mana">
-                ${rService.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[2]])}
+                ${rService.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[2]], btnRecord)}
             </div>
         </section>
     </section>

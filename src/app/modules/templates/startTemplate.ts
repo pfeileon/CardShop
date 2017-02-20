@@ -1,5 +1,5 @@
 import { RenderService } from '../services/render/renderService';
-import { cartButtonTemplate } from "./snippets";
+import { cartButtonTemplate, btnRecord } from "./snippets";
 
 'use strict'
 
@@ -18,7 +18,7 @@ export const startPage = (rService: RenderService, data: { startPageData }) => {
         </h2>
 
         <div class="btn-group-justified" role="group" aria-label="CardSets">
-            ${rService.insertList(data.startPageData[Object.keys(data.startPageData)[0]])}
+            ${rService.insertList(data.startPageData[Object.keys(data.startPageData)[0]], btnRecord)}
         </div>
         
         <button id="preview-card-set-btn" class="btn btn-info" type="button">Preview Card Set</button>

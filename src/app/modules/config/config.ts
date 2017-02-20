@@ -41,7 +41,7 @@ export const config: Config<HearthstoneAPI, HardcodedData> = {
             ]
         },
         setPreviewData: {
-            cardSetName: Utils.getHashValue('#', 1) || 'Classic',
+            cardSetName: Utils.getHashValue() || 'Classic',
             heroes: [
                 'Druid',
                 'Hunter',

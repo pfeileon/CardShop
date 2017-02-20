@@ -80,7 +80,7 @@ export function fakeHashchange(): void {
 export function isStartPage(): boolean {
     let hashValue = getHashValue();
     let isStart = true;
-    if (hashValue !== undefined && hashValue.search("/") !== -1) {
+    if (hashValue !== undefined && ((<any>hashValue).includes("/"))) {
         isStart = false;
     }
     return isStart;
