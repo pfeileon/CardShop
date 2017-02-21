@@ -19,6 +19,8 @@ export class CardShop extends SinglePageApplication {
     // - FORCED
     protected readonly states = ["start", "preview", "cart", "checkout", "error"];
     public get States() { return this.states; }
+    private readonly pages: string[] = ["start-page", "set-preview", "shopping-cart", "checkout", "error-page"];
+    public get Pages() { return this.pages; }
 
     // - OWN
     private cart: ShoppingCart;

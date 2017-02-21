@@ -1,5 +1,12 @@
 @import "_variables";
 
+article {
+    background: linear-gradient(to right, rgba($articleColor, 0.2), white);
+    margin: 1em !important;
+    padding: 1em !important;
+    border-radius: 0.5em;
+}
+
 .no-display {
     display: none !important;
 }
@@ -9,13 +16,11 @@
         list-style-type: none;
 }
 
-// #cart-content, #cart-btns > * {
-//     border: 1px solid black !important;
-// }
-
 .confirm-btn.disabled {
     pointer-events: none;
 }
+
+// Modal
 
 .blur {
     filter: blur(1px);
@@ -49,6 +54,8 @@
     }
 }
 
+// Carousel
+
 .carousel-control {
     background: none !important;
 }
@@ -62,6 +69,8 @@
     }
 }
 
+// Pack-Slider
+
 .start-slider {
     display: inline-flex;
     flex-flow: row wrap;
@@ -74,11 +83,4 @@
     width: 100%;
     white-space: nowrap;
     overflow-x: auto;
-}
-
-article {
-    background: linear-gradient(to right, rgba($articleColor, 0.2), white);
-    margin: 1em !important;
-    padding: 1em !important;
-    border-radius: 0.5em;
 }

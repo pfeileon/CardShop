@@ -26,12 +26,6 @@ module.exports = function (env) {
             }, {
                 test: /\.(eot|svg|ttf|woff|woff2)$/,
                 loader: 'file-loader?name=assets/fonts/[name].[ext]'
-            }, {
-                test: /\.(jpg|png)$/,
-                use: ['file-loader'],
-                options: {
-                    name: '[path][name].[hash].[ext]',
-                },
             }]
         },
         devtool: 'source-map',

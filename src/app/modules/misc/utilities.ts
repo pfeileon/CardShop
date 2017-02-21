@@ -27,6 +27,13 @@ export function getHashValue(seperator: string = "#", pos: number = 1): string {
     return decodeURI(window.location.hash).split(seperator)[pos]
 }
 
+/** Fakes a hashchange in order to update the content */
+export function fakeHashchange(): void {
+    let hashValue: string = getHashValue();
+    createHash(hashValue + "fake");
+    createHash(hashValue);
+}
+
 /** The Luhn-Algorithm for CreditCard-Validation */
 export function luhnAlgorithm(value: string) {
 
@@ -54,7 +61,7 @@ export function luhnAlgorithm(value: string) {
 }
 
 /** Toggles the class value of a specified HTMLElement */
-export function toggleCssClass(id: string, cssClass: string): void {
+export function toggleCssClass(id: string, cssClass: string = "no-display"): void {
     document.getElementById(id).classList.toggle(cssClass);
 }
 
@@ -68,22 +75,6 @@ export function getFilters(): {} {
         filters = hashValue;
     }
     return filters;
-}
-
-/** Fakes a hashchange in order to update the content */
-export function fakeHashchange(): void {
-    let hashValue: string = getHashValue();
-    createHash(hashValue + "fake");
-    createHash(hashValue);
-}
-
-export function isStartPage(): boolean {
-    let hashValue = getHashValue();
-    let isStart = true;
-    if (hashValue !== undefined && ((<any>hashValue).includes("/"))) {
-        isStart = false;
-    }
-    return isStart;
 }
 
 export function getCardSetFilter(): string {
@@ -107,4 +98,14 @@ export function getHeroFilter(): string {
 export function getManaFilter(): string {
     let temp = getFilters()["manaCost"];
     return temp;
+}
+
+/** Determines if the user is on the start page */
+export function isStartPage(): boolean {
+    let hashValue = getHashValue();
+    let isStart = true;
+    if (hashValue !== undefined && ((<any>hashValue).includes("/"))) {
+        isStart = false;
+    }
+    return isStart;
 }

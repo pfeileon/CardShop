@@ -29,14 +29,13 @@ export class RenderResource extends RenderService {
 
     constructor(fResource: FetchResource, rDetail: RenderDetail) {
         super(fResource);
-        this.rDetail= rDetail;
+        this.rDetail = rDetail;
     }
 
     /** Renders the page according to the hash */
     render(shop: CardShop): void {
         let hashValue;
 
-        // string.includes() throws error("Property 'includes' does not exist on type 'string'.")
         if ((<any>decodeURI(window.location.hash)).includes("/")) {
             hashValue = decodeURI(window.location.hash.split("/")[0]);
         }
@@ -45,33 +44,24 @@ export class RenderResource extends RenderService {
         }
 
         switch (hashValue) {
-            case undefined:
-                this.displayCheck(shop.States[0], shop);
-                break;
-
-            case "":
-                this.displayCheck(shop.States[0], shop);
-                break;
-
-            case "#":
-                this.displayCheck(shop.States[0], shop);
-                break;
-
             case "#filters":
-                this.displayCheck(shop.States[1]);
+                this.renderState(shop.States[1], shop);
                 break;
 
             case "#cart":
-                this.displayCheck(shop.States[2], shop);
+                this.renderState(shop.States[2], shop);
                 break;
 
             case "#checkout":
-                this.displayCheck(shop.States[3], shop)
+                this.renderState(shop.States[3], shop)
+                break;
+
+            case "#error":
+                this.renderState(shop.States[4], shop);
                 break;
 
             default:
-                this.displayCheck(shop.States[4]);
-                break;
+                this.renderState(shop.States[0], shop);
         }
     }
 
@@ -80,113 +70,32 @@ export class RenderResource extends RenderService {
      * 
      * @param {string} selector - The state of the site
      */
-    displayCheck(selector: string, shop?: CardShop): void {
+    renderState(selector: string, shop: CardShop): void {
         let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
-
-        let startPageShown: boolean = !document.getElementById("start-page").classList.contains("no-display");
-        let setPreviewShown: boolean = !document.getElementById("set-preview").classList.contains("no-display");
-        let cartShown: boolean = !document.getElementById("shopping-cart").classList.contains("no-display");
-        let checkoutShown: boolean = !document.getElementById("checkout").classList.contains("no-display");
-        let errorPageShown: boolean = !document.getElementById("error-page").classList.contains("no-display");
-
         switch (selector) {
-            case "start": {
+            case shop.States[0]: {
                 shownCardSetHeader[0].textContent = this.renderStart(shop);
                 this.rDetail.refreshButtons(selector);
-                if (!startPageShown) {
-                    Utils.toggleCssClass("start-page", "no-display");
-                }
-                if (setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "no-display");
-                }
-                if (cartShown) {
-                    Utils.toggleCssClass("shopping-cart", "no-display");
-                }
-                if (checkoutShown) {
-                    Utils.toggleCssClass("checkout", "no-display");
-                }
-                if (errorPageShown) {
-                    Utils.toggleCssClass("error-page", "no-display");
-                }
                 break;
             }
-            case "preview": {
+            case shop.States[1]: {
                 shownCardSetHeader[1].textContent = this.renderPreview();
                 this.rDetail.refreshButtons(selector);
-                if (!setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "no-display");
-                }
-                if (startPageShown) {
-                    Utils.toggleCssClass("start-page", "no-display");
-                }
-                if (cartShown) {
-                    Utils.toggleCssClass("shopping-cart", "no-display");
-                }
-                if (checkoutShown) {
-                    Utils.toggleCssClass("checkout", "no-display");
-                }
-                if (errorPageShown) {
-                    Utils.toggleCssClass("error-page", "no-display");
-                }
                 break;
             }
-            case "cart": {
+            case shop.States[2]: {
                 this.renderCart(shop);
-                if (!cartShown) {
-                    Utils.toggleCssClass("shopping-cart", "no-display");
-                }
-                if (startPageShown) {
-                    Utils.toggleCssClass("start-page", "no-display");
-                }
-                if (setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "no-display");
-                }
-                if (checkoutShown) {
-                    Utils.toggleCssClass("checkout", "no-display");
-                }
-                if (errorPageShown) {
-                    Utils.toggleCssClass("error-page", "no-display");
-                }
                 break;
             }
-            case "checkout": {
+            case shop.States[3]: {
                 this.renderCart(shop);
-                if (!checkoutShown) {
-                    Utils.toggleCssClass("checkout", "no-display");
-                }
-                if (startPageShown) {
-                    Utils.toggleCssClass("start-page", "no-display");
-                }
-                if (setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "no-display");
-                }
-                if (cartShown) {
-                    Utils.toggleCssClass("shopping-cart", "no-display");
-                }
-                if (errorPageShown) {
-                    Utils.toggleCssClass("error-page", "no-display");
-                }
                 break;
             }
-            case "error": {
-                if (!errorPageShown) {
-                    Utils.toggleCssClass("error-page", "no-display");
-                }
-                if (startPageShown) {
-                    Utils.toggleCssClass("start-page", "no-display");
-                }
-                if (setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "no-display");
-                }
-                if (cartShown) {
-                    Utils.toggleCssClass("shopping-cart", "no-display");
-                }
-                if (checkoutShown) {
-                    Utils.toggleCssClass("checkout", "no-display");
-                }
+            case shop.States[4]: {
                 break;
             }
         }
+        this.displayState(shop.Pages, selector);
     }
 
     renderCart(shop: CardShop): void {
@@ -256,7 +165,7 @@ export class RenderResource extends RenderService {
         const hashValue = Utils.getHashValue();
 
         let cardSet: string;
-        if (config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
+        if ((<any>config.data.startPageData.cardSets).includes(hashValue)) {
             cardSet = hashValue;
         }
         else {
@@ -271,19 +180,13 @@ export class RenderResource extends RenderService {
     renderPreview(): string {
         const filters: {} = Utils.getFilters();
 
-        if (filters["hero"] !== undefined && config.data.setPreviewData.heroes.indexOf(filters["hero"]) === -1) {
+        if (filters["hero"] !== undefined && !(<any>config.data.setPreviewData.heroes).includes(filters["hero"])) {
             alert("Invalid Hero! Showing Druid instead");
 
             Utils.createHash(`filters/{"cardSet":"${config.data.setPreviewData.cardSetName}","hero":"Druid"}`);
         }
 
         const setName: string = filters["cardSet"];
-
-        //const filterString: string = `${setName}`;
-        // let manaCost: string = filter["manaCost"];
-        // if (manaCost !== undefined) {
-        //     filterString += `&cost=${manaCost}`;
-        // }
 
         if (this.lastSetName === setName && setName !== undefined) {
             this.rDetail.showCards(this.lastCardData);
