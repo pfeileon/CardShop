@@ -1,6 +1,6 @@
 @import "_variables";
 
-.noDisplay {
+.no-display {
     display: none !important;
 }
 
@@ -22,7 +22,7 @@
 }
 
 .modal-open {
-    header, .filters, .carousel {
+    header, li, h1, .panel-group, .filters, .carousel {
         @extend .blur;
     }
 }

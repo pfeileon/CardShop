@@ -28,7 +28,7 @@ module.exports = function (env) {
                 loader: 'file-loader?name=assets/fonts/[name].[ext]'
             }, {
                 test: /\.(jpg|png)$/,
-                loader: 'file-loader',
+                use: ['file-loader'],
                 options: {
                     name: '[path][name].[hash].[ext]',
                 },

@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fResource: FetchResource = new FetchResource();
     const rDetail: RenderDetail = new RenderDetail();
     const rService: RenderResource = new RenderResource(fResource, rDetail);
-    
+
     const tHandler: TemplateHandler = new TemplateHandler(rService);
     const bHandler: ShopButtonHandler = new ShopButtonHandler(rService);
 

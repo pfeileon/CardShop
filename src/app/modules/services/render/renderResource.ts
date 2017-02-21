@@ -83,30 +83,30 @@ export class RenderResource extends RenderService {
     displayCheck(selector: string, shop?: CardShop): void {
         let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
 
-        let startPageShown: boolean = !document.getElementById("start-page").classList.contains("noDisplay");
-        let setPreviewShown: boolean = !document.getElementById("set-preview").classList.contains("noDisplay");
-        let cartShown: boolean = !document.getElementById("shopping-cart").classList.contains("noDisplay");
-        let checkoutShown: boolean = !document.getElementById("checkout").classList.contains("noDisplay");
-        let errorPageShown: boolean = !document.getElementById("error-page").classList.contains("noDisplay");
+        let startPageShown: boolean = !document.getElementById("start-page").classList.contains("no-display");
+        let setPreviewShown: boolean = !document.getElementById("set-preview").classList.contains("no-display");
+        let cartShown: boolean = !document.getElementById("shopping-cart").classList.contains("no-display");
+        let checkoutShown: boolean = !document.getElementById("checkout").classList.contains("no-display");
+        let errorPageShown: boolean = !document.getElementById("error-page").classList.contains("no-display");
 
         switch (selector) {
             case "start": {
                 shownCardSetHeader[0].textContent = this.renderStart(shop);
                 this.rDetail.refreshButtons(selector);
                 if (!startPageShown) {
-                    Utils.toggleCssClass("start-page", "noDisplay");
+                    Utils.toggleCssClass("start-page", "no-display");
                 }
                 if (setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "noDisplay");
+                    Utils.toggleCssClass("set-preview", "no-display");
                 }
                 if (cartShown) {
-                    Utils.toggleCssClass("shopping-cart", "noDisplay");
+                    Utils.toggleCssClass("shopping-cart", "no-display");
                 }
                 if (checkoutShown) {
-                    Utils.toggleCssClass("checkout", "noDisplay");
+                    Utils.toggleCssClass("checkout", "no-display");
                 }
                 if (errorPageShown) {
-                    Utils.toggleCssClass("error-page", "noDisplay");
+                    Utils.toggleCssClass("error-page", "no-display");
                 }
                 break;
             }
@@ -114,75 +114,75 @@ export class RenderResource extends RenderService {
                 shownCardSetHeader[1].textContent = this.renderPreview();
                 this.rDetail.refreshButtons(selector);
                 if (!setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "noDisplay");
+                    Utils.toggleCssClass("set-preview", "no-display");
                 }
                 if (startPageShown) {
-                    Utils.toggleCssClass("start-page", "noDisplay");
+                    Utils.toggleCssClass("start-page", "no-display");
                 }
                 if (cartShown) {
-                    Utils.toggleCssClass("shopping-cart", "noDisplay");
+                    Utils.toggleCssClass("shopping-cart", "no-display");
                 }
                 if (checkoutShown) {
-                    Utils.toggleCssClass("checkout", "noDisplay");
+                    Utils.toggleCssClass("checkout", "no-display");
                 }
                 if (errorPageShown) {
-                    Utils.toggleCssClass("error-page", "noDisplay");
+                    Utils.toggleCssClass("error-page", "no-display");
                 }
                 break;
             }
             case "cart": {
                 this.renderCart(shop);
                 if (!cartShown) {
-                    Utils.toggleCssClass("shopping-cart", "noDisplay");
+                    Utils.toggleCssClass("shopping-cart", "no-display");
                 }
                 if (startPageShown) {
-                    Utils.toggleCssClass("start-page", "noDisplay");
+                    Utils.toggleCssClass("start-page", "no-display");
                 }
                 if (setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "noDisplay");
+                    Utils.toggleCssClass("set-preview", "no-display");
                 }
                 if (checkoutShown) {
-                    Utils.toggleCssClass("checkout", "noDisplay");
+                    Utils.toggleCssClass("checkout", "no-display");
                 }
                 if (errorPageShown) {
-                    Utils.toggleCssClass("error-page", "noDisplay");
+                    Utils.toggleCssClass("error-page", "no-display");
                 }
                 break;
             }
             case "checkout": {
                 this.renderCart(shop);
                 if (!checkoutShown) {
-                    Utils.toggleCssClass("checkout", "noDisplay");
+                    Utils.toggleCssClass("checkout", "no-display");
                 }
                 if (startPageShown) {
-                    Utils.toggleCssClass("start-page", "noDisplay");
+                    Utils.toggleCssClass("start-page", "no-display");
                 }
                 if (setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "noDisplay");
+                    Utils.toggleCssClass("set-preview", "no-display");
                 }
                 if (cartShown) {
-                    Utils.toggleCssClass("shopping-cart", "noDisplay");
+                    Utils.toggleCssClass("shopping-cart", "no-display");
                 }
                 if (errorPageShown) {
-                    Utils.toggleCssClass("error-page", "noDisplay");
+                    Utils.toggleCssClass("error-page", "no-display");
                 }
                 break;
             }
             case "error": {
                 if (!errorPageShown) {
-                    Utils.toggleCssClass("error-page", "noDisplay");
+                    Utils.toggleCssClass("error-page", "no-display");
                 }
                 if (startPageShown) {
-                    Utils.toggleCssClass("start-page", "noDisplay");
+                    Utils.toggleCssClass("start-page", "no-display");
                 }
                 if (setPreviewShown) {
-                    Utils.toggleCssClass("set-preview", "noDisplay");
+                    Utils.toggleCssClass("set-preview", "no-display");
                 }
                 if (cartShown) {
-                    Utils.toggleCssClass("shopping-cart", "noDisplay");
+                    Utils.toggleCssClass("shopping-cart", "no-display");
                 }
                 if (checkoutShown) {
-                    Utils.toggleCssClass("checkout", "noDisplay");
+                    Utils.toggleCssClass("checkout", "no-display");
                 }
                 break;
             }

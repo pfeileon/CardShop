@@ -17,7 +17,7 @@ const accordionPanel = (abbr: string, id: string, heading: string, shown: string
         </h4>
       </div>
 
-        <div id="collapse${abbr}" class="panel-collapse collapse${shown}" role="tabpanel" aria-labelledby="title${abbr}">
+        <div id="collapse${abbr}" class="panel-collapse collapse ${shown}" role="tabpanel" aria-labelledby="title${abbr}">
             <div class="panel-body">
                 ${content(id)}
             </div>

@@ -129,6 +129,58 @@ export class RenderDetail {
     }
 
     renderCarousel(card, i: number) {
+        let numberOfImagesPerSlide = this.determineNumberOfImagesPerSlide();
+        let j = Math.floor(i / numberOfImagesPerSlide);
+
+        if (i === 0 || i % numberOfImagesPerSlide === 0) {
+            document.getElementById("carouselCardWrapper").insertAdjacentHTML("beforeend", `<div id="carouselItem${j}" class="item"></div>`);
+        }
+
+        document.getElementById(`carouselItem${j}`).insertAdjacentHTML("beforeend", `<div id="carouselCardHelp${j}" class="text-center"</div>`);
+
+        // Render card image
+        document.getElementById(`carouselCardHelp${j}`).insertAdjacentHTML("beforeend", `<img role="button" data-toggle="modal" data-target="#cardModal${i}" src="${card.img}" alt="${card.name}" />`);
+        document.getElementById("previewFooter").insertAdjacentHTML("beforeend", `${cardModal(card, i)}`);
+
+        if (i === 0) {
+            document.getElementById("carouselItem0").classList.add("active");
+        }
+        this.hideCarouselControls(j);
+    }
+
+    /** Automatically generates a carousel's indicators */
+    genCarouselInd() {
+        let carInd = document.getElementById("carouselInd");
+
+        let carWrap = document.getElementById("carouselCardWrapper");
+        let len = carWrap.children.length;
+
+        for (let i = 0; i < len; i++) {
+            carInd.insertAdjacentHTML("beforeend", `<li id="indicator${i}" data-target='#previewCarousel' data-slide-to="${i}" class=""></li>`);
+            if (i === 0) {
+                document.getElementById("indicator0").classList.add("active");
+            }
+        }
+    }
+
+    /** Hides the carousel's controls if there is only one slide */
+    hideCarouselControls(numberOfSlides: number) {
+        if (numberOfSlides === 0) {
+            for (let item of <any>document.getElementsByClassName("carousel-control")) {
+                item.classList.add("hide");
+            }
+            document.getElementById("carouselInd").classList.add("hidden");
+        }
+        else if (numberOfSlides === 1) {
+            for (let item of <any>document.getElementsByClassName("carousel-control")) {
+                item.classList.remove("hide");
+            }
+            document.getElementById("carouselInd").classList.remove("hidden");
+        }
+    }
+
+    /** Determines how many Images are shown per slide based on the "innerWidth"-property */
+    determineNumberOfImagesPerSlide(): number {
         let x: number;
         let w = window.innerWidth;
         if (w < 600) {
@@ -146,35 +198,6 @@ export class RenderDetail {
         if (w > 1600) {
             x = 6;
         }
-
-        let j = Math.floor(i / x);
-
-        if (i === 0 || i % x === 0) {
-            document.getElementById("carouselCardWrapper").insertAdjacentHTML("beforeend", `<div id="carouselItem${j}" class="item"></div>`);
-        }
-
-        document.getElementById(`carouselItem${j}`).insertAdjacentHTML("beforeend", `<div id="carouselCardHelp${j}" class="text-center"</div>`);
-
-        // Render card image
-        document.getElementById(`carouselCardHelp${j}`).insertAdjacentHTML("beforeend", `<img role="button" data-toggle="modal" data-target="#cardModal${i}" src="${card.img}" alt="${card.name}" />`);
-        document.getElementById("previewFooter").insertAdjacentHTML("beforeend", `${cardModal(card, i)}`);
-
-        if (i === 0) {
-            document.getElementById("carouselItem0").classList.add("active");
-        }
-    }
-
-    genCarouselInd() {
-        let carInd = document.getElementById("carouselInd");
-
-        let carWrap = document.getElementById("carouselCardWrapper");
-        let len = carWrap.children.length;
-
-        for (let i = 0; i < len; i++) {
-            carInd.insertAdjacentHTML("beforeend", `<li id="indicator${i}" data-target='#previewCarousel' data-slide-to="${i}" class=""></li>`);
-            if (i === 0) {
-                document.getElementById("indicator0").classList.add("active");
-            }
-        }
+        return x;
     }
 }
