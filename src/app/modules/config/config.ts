@@ -3,8 +3,9 @@ import * as Utils from '../misc/utilities';
 'use strict'
 
 /** Generic interface for exported config constants */
-interface Config<S, T> {
-    api: S;
+interface Config<R, S, T> {
+    api: R;
+    statePage: S;
     data: T;
 }
 
@@ -14,22 +15,37 @@ interface HearthstoneAPI {
     mashApeKey: string;
 }
 
+interface CardShopStates {
+    start: string;
+    preview: string;
+    cart: string;
+    checkout: string;
+    error: string;
+}
+
 /** Interface for Config.data */
-interface HardcodedData {
+interface CardShopData {
     startPageData: {
         cardSets: string[];
     },
-    setPreviewData: {
+    previewPageData: {
         cardSetName: string;
         heroes: string[],
         mana: number[]
     }
 }
 
-export const config: Config<HearthstoneAPI, HardcodedData> = {
+export const config: Config<HearthstoneAPI, CardShopStates, CardShopData> = {
     api: {
         url: 'https://omgvamp-hearthstone-v1.p.mashape.com/cards',
         mashApeKey: 'aCMgPO6J9ZmshlRIBc6BEJBGXW5Zp13EcMsjsnWOEWLa1mIRqb'
+    },
+    statePage: {
+        "start": "start-page",
+        "preview": "preview-page",
+        "cart": "cart-page",
+        "checkout": "checkout-page",
+        "error": "error-page"
     },
     data: {
         startPageData: {
@@ -40,7 +56,7 @@ export const config: Config<HearthstoneAPI, HardcodedData> = {
                 'Mean Streets of Gadgetzan'
             ]
         },
-        setPreviewData: {
+        previewPageData: {
             cardSetName: Utils.getHashValue() || 'Classic',
             heroes: [
                 'Druid',

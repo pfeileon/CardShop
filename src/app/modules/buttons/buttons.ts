@@ -50,7 +50,6 @@ export class CancelButton extends Button {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
-                console.log(item.id);
                 if (item.id === "cancelPD") {
                     Utils.createHash("");
                     Utils.createHash("cart/" + localStorage.getItem("cart"));
@@ -171,8 +170,8 @@ export class PreviewButton extends Button {
                 cardSetName = "Classic";
             }
 
-            config.data.setPreviewData.cardSetName = cardSetName;
-            Utils.createHash(`filters/{"cardSet":"${cardSetName}","hero":"Druid"}`);
+            config.data.previewPageData.cardSetName = cardSetName;
+            Utils.createHash(`preview/{"cardSet":"${cardSetName}","hero":"Druid"}`);
         });
     }
 }
@@ -238,7 +237,7 @@ export class SetCardSetButton extends ShopButton {
     click = (cardSet: HTMLElement): void => {
         cardSet.addEventListener("click", (e: MouseEvent): void => {
             const cardSetName: string = e.srcElement.attributes[0].value;
-            config.data.setPreviewData.cardSetName = cardSetName;
+            config.data.previewPageData.cardSetName = cardSetName;
 
             this.resetBtnClassList(cardSet, e);
             
@@ -250,7 +249,7 @@ export class SetCardSetButton extends ShopButton {
                 else {
                     filter["cardSet"] = cardSetName;
                 }
-                Utils.createHash(`filters/${JSON.stringify(filter)}`);
+                Utils.createHash(`preview/${JSON.stringify(filter)}`);
             }
             else {
                 Utils.createHash(cardSetName);
@@ -274,7 +273,7 @@ export class SetHeroButton extends ShopButton {
             else {
                 filter["hero"] = heroValue;
             }
-            Utils.createHash(`filters/${JSON.stringify(filter)}`);
+            Utils.createHash(`preview/${JSON.stringify(filter)}`);
         });
     }
 }
@@ -298,7 +297,7 @@ export class SetManaCostButton extends ShopButton {
                 filter["manaCost"] = manaCostValue;
             }
 
-            Utils.createHash(`filters/${JSON.stringify(filter)}`);
+            Utils.createHash(`preview/${JSON.stringify(filter)}`);
         });
     }
 }

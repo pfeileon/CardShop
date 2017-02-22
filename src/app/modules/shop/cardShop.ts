@@ -16,13 +16,6 @@ import * as Buttons from '../buttons/buttons';
 /** Start via inherited method "start()" */
 export class CardShop extends SinglePageApplication {
     // PROPERTIES
-    // - FORCED
-    protected readonly states = ["start", "preview", "cart", "checkout", "error"];
-    public get States() { return this.states; }
-    private readonly pages: string[] = ["start-page", "set-preview", "shopping-cart", "checkout", "error-page"];
-    public get Pages() { return this.pages; }
-
-    // - OWN
     private cart: ShoppingCart;
     public get Cart() { return this.cart; }
 
@@ -33,7 +26,7 @@ export class CardShop extends SinglePageApplication {
     public get SService() { return this.sService; }
 
     public get THandler() { return this.tHandler; }
-    
+
     public get BHandler(): ShopButtonHandler { return <ShopButtonHandler>this.bHandler; }
 
     // CONSTRUCTOR

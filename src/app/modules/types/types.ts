@@ -50,7 +50,7 @@ export interface HardcodedData {
     startPageData: {
         cardSets: string[];
     },
-    setPreviewData: {
+    previewPageData: {
         cardSetName: string;
         heroes: string[],
         mana: number[]

@@ -1,4 +1,5 @@
 import { PseudoSingleton } from './pseudoSingleton'
+import { config } from '../config/config';
 import * as Utils from '../misc/utilities';
 import { FetchResource } from '../services/fetch/fetchResource';
 import { TemplateHandler } from '../templates/templateHandler';
@@ -12,10 +13,6 @@ import { ButtonHandler } from '../buttons/buttonHandler';
 export abstract class SinglePageApplication extends PseudoSingleton {
     // PROPERTIES
 
-    // -ABSTRACT
-    protected abstract readonly states: string[];
-    public abstract get States();
-
     // - STATIC
     private static namePS: string;
     private static exists: boolean = false;
@@ -25,6 +22,9 @@ export abstract class SinglePageApplication extends PseudoSingleton {
     };
 
     // - OWN
+    protected readonly statePage = config.statePage;
+    public get StatePage() { return this.statePage; }
+    
     protected content: any;
     protected fResource: FetchResource;
     protected tHandler: TemplateHandler;

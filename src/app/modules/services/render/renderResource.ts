@@ -13,89 +13,109 @@ const deleteRecord = (item) => {
     return `<li data-id="${item}-del-btn"><button id="${item.replace(/ /gi, "-")}-del-btn" data-id="${item}-del-btn" type="button" class="cart-del-btn btn btn-warning">delete</button></li>`;
 }
 
-const inputPack = (item) => {
+const inputPackRecord = (item) => {
     return `<li data-id="${item}"><div class="input-pack btn btn-primary">${item}</div></li>`;
 };
 
-const inputAmount = (item) => {
+const inputAmountRecord = (item) => {
     return `<li data-id="${item}"><input class="input-amount btn btn-default" type="number" name ="amount" value="${item}" min="1" max="100" pattern="[0-9]" /></li>`
 }
 
 export class RenderResource extends RenderService {
 
+    // PROPERTIES
+
+    // -- FORCED
+    protected stateRenderers = {
+        "start": this.renderStart.bind(this),
+        "preview": this.renderPreview.bind(this),
+        "cart": this.renderCart.bind(this),
+        "checkout": this.renderCheckout.bind(this),
+        "error": this.renderError.bind(this)
+    }
+    
+    // -- OWN
     private lastSetName: string;
     private lastCardData: any;
     private rDetail: RenderDetail;
 
+    // CONSTRUCTOR
     constructor(fResource: FetchResource, rDetail: RenderDetail) {
         super(fResource);
         this.rDetail = rDetail;
     }
 
-    /** Renders the page according to the hash */
-    render(shop: CardShop): void {
-        let hashValue;
-
-        if ((<any>decodeURI(window.location.hash)).includes("/")) {
-            hashValue = decodeURI(window.location.hash.split("/")[0]);
-        }
-        else {
-            hashValue = "";
-        }
-
-        switch (hashValue) {
-            case "#filters":
-                this.renderState(shop.States[1], shop);
-                break;
-
-            case "#cart":
-                this.renderState(shop.States[2], shop);
-                break;
-
-            case "#checkout":
-                this.renderState(shop.States[3], shop)
-                break;
-
-            case "#error":
-                this.renderState(shop.States[4], shop);
-                break;
-
-            default:
-                this.renderState(shop.States[0], shop);
-        }
-    }
+    // METHODS
 
     /**
-     * Decides which parts of the site have to be displayed or not, depending on the state
+     * Adds dynamically generated content to the startPageData
      * 
-     * @param {string} selector - The state of the site
-     */
-    renderState(selector: string, shop: CardShop): void {
+     * and returns the card set heading as string */
+    renderStart(shop: CardShop) {
         let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
-        switch (selector) {
-            case shop.States[0]: {
-                shownCardSetHeader[0].textContent = this.renderStart(shop);
-                this.rDetail.refreshButtons(selector);
-                break;
-            }
-            case shop.States[1]: {
-                shownCardSetHeader[1].textContent = this.renderPreview();
-                this.rDetail.refreshButtons(selector);
-                break;
-            }
-            case shop.States[2]: {
-                this.renderCart(shop);
-                break;
-            }
-            case shop.States[3]: {
-                this.renderCart(shop);
-                break;
-            }
-            case shop.States[4]: {
-                break;
-            }
+
+        this.rDetail.showItems(shop.Cart.Items);
+        const hashValue = Utils.getHashValue();
+
+        let cardSet: string;
+        if ((<any>config.data.startPageData.cardSets).includes(hashValue)) {
+            cardSet = hashValue;
         }
-        this.displayState(shop.Pages, selector);
+        else {
+            cardSet = "";
+        }
+        shownCardSetHeader[0].textContent = cardSet;
+
+        this.rDetail.refreshButtons(Object.keys(shop.StatePage)[0]);
+    }
+
+    /** Adds dynamically generated content to the PreviewPage
+     * 
+     * and returns the card set heading as string */
+    renderPreview(shop: CardShop) {
+        let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
+        const filters: {} = Utils.getFilters();
+
+        if (filters["hero"] !== undefined && !(<any>config.data.previewPageData.heroes).includes(filters["hero"])) {
+            alert("Invalid Hero! Showing Druid instead");
+
+            Utils.createHash(`preview/{"cardSet":"${config.data.previewPageData.cardSetName}","hero":"Druid"}`);
+        }
+
+        const setName: string = filters["cardSet"];
+
+        if (this.lastSetName === setName && setName !== undefined) {
+            this.rDetail.showCards(this.lastCardData);
+        }
+        else {
+            this.fResource.getCardData(filters)
+                .then(cardData => {
+                    if (setName !== undefined) {
+                        this.lastSetName = setName;
+
+                        if (cardData !== undefined) {
+                            this.lastCardData = cardData;
+                        }
+                    }
+                    this.rDetail.showCards(cardData);
+                })
+        }
+
+        let cardSet: string;
+        // Set Heading
+        if (filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
+            cardSet = filters["cardSet"];
+        }
+        else if (filters["cardSet"] !== undefined) {
+            Utils.createHash(`preview/{"cardSet":"Classic"}`);
+            cardSet = "Classic";
+        }
+        else {
+            cardSet = "none chosen";
+        }
+        shownCardSetHeader[1].textContent = cardSet;
+
+        this.rDetail.refreshButtons(<any>Object.keys(shop.StatePage)[1]);
     }
 
     renderCart(shop: CardShop): void {
@@ -113,8 +133,8 @@ export class RenderResource extends RenderService {
                 deleteList.push(help[0][i]);
             }
 
-            document.getElementById("cart-content-packs").innerHTML = `${this.insertList((<any>Array).from(help[0]), inputPack)}`;
-            document.getElementById("cart-content-amount").innerHTML = `${this.insertList((<any>Array).from(help[1]), inputAmount)}`;
+            document.getElementById("cart-content-packs").innerHTML = `${this.insertList((<any>Array).from(help[0]), inputPackRecord)}`;
+            document.getElementById("cart-content-amount").innerHTML = `${this.insertList((<any>Array).from(help[1]), inputAmountRecord)}`;
             document.getElementById("cart-content-delete").innerHTML = `${this.insertList(deleteList, deleteRecord)}`;
 
             shop.BHandler.deleteCartPosition(shop);
@@ -156,67 +176,11 @@ export class RenderResource extends RenderService {
         }
     }
 
-    /**
-     * Adds dynamically generated content to the startPageData
-     * 
-     * and returns the card set heading as string */
-    renderStart(shop: CardShop): string {
-        this.rDetail.showItems(shop.Cart.Items);
-        const hashValue = Utils.getHashValue();
-
-        let cardSet: string;
-        if ((<any>config.data.startPageData.cardSets).includes(hashValue)) {
-            cardSet = hashValue;
-        }
-        else {
-            cardSet = "";
-        }
-        return cardSet;
+    renderCheckout(shop: CardShop) {
+        // TODO ?
     }
 
-    /** Adds dynamically generated content to the PreviewPage
-     * 
-     * and returns the card set heading as string */
-    renderPreview(): string {
-        const filters: {} = Utils.getFilters();
-
-        if (filters["hero"] !== undefined && !(<any>config.data.setPreviewData.heroes).includes(filters["hero"])) {
-            alert("Invalid Hero! Showing Druid instead");
-
-            Utils.createHash(`filters/{"cardSet":"${config.data.setPreviewData.cardSetName}","hero":"Druid"}`);
-        }
-
-        const setName: string = filters["cardSet"];
-
-        if (this.lastSetName === setName && setName !== undefined) {
-            this.rDetail.showCards(this.lastCardData);
-        }
-        else {
-            this.fResource.getCardData(filters)
-                .then(cardData => {
-                    if (setName !== undefined) {
-                        this.lastSetName = setName;
-
-                        if (cardData !== undefined) {
-                            this.lastCardData = cardData;
-                        }
-                    }
-                    this.rDetail.showCards(cardData);
-                })
-        }
-
-        let cardSet: string;
-        // Set Heading
-        if (filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
-            cardSet = filters["cardSet"];
-        }
-        else if (filters["cardSet"] !== undefined) {
-            Utils.createHash(`filters/{"cardSet":"Classic"}`);
-            cardSet = "Classic";
-        }
-        else {
-            cardSet = "none chosen";
-        }
-        return cardSet;
+    renderError(shop: CardShop) {
+        document.getElementById("error-page").insertAdjacentHTML("afterbegin", "<h1>Error!</h1>");
     }
 }

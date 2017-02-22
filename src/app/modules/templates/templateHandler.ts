@@ -1,31 +1,38 @@
 import { Template } from '../types/types';
 import { config } from '../config/config';
-import { startPage } from './startTemplate';
-import { setPreview } from './previewTemplate';
+import { startTemplate } from './startTemplate';
+import { previewTemplate } from './previewTemplate';
 import { RenderService } from '../services/render/renderService';
 import { cartTemplate } from "../templates/cartTemplate";
 import { checkoutTemplate } from "../templates/checkoutTemplate";
+import { errorTemplate } from "../templates/errorTemplate";
 import { ShoppingCart } from "../shop/shoppingCart";
 import { StorageService } from "../services/storage/storageService";
 import { validate } from "../misc/customJQ";
 
-const templates = (rService: RenderService): Template[] => [{
-    id: 'start-page',
-    where: 'afterbegin',
-    html: startPage(rService, config.data)
-}, {
-    id: 'set-preview',
-    where: 'afterbegin',
-    html: setPreview(rService, config.data)
-}, {
-    id: "shopping-cart",
-    where: "afterbegin",
-    html: cartTemplate(rService)
-}, {
-    id: "checkout",
-    where: "afterbegin",
-    html: checkoutTemplate(rService)
-}]
+const templates = (rService: RenderService): Template[] => {
+    return [{
+        id: 'start-page',
+        where: 'afterbegin',
+        html: startTemplate(rService, config.data)
+    }, {
+        id: 'preview-page',
+        where: 'afterbegin',
+        html: previewTemplate(rService, config.data)
+    }, {
+        id: "cart-page",
+        where: "afterbegin",
+        html: cartTemplate(rService)
+    }, {
+        id: "checkout-page",
+        where: "afterbegin",
+        html: checkoutTemplate(rService)
+    }, {
+        id: "error-page",
+        where: "afterbegin",
+        html: errorTemplate(rService)
+    }];
+}
 
 /** All templates with exact position */
 

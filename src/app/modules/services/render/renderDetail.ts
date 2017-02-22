@@ -110,7 +110,7 @@ export class RenderDetail {
             btnList = temp[i + 2].children[0].children;
             this.refreshButtonsHelpFunction(btnList, Utils.getManaFilter());
         }
-
+        
         btnList = temp[i].children[0].children;
         this.refreshButtonsHelpFunction(btnList, Utils.getCardSetFilter());
     }

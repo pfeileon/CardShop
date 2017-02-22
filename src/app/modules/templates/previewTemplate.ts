@@ -5,7 +5,7 @@ import { carousel } from "./carouselTemplate";
 'use strict';
 
 /** Set Preview Template */
-export const setPreview = (rService: RenderService, data: { setPreviewData }) => {
+export const previewTemplate = (rService: RenderService, data: { previewPageData }) => {
     return `<article class="container">
     <header id="previewHeader">
         <button id="set-return-btn" type="button" class="btn btn-default return-btn">Return</button>
@@ -13,7 +13,7 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
     </header>
 
     <section id="previewSetSelection" class="set-filter display-in-line">
-        <h1>Preview Card Set: <span class="card-set-name">${data.setPreviewData[Object.keys(data.setPreviewData)[0]]}</span></h1>
+        <h1>Preview Card Set: <span class="card-set-name">${data.previewPageData[Object.keys(data.previewPageData)[0]]}</span></h1>
          <div class="btn-group-justified" role="group" aria-label="CardSets">
             ${rService.insertList(data["startPageData"][Object.keys(data["startPageData"])[0]], btnRecord)}
         </div>
@@ -23,13 +23,13 @@ export const setPreview = (rService: RenderService, data: { setPreviewData }) =>
         <section id="hero-filter" class="display-in-line">
             <h2>Select Hero:</h2>
             <div class="btn-group-justified" role="group" aria-label="Heroes">
-                ${rService.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[1]], btnRecord)}
+                ${rService.insertList(data.previewPageData[Object.keys(data.previewPageData)[1]], btnRecord)}
             </div>
         </section>
         <section id ="mana-filter" class="display-in-line">
             <h2>Mana Cost:</h2>
             <div class="btn-group-justified" role="group" aria-label="Mana">
-                ${rService.insertList(data.setPreviewData[Object.keys(data.setPreviewData)[2]], btnRecord)}
+                ${rService.insertList(data.previewPageData[Object.keys(data.previewPageData)[2]], btnRecord)}
             </div>
         </section>
     </section>
