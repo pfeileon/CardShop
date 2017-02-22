@@ -1,5 +1,80 @@
-.noDisplay {
+@import "_variables";
+
+article {
+    background: linear-gradient(to right, rgba($articleColor, 0.2), white);
+    margin: 1em !important;
+    padding: 1em !important;
+    border-radius: 0.5em;
+}
+
+.no-display {
     display: none !important;
+}
+
+.display-in-line > * > * > * {
+        display: inline;
+        list-style-type: none;
+}
+
+.confirm-btn.disabled {
+    pointer-events: none;
+}
+
+// Modal
+
+.blur {
+    filter: blur(1px);
+}
+
+.modal-open {
+    header, li, h1, .panel-group, .filters, .carousel {
+        @extend .blur;
+    }
+}
+
+.modal {
+    background-color: transparent;
+}
+
+.modal-content {
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+    background-color: transparent;
+    border-radius: .5em;
+    .modal-header, .modal-footer {
+        background-color: rgba($modalColor1, 0.9);
+        border-radius: .5em;
+    }
+    .flavor {
+        margin-top: 70px;
+        background-color: rgba($modalColor2, 0.9);
+    }
+}
+
+// Carousel
+
+.carousel-control {
+    background: none !important;
+}
+
+.carousel {
+    background: linear-gradient(to right, rgba($carouselColor1, 1), rgba($carouselColor2, 1));
+    border-radius: .5em;
+    img {
+        display: inline;
+        max-width: 150px;
+    }
+}
+
+// Pack-Slider
+
+.start-slider {
+    display: inline-flex;
+    flex-flow: row wrap;
+    justify-content: center;
 }
 
 .slider {
@@ -8,22 +83,4 @@
     width: 100%;
     white-space: nowrap;
     overflow-x: auto;
-}
-
-.display-in-line > * > * > * {
-        display: inline;
-        list-style-type: none;
-}
-
-// #cart-content, #cart-btns > * {
-//     border: 1px solid black !important;
-// }
-
-.confirm-btn.disabled {
-    pointer-events: none;
-}
-
-#previewCarousel img {
-    display: inline;
-    max-width: 300px;
 }

@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = function(env) {
+module.exports = function (env) {
     return {
         entry: {
             app: './src/app/main.ts'
@@ -11,7 +11,7 @@ module.exports = function(env) {
             filename: 'bundle.js'
         },
         plugins: [new HtmlWebpackPlugin({
-            template:  './src/app/index.html'
+            template: './src/app/index.html'
         })],
         resolve: {
             extensions: ['.ts', '.js', '.scss']
