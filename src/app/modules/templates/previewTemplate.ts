@@ -12,7 +12,7 @@ export const previewTemplate = (rService: RenderService, data: { previewPageData
         ${cartButtonTemplate}
     </header>
 
-    <section id="previewSetSelection" class="set-filter display-in-line">
+    <section id="previewSetSelection" class="cardSet-filter">
         <h1>Preview Card Set: <span class="card-set-name">${data.previewPageData[Object.keys(data.previewPageData)[0]]}</span></h1>
          <div class="btn-group-justified" role="group" aria-label="CardSets">
             ${rService.insertList(data["startPageData"][Object.keys(data["startPageData"])[0]], btnRecord)}
@@ -20,13 +20,13 @@ export const previewTemplate = (rService: RenderService, data: { previewPageData
     </section>
 
     <section id="preview-filters" class="filters">
-        <section id="hero-filter" class="display-in-line">
+        <section id="hero-filter">
             <h2>Select Hero:</h2>
             <div class="btn-group-justified" role="group" aria-label="Heroes">
                 ${rService.insertList(data.previewPageData[Object.keys(data.previewPageData)[1]], btnRecord)}
             </div>
         </section>
-        <section id ="mana-filter" class="display-in-line">
+        <section id ="mana-filter">
             <h2>Mana Cost:</h2>
             <div class="btn-group-justified" role="group" aria-label="Mana">
                 ${rService.insertList(data.previewPageData[Object.keys(data.previewPageData)[2]], btnRecord)}

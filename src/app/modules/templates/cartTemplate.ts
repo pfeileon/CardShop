@@ -6,7 +6,7 @@ export const cartTemplate = (rService: RenderService) => {
 
     <h1 class="well">Shopping Cart</h1>
     
-    <section id="cart-content" class="row display-in-line">
+    <section id="cart-content" class="row">
         <div id="cart-content-packs" class="col-xs-3"></div>
         <div id="cart-content-amount" class="col-xs-2"></div>
         <div id="cart-content-delete" class="col-xs-1"></div>

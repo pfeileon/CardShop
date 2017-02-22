@@ -1,5 +1,9 @@
 @import "_variables";
 
+* {
+    list-style-type: none;
+}
+
 article {
     background: linear-gradient(to right, rgba($articleColor, 0.2), white);
     margin: 1em !important;
@@ -11,9 +15,8 @@ article {
     display: none !important;
 }
 
-.display-in-line > * > * > * {
-        display: inline;
-        list-style-type: none;
+.btn-group-justified ul li {
+    display: inline !important;
 }
 
 .confirm-btn.disabled {
