@@ -46,11 +46,11 @@ export class CardShop extends SinglePageApplication {
     /** Called by SinglePageApplication.start() */
     loadSpecifics = (): void => {
         this.sService.storageInit(this.cart);
-        window.addEventListener("hashchange", (e) => {
+        window.addEventListener("hashchange", (setCart) => {
             this.sService.setCart(this.cart);
         });
         // Updates other window or tab when storage changes
-        window.addEventListener("storage", (e) => {
+        window.addEventListener("storage", (setCart) => {
             this.sService.setCart(this.cart);
         });
     }

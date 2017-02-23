@@ -9,6 +9,10 @@ export interface Callback<T, TResult> {
     (arg?: T): TResult;
 }
 
+export interface Record {
+    (a: string | string[]): string;
+}
+
 export interface Shopable {
     Key: string;
 }

@@ -22,8 +22,6 @@ export abstract class ButtonHandler {
         this.iterateFilters(this.filters);
         this.initSpecificButtons(spApp);
     }
-    abstract applyFilter(filter: string, filters: {});
-    abstract initSpecificButtons(spApp: SinglePageApplication);
 
     /** Activates the filters */
     iterateFilters(filters: {}): void {
@@ -31,4 +29,9 @@ export abstract class ButtonHandler {
             this.applyFilter(filter, filters);
         }
     }
+
+    // - ABSTRACT
+    
+    abstract applyFilter(filter: string, filters: {});
+    abstract initSpecificButtons(spApp: SinglePageApplication);
 }

@@ -135,4 +135,37 @@ export class ShopButtonHandler extends ButtonHandler {
         const setManaCostBtn: Buttons.SetManaCostButton = new Buttons.SetManaCostButton("set-mana-set-btn", this);
         setManaCostBtn.click(manaCost);
     }
+
+    /** Activates the input fields of the cart table */
+    editCartPosition() {
+        let inputAmountHelper: HTMLCollectionOf<Element> = document.getElementsByClassName("input-amount btn");
+        let i = 0;
+        for (let item of <any>inputAmountHelper) {
+            item.id = `cart-input-amount-${i}`;
+            item.addEventListener("input", (e) => {
+                let amountOfPacks: number;
+                amountOfPacks = +(<HTMLInputElement>item).value;
+                let cartStorage = JSON.parse(localStorage.getItem("cart"));
+
+                let prop = Object.keys(cartStorage);
+                cartStorage[prop[+(item.id.substring(18))]] = amountOfPacks;
+
+                localStorage.setItem("cart", JSON.stringify(cartStorage));
+
+                Utils.createHash("cart/" + localStorage.getItem("cart"));
+            });
+            i++;
+        }
+    }
+
+    /** Activates the positions as buttons linking to the preview-page */
+    cartToPreview() {
+        let inputPackHelper: HTMLCollectionOf<Element> = document.getElementsByClassName("input-pack btn")
+        let j = 0;
+        for (let item of <any>inputPackHelper) {
+            item.id = `${item.classList[0]}-${j}`;
+            this.previewCardSet(item.id);
+            j++;
+        }
+    }
 }

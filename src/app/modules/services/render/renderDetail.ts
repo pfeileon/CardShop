@@ -1,10 +1,22 @@
-import { Shopable } from "../../types/types";
+import { Record, Shopable } from "../../types/types";
 import { config } from '../../config/config';
 import { RenderService } from "./renderService";
 import * as Utils from '../../misc/utilities';
 import { cardModal } from "../../templates/modals";
 
 "use strict";
+
+const deleteRecord: Record = (item) => {
+    return `<li role="button" id="${(<any>item).replace(/ /gi, "-")}-del-btn" data-id="${item}-del-btn" class="cart-del-btn btn btn-warning">delete</li>`;
+}
+
+const inputPackRecord: Record = (item) => {
+    return `<li data-id="${item}"><div class="input-pack btn btn-primary">${item}</div></li>`;
+};
+
+const inputAmountRecord: Record = (item) => {
+    return `<li data-id="${item}"><input class="input-amount btn btn-default" type="number" name ="amount" value="${item}" min="1" max="100" pattern="[0-9]" /></li>`
+}
 
 export class RenderDetail {
     /** Inserts the images of the cards of a fetch call */
@@ -94,6 +106,20 @@ export class RenderDetail {
         }
     }
 
+    /** Renders the items in the cart as editable table */
+    showCart(cartObject: {}) {
+        for (let item in cartObject) {
+            let cartTable = <HTMLTableElement>document.getElementById("cartContentTable");
+            let cartTableRow = cartTable.insertRow();
+            let cartTableCell = cartTableRow.insertCell(0);
+            cartTableCell.innerHTML = inputPackRecord(item);
+            cartTableCell = cartTableRow.insertCell(1);
+            cartTableCell.innerHTML = inputAmountRecord(cartObject[item]);
+            cartTableCell = cartTableRow.insertCell(2);
+            cartTableCell.innerHTML = deleteRecord(item);
+        }
+    }
+
     refreshButtons(state: string) {
         let temp = document.getElementsByClassName("btn-group-justified");
         let btnList: HTMLCollection;
@@ -110,7 +136,7 @@ export class RenderDetail {
             btnList = temp[i + 2].children[0].children;
             this.refreshButtonsHelpFunction(btnList, Utils.getManaFilter());
         }
-        
+
         btnList = temp[i].children[0].children;
         this.refreshButtonsHelpFunction(btnList, Utils.getCardSetFilter());
     }

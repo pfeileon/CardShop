@@ -13,7 +13,7 @@ import { testing } from './modules/misc/tests';
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', (start) => {
 
     // Initialization
     const fResource: FetchResource = new FetchResource();
