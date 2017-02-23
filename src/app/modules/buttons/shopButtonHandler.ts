@@ -11,12 +11,17 @@ import * as Buttons from "./buttons";
 "use strict";
 
 interface Filters {
-    id: string[];
-    do: Callback<HTMLElement, void>[];
+    [filter: string]: Callback<HTMLElement, void>;
 }
 
 export class ShopButtonHandler extends ButtonHandler {
     // PROPERTIES
+    protected readonly filters: Filters = {
+        "cardSet": this.selectCardSet,
+        "hero": this.selectHero,
+        "mana": this.selectManaCost
+    }
+
     // CONSTRUCTOR
     constructor(rResource: RenderResource) {
         super(rResource);
@@ -25,11 +30,7 @@ export class ShopButtonHandler extends ButtonHandler {
     // METHODS
 
     // - FORCED
-    buttonInit(shop: CardShop): void {
-
-        // Filters
-        this.iterateFilters();
-
+    initSpecificButtons(shop: CardShop): void {
         // Preview Card Set
         this.previewCardSet();
 
@@ -48,26 +49,16 @@ export class ShopButtonHandler extends ButtonHandler {
     }
 
     // - OWN
-    /** Activates the filters */
-    iterateFilters(): void {
-        const filters: Filters = {
-            id: ["set", "hero", "mana"],
-            do: [
-                this.selectCardSet,
-                this.selectHero,
-                this.selectManaCost
-            ]
-        }
 
-        for (let i: number = 0; i < filters["id"].length; i++) {
-            if (filters["id"][i] === "set") {
-                for (let item of <any>document.getElementsByClassName(`${filters["id"][i]}-filter`)) {
-                    Utils.iterateUl(item.children[1].children, filters["do"][i]);
-                }
+    /** Iterates an array of HTMLElements by class or selects an HTMLElement by id and applies the filter   */
+    applyFilter(filter: string, filters: Filters): void {
+        if (filter === "cardSet") {
+            for (let cardSet of <any>document.getElementsByClassName(`${filter}-filter`)) {
+                Utils.iterateUl(cardSet.children[1].children, filters[filter]);
             }
-            else {
-                Utils.iterateUl(document.getElementById(`${filters["id"][i]}-filter`).children[1].children, filters["do"][i]);
-            }
+        }
+        else {
+            Utils.iterateUl(document.getElementById(`${filter}-filter`).children[1].children, filters[filter]);
         }
     }
 
