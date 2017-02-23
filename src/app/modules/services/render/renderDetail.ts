@@ -118,12 +118,12 @@ export class RenderDetail {
     refreshButtonsHelpFunction(btnList: HTMLCollection, filter: string) {
         for (let item of <any>btnList) {
             if (item.attributes["data-id"].value === filter) {
-                item.children[0].classList.remove("btn-default");
-                item.children[0].classList.add("btn-primary");
+                item.classList.remove("btn-default");
+                item.classList.add("btn-primary");
             }
             else {
-                item.children[0].classList.add("btn-default");
-                item.children[0].classList.remove("btn-primary");
+                item.classList.add("btn-default");
+                item.classList.remove("btn-primary");
             }
         }
     }

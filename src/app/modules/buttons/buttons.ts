@@ -84,7 +84,6 @@ export class ConfirmButton extends ShopButton {
                     document.getElementById("checkoutFooter").insertAdjacentHTML("afterbegin", checkoutModal(this.shop.Customer));
                     this.shop.BHandler.buy();
                 }
-                console.log(this.shop.Customer);
             });
         }
     }
