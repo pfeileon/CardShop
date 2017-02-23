@@ -10,7 +10,7 @@ import { cardModal } from "../../templates/modals";
 'use strict';
 
 const deleteRecord = (item) => {
-    return `<li data-id="${item}-del-btn"><button id="${item.replace(/ /gi, "-")}-del-btn" data-id="${item}-del-btn" type="button" class="cart-del-btn btn btn-warning">delete</button></li>`;
+    return `<li role="button" id="${item.replace(/ /gi, "-")}-del-btn" data-id="${item}-del-btn" class="cart-del-btn btn btn-warning">delete</li>`;
 }
 
 const inputPackRecord = (item) => {
