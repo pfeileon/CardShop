@@ -8,7 +8,7 @@ import { CardPack } from "../shop/cardPack";
 import { Customer } from "../shop/customer";
 import { CreditCard } from "../shop/creditCard";
 import { RenderService } from "../services/render/renderService";
-import { checkoutModal } from "../templates/modals";
+import { checkoutModal } from "../templates/modalTemplate";
 
 "use strict";
 
@@ -20,8 +20,8 @@ abstract class ShopButton extends Button {
         super(id, bHandler);
         this.shop = shop;
     }
-    
-    resetBtnClassList(element: HTMLElement, e: MouseEvent) {        
+
+    resetBtnClassList(element: HTMLElement, e: MouseEvent) {
         let isPrimary = false;
         if ((<any>e.target).classList.contains("btn-primary")) {
             isPrimary = true;
@@ -114,20 +114,35 @@ export class ClearButton extends ShopButton {
 
 export class DeleteButton extends ShopButton {
     click = (): void => {
-        for (let item of <any>document.getElementsByClassName(this.id)) {
-            item.addEventListener("click", (del: MouseEvent) => {
-                let items = JSON.parse(localStorage.getItem("cart"));
-                if (Object.keys(items).length === 1) {
-                    localStorage.removeItem("cart");
-                    this.shop.Cart.Items = [];
-                }
-                else {
-                    delete items[`${(item.id.split("-del")[0]).replace(/-/gi, " ")}`];
-                    localStorage.setItem("cart", JSON.stringify(items));
-                }
-                Utils.createHash("cart/" + localStorage.getItem("cart"));
-            });
-        }
+        document.getElementById(this.id).addEventListener("click", (del: MouseEvent) => {
+            let items = JSON.parse(localStorage.getItem("cart"));
+            if (Object.keys(items).length === 1) {
+                localStorage.removeItem("cart");
+                this.shop.Cart.Items = [];
+            }
+            else {
+                delete items[`${((<any>del.target).id.split("-del")[0]).replace(/-/gi, " ")}`];
+                localStorage.setItem("cart", JSON.stringify(items));
+            }
+            Utils.createHash("cart/" + localStorage.getItem("cart"));
+        });
+    }
+}
+
+export class EditButton extends Button {
+    click = (): void => {
+        document.getElementById(this.id).addEventListener("input", (e) => {
+            let amount: number;
+            amount = +(<HTMLInputElement>e.target).value;
+            let cartStorage = JSON.parse(localStorage.getItem("cart"));
+
+            let prop = Object.keys(cartStorage);
+            cartStorage[prop[+((<any>e.target).id.substring(13))]] = amount;
+
+            localStorage.setItem("cart", JSON.stringify(cartStorage));
+
+            Utils.createHash("cart/" + localStorage.getItem("cart"));
+        });
     }
 }
 
@@ -182,7 +197,7 @@ export class AddToCartButton extends ShopButton {
                 let setName: string;
                 const hashValue: string = Utils.getHashValue();
                 const filters: {} = Utils.getFilters();
-                
+
                 if (hashValue !== undefined || "" || null) {
 
                     if ((<any>hashValue).includes("/") && filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
@@ -239,7 +254,7 @@ export class SetCardSetButton extends ShopButton {
             config.data.previewPageData.cardSetName = cardSetName;
 
             this.resetBtnClassList(cardSet, e);
-            
+
             if (Utils.getHashValue() !== undefined && (<any>Utils.getHashValue()).includes("/")) {
                 let filter = Utils.getFilters();
                 if (filter["cardSet"] !== undefined && filter["cardSet"] === cardSetName && filter["hero"] !== undefined) {

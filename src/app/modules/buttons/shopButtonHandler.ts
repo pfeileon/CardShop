@@ -32,7 +32,7 @@ export class ShopButtonHandler extends ButtonHandler {
     // - FORCED
     initSpecificButtons(shop: CardShop): void {
         // Preview Card Set
-        this.previewCardSet();
+        this.toPreview();
 
         // Return
         this.goBack();
@@ -82,10 +82,15 @@ export class ShopButtonHandler extends ButtonHandler {
         checkoutBtn.click();
     }
 
-    /** Call this method when the ShoppingCart is rendered */
+    /** Call this method when the ShoppingCart is rendered otherwise the EventHandler gets lost on re-rendering*/
     deleteCartPosition(shop: CardShop, id = "cart-del-btn"): void {
         const deleteBtn: Buttons.DeleteButton = new Buttons.DeleteButton(id, this, shop);
         deleteBtn.click();
+    }
+
+    editCartPosition(id = "cart-edit-btn"): void {
+        const editBtn: Buttons.EditButton = new Buttons.EditButton(id, this);
+        editBtn.click();
     }
 
     /** Clears the ShoppingCart */
@@ -100,8 +105,8 @@ export class ShopButtonHandler extends ButtonHandler {
         returnBtn.click();
     }
 
-    /** What happens when you click the Preview Card Set Button */
-    previewCardSet(id = "preview-card-set-btn"): void {
+    /** Activates button as link to the preview-page */
+    toPreview(id = "preview-card-set-btn"): void {
         const previewBtn: Buttons.PreviewButton = new Buttons.PreviewButton(id, this);
         previewBtn.click();
     }
@@ -134,38 +139,5 @@ export class ShopButtonHandler extends ButtonHandler {
     selectManaCost(manaCost: HTMLElement): void {
         const setManaCostBtn: Buttons.SetManaCostButton = new Buttons.SetManaCostButton("set-mana-set-btn", this);
         setManaCostBtn.click(manaCost);
-    }
-
-    /** Activates the input fields of the cart table */
-    editCartPosition() {
-        let inputAmountHelper: HTMLCollectionOf<Element> = document.getElementsByClassName("input-amount btn");
-        let i = 0;
-        for (let item of <any>inputAmountHelper) {
-            item.id = `cart-input-amount-${i}`;
-            item.addEventListener("input", (e) => {
-                let amountOfPacks: number;
-                amountOfPacks = +(<HTMLInputElement>item).value;
-                let cartStorage = JSON.parse(localStorage.getItem("cart"));
-
-                let prop = Object.keys(cartStorage);
-                cartStorage[prop[+(item.id.substring(18))]] = amountOfPacks;
-
-                localStorage.setItem("cart", JSON.stringify(cartStorage));
-
-                Utils.createHash("cart/" + localStorage.getItem("cart"));
-            });
-            i++;
-        }
-    }
-
-    /** Activates the positions as buttons linking to the preview-page */
-    cartToPreview() {
-        let inputPackHelper: HTMLCollectionOf<Element> = document.getElementsByClassName("input-pack btn")
-        let j = 0;
-        for (let item of <any>inputPackHelper) {
-            item.id = `${item.classList[0]}-${j}`;
-            this.previewCardSet(item.id);
-            j++;
-        }
     }
 }

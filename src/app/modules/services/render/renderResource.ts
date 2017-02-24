@@ -5,7 +5,7 @@ import { config } from '../../config/config';
 import * as Utils from '../../misc/utilities';
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/fetchResource";
-import { cardModal } from "../../templates/modals";
+import { cardModal } from "../../templates/modalTemplate";
 
 'use strict';
 
@@ -25,6 +25,7 @@ export class RenderResource extends RenderService {
     // -- OWN
     private lastSetName: string;
     private lastCardData: any;
+    public get LastCardData() { return this.lastCardData; }
     private rDetail: RenderDetail;
 
     // CONSTRUCTOR
@@ -35,14 +36,11 @@ export class RenderResource extends RenderService {
 
     // METHODS
 
-    /**
-     * Adds dynamically generated content to the startPageData
-     * 
-     * and returns the card set heading as string */
+    /** Adds dynamically generated content to the startPageData */
     renderStart(shop: CardShop) {
         let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
 
-        this.rDetail.showItems(shop.Cart.Items);
+        this.rDetail.renderItems(shop.Cart.Items);
         const hashValue = Utils.getHashValue();
 
         let cardSet: string;
@@ -54,12 +52,10 @@ export class RenderResource extends RenderService {
         }
         shownCardSetHeader[0].textContent = cardSet;
 
-        this.rDetail.refreshButtons(Object.keys(shop.StatePage)[0]);
+        this.rDetail.refreshFilters("start");
     }
 
-    /** Adds dynamically generated content to the PreviewPage
-     * 
-     * and returns the card set heading as string */
+    /** Adds dynamically generated content to the PreviewPage */
     renderPreview(shop: CardShop) {
         let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
         const filters: {} = Utils.getFilters();
@@ -73,7 +69,7 @@ export class RenderResource extends RenderService {
         const setName: string = filters["cardSet"];
 
         if (this.lastSetName === setName && setName !== undefined) {
-            this.rDetail.showCards(this.lastCardData);
+            this.rDetail.renderCards(this.lastCardData);
         }
         else {
             this.fResource.getCardData(filters)
@@ -85,8 +81,11 @@ export class RenderResource extends RenderService {
                             this.lastCardData = cardData;
                         }
                     }
-                    this.rDetail.showCards(cardData);
+                    this.rDetail.renderCards(cardData);
                 })
+            window.addEventListener("resize", (e) => {
+                this.rDetail.renderCards(this.lastCardData);
+            });
         }
 
         let cardSet: string;
@@ -103,32 +102,31 @@ export class RenderResource extends RenderService {
         }
         shownCardSetHeader[1].textContent = cardSet;
 
-        this.rDetail.refreshButtons(<any>Object.keys(shop.StatePage)[1]);
+        this.rDetail.refreshFilters("preview");
     }
 
     renderCart(shop: CardShop): void {
-        if (localStorage.getItem("cart") !== null || undefined) {
-            document.getElementById("cart-content").innerHTML = `
+        let classList = document.getElementById("checkout-btn").classList;
+        let cartContent = document.getElementById("cart-content");
+
+        if (localStorage.getItem("cart") !== (null && undefined)) {
+            cartContent.innerHTML = `
                 <table id="cartContentTable">
                 </table>
             `;
 
-            if (!document.getElementById("checkout-btn").classList.contains("btn-success")) {
-                document.getElementById("checkout-btn").classList.remove("btn-success");
+            if (!classList.contains("btn-success")) {
+                classList.add("btn-success");
             }
-            
+
             let cartObject = JSON.parse(localStorage.getItem("cart"));
-            this.rDetail.showCart(cartObject);
-            // Must be called on rendering and not on start because eventHandlers get lost after re-rendering
-            shop.BHandler.cartToPreview();
-            shop.BHandler.editCartPosition();
-            shop.BHandler.deleteCartPosition(shop);
+            this.rDetail.renderCartTable(shop, cartObject);
         }
         else {
-            if (document.getElementById("checkout-btn").classList.contains("btn-success")) {
-                document.getElementById("checkout-btn").classList.remove("btn-success");
+            if (classList.contains("btn-success")) {
+                classList.remove("btn-success");
             }
-            document.getElementById("cart-content").innerHTML = `
+            cartContent.innerHTML = `
                 <div class="well">Your cart is empty!</div>
             `;
         }
