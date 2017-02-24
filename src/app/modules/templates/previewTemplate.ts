@@ -13,7 +13,7 @@ export const previewTemplate = (rService: RenderService, data: { previewPageData
     </header>
 
     <section id="previewSetSelection" class="cardSet-filter">
-        <h1>Preview Card Set: <span class="card-set-name">${data.previewPageData[Object.keys(data.previewPageData)[0]]}</span></h1>
+        <h1><span class="addHeading">Preview Card Set: </span><span class="card-set-name">${data.previewPageData[Object.keys(data.previewPageData)[0]]}</span></h1>
          <div class="btn-group-justified" role="group" aria-label="CardSets">
             ${rService.insertList(data["startPageData"][Object.keys(data["startPageData"])[0]], btnRecord)}
         </div>

@@ -1,10 +1,11 @@
+import { Record } from "../../types/types";
 import { FetchResource } from "../fetch/fetchResource";
 import { SinglePageApplication } from "../../spa/singlePageApplication";
 import { toggleCssClass } from "../../misc/utilities";
 
 "use strict";
 
-const record = (item) => {
+const record: Record = (item) => {
     return `<li data-id="${item}">${item}</li>`;
 };
 

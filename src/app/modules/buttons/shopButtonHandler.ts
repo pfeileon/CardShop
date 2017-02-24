@@ -32,7 +32,7 @@ export class ShopButtonHandler extends ButtonHandler {
     // - FORCED
     initSpecificButtons(shop: CardShop): void {
         // Preview Card Set
-        this.previewCardSet();
+        this.toPreview();
 
         // Return
         this.goBack();
@@ -82,10 +82,15 @@ export class ShopButtonHandler extends ButtonHandler {
         checkoutBtn.click();
     }
 
-    /** Call this method when the ShoppingCart is rendered */
+    /** Call this method when the ShoppingCart is rendered otherwise the EventHandler gets lost on re-rendering*/
     deleteCartPosition(shop: CardShop, id = "cart-del-btn"): void {
         const deleteBtn: Buttons.DeleteButton = new Buttons.DeleteButton(id, this, shop);
         deleteBtn.click();
+    }
+
+    editCartPosition(id = "cart-edit-btn"): void {
+        const editBtn: Buttons.EditButton = new Buttons.EditButton(id, this);
+        editBtn.click();
     }
 
     /** Clears the ShoppingCart */
@@ -100,8 +105,8 @@ export class ShopButtonHandler extends ButtonHandler {
         returnBtn.click();
     }
 
-    /** What happens when you click the Preview Card Set Button */
-    previewCardSet(id = "preview-card-set-btn"): void {
+    /** Activates button as link to the preview-page */
+    toPreview(id = "preview-card-set-btn"): void {
         const previewBtn: Buttons.PreviewButton = new Buttons.PreviewButton(id, this);
         previewBtn.click();
     }

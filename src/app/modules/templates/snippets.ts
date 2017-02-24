@@ -7,5 +7,5 @@ export const cartButtonTemplate = `<input class="input-amount" type= "number" na
 `;
 
 export const btnRecord = (item) => {
-    return `<li data-id="${item}"><button data-id="${item}" type="button" class="btn btn-default">${item}</button></li>`;
+    return `<li data-id="${item}" role="button" class="btn btn-default">${item}</li>`;
 }

@@ -56,7 +56,7 @@ export abstract class SinglePageApplication extends PseudoSingleton {
         this.bHandler.initButtons(this);
 
         // User input is processed
-        window.addEventListener("hashchange", (e) => {
+        window.addEventListener("hashchange", (render) => {
             this.rService.render(this);
         });
 
