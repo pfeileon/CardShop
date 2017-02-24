@@ -5,21 +5,9 @@ import { config } from '../../config/config';
 import * as Utils from '../../misc/utilities';
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/fetchResource";
-import { cardModal } from "../../templates/modals";
+import { cardModal } from "../../templates/modalTemplate";
 
 'use strict';
-
-const deleteRecord = (item) => {
-    return `<li data-id="${item}-del-btn"><button id="${item.replace(/ /gi, "-")}-del-btn" data-id="${item}-del-btn" type="button" class="cart-del-btn btn btn-warning">delete</button></li>`;
-}
-
-const inputPackRecord = (item) => {
-    return `<li data-id="${item}"><div class="input-pack btn btn-primary">${item}</div></li>`;
-};
-
-const inputAmountRecord = (item) => {
-    return `<li data-id="${item}"><input class="input-amount btn btn-default" type="number" name ="amount" value="${item}" min="1" max="100" pattern="[0-9]" /></li>`
-}
 
 export class RenderResource extends RenderService {
 
@@ -33,10 +21,11 @@ export class RenderResource extends RenderService {
         "checkout": this.renderCheckout.bind(this),
         "error": this.renderError.bind(this)
     }
-    
+
     // -- OWN
     private lastSetName: string;
     private lastCardData: any;
+    public get LastCardData() { return this.lastCardData; }
     private rDetail: RenderDetail;
 
     // CONSTRUCTOR
@@ -47,14 +36,11 @@ export class RenderResource extends RenderService {
 
     // METHODS
 
-    /**
-     * Adds dynamically generated content to the startPageData
-     * 
-     * and returns the card set heading as string */
+    /** Adds dynamically generated content to the startPageData */
     renderStart(shop: CardShop) {
         let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
 
-        this.rDetail.showItems(shop.Cart.Items);
+        this.rDetail.renderItems(shop.Cart.Items);
         const hashValue = Utils.getHashValue();
 
         let cardSet: string;
@@ -66,12 +52,10 @@ export class RenderResource extends RenderService {
         }
         shownCardSetHeader[0].textContent = cardSet;
 
-        this.rDetail.refreshButtons(Object.keys(shop.StatePage)[0]);
+        this.rDetail.refreshFilters("start");
     }
 
-    /** Adds dynamically generated content to the PreviewPage
-     * 
-     * and returns the card set heading as string */
+    /** Adds dynamically generated content to the PreviewPage */
     renderPreview(shop: CardShop) {
         let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
         const filters: {} = Utils.getFilters();
@@ -85,7 +69,7 @@ export class RenderResource extends RenderService {
         const setName: string = filters["cardSet"];
 
         if (this.lastSetName === setName && setName !== undefined) {
-            this.rDetail.showCards(this.lastCardData);
+            this.rDetail.renderCards(this.lastCardData);
         }
         else {
             this.fResource.getCardData(filters)
@@ -97,8 +81,11 @@ export class RenderResource extends RenderService {
                             this.lastCardData = cardData;
                         }
                     }
-                    this.rDetail.showCards(cardData);
+                    this.rDetail.renderCards(cardData);
                 })
+            window.addEventListener("resize", (e) => {
+                this.rDetail.renderCards(this.lastCardData);
+            });
         }
 
         let cardSet: string;
@@ -115,64 +102,33 @@ export class RenderResource extends RenderService {
         }
         shownCardSetHeader[1].textContent = cardSet;
 
-        this.rDetail.refreshButtons(<any>Object.keys(shop.StatePage)[1]);
+        this.rDetail.refreshFilters("preview");
     }
 
     renderCart(shop: CardShop): void {
-        if (localStorage.getItem("cart") !== null || undefined) {
+        let classList = document.getElementById("checkout-btn").classList;
+        let cartContent = document.getElementById("cart-content");
 
-            if (!document.getElementById("checkout-btn").classList.contains("btn-success")) {
-                document.getElementById("checkout-btn").classList.toggle("btn-success");
+        if (localStorage.getItem("cart") !== (null && undefined)) {
+            cartContent.innerHTML = `
+                <table id="cartContentTable">
+                </table>
+            `;
+
+            if (!classList.contains("btn-success")) {
+                classList.add("btn-success");
             }
 
-            let temp: {} = JSON.parse(localStorage.getItem("cart"));
-            let help: string[][] = [Object.keys(temp), (<any>Object).values(temp)];
-
-            let deleteList: string[] = [];
-            for (let i = 0; i < help[0].length; i++) {
-                deleteList.push(help[0][i]);
-            }
-
-            document.getElementById("cart-content-packs").innerHTML = `${this.insertList((<any>Array).from(help[0]), inputPackRecord)}`;
-            document.getElementById("cart-content-amount").innerHTML = `${this.insertList((<any>Array).from(help[1]), inputAmountRecord)}`;
-            document.getElementById("cart-content-delete").innerHTML = `${this.insertList(deleteList, deleteRecord)}`;
-
-            shop.BHandler.deleteCartPosition(shop);
-
-            let inputPackHelper: HTMLCollectionOf<Element> = document.getElementsByClassName("input-pack btn")
-            let j = 0;
-            for (let item of <any>inputPackHelper) {
-                item.id = `${item.classList[0]}-${j}`;
-                shop.BHandler.previewCardSet(item.id);
-                j++;
-            }
-
-            let inputAmountHelper: HTMLCollectionOf<Element> = document.getElementsByClassName("input-amount btn");
-            let i = 0;
-            for (let item of <any>inputAmountHelper) {
-                item.id = `cart-input-amount-${i}`;
-                item.addEventListener("input", (e) => {
-                    let amountOfPacks: number;
-                    amountOfPacks = +(<HTMLInputElement>item).value;
-                    let cartStorage = JSON.parse(localStorage.getItem("cart"));
-
-                    let prop = Object.keys(cartStorage);
-                    cartStorage[prop[+(item.id.substring(18))]] = amountOfPacks;
-
-                    localStorage.setItem("cart", JSON.stringify(cartStorage));
-
-                    Utils.createHash("cart/" + localStorage.getItem("cart"));
-                });
-                i++;
-            }
+            let cartObject = JSON.parse(localStorage.getItem("cart"));
+            this.rDetail.renderCartTable(shop, cartObject);
         }
         else {
-            if (document.getElementById("checkout-btn").classList.contains("btn-success")) {
-                document.getElementById("checkout-btn").classList.toggle("btn-success");
+            if (classList.contains("btn-success")) {
+                classList.remove("btn-success");
             }
-            document.getElementById("cart-content-packs").innerHTML = `<div class="well">Your cart is empty!</div>`;
-            document.getElementById("cart-content-amount").innerHTML = "";
-            document.getElementById("cart-content-delete").innerHTML = "";
+            cartContent.innerHTML = `
+                <div class="well">Your cart is empty!</div>
+            `;
         }
     }
 

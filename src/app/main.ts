@@ -13,15 +13,15 @@ import { testing } from './modules/misc/tests';
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', (start) => {
 
     // Initialization
     const fResource: FetchResource = new FetchResource();
     const rDetail: RenderDetail = new RenderDetail();
-    const rService: RenderResource = new RenderResource(fResource, rDetail);
+    const rResource: RenderResource = new RenderResource(fResource, rDetail);
 
-    const tHandler: TemplateHandler = new TemplateHandler(rService);
-    const bHandler: ShopButtonHandler = new ShopButtonHandler(rService);
+    const tHandler: TemplateHandler = new TemplateHandler(rResource);
+    const bHandler: ShopButtonHandler = new ShopButtonHandler(rResource);
 
     const sService: StorageService = new StorageService();
     const cart: ShoppingCart = new ShoppingCart(sService);

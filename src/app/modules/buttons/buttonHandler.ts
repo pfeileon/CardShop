@@ -6,6 +6,7 @@ import { RenderService } from '../services/render/renderService';
 
 export abstract class ButtonHandler {
     //PROPERTIES
+    protected abstract readonly filters: {};
     protected fResource: FetchResource;
     protected rService: RenderService;
     public get RService() { return this.rService; }
@@ -17,5 +18,20 @@ export abstract class ButtonHandler {
     }
 
     // METHODS
-    abstract buttonInit(spApp: SinglePageApplication);
+    initButtons(spApp: SinglePageApplication) {
+        this.iterateFilters(this.filters);
+        this.initSpecificButtons(spApp);
+    }
+
+    /** Activates the filters */
+    iterateFilters(filters: {}): void {
+        for (let filter in filters) {
+            this.applyFilter(filter, filters);
+        }
+    }
+
+    // - ABSTRACT
+    
+    abstract applyFilter(filter: string, filters: {});
+    abstract initSpecificButtons(spApp: SinglePageApplication);
 }

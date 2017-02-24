@@ -11,12 +11,17 @@ import * as Buttons from "./buttons";
 "use strict";
 
 interface Filters {
-    id: string[];
-    do: Callback<HTMLElement, void>[];
+    [filter: string]: Callback<HTMLElement, void>;
 }
 
 export class ShopButtonHandler extends ButtonHandler {
     // PROPERTIES
+    protected readonly filters: Filters = {
+        "cardSet": this.selectCardSet,
+        "hero": this.selectHero,
+        "mana": this.selectManaCost
+    }
+
     // CONSTRUCTOR
     constructor(rResource: RenderResource) {
         super(rResource);
@@ -25,13 +30,9 @@ export class ShopButtonHandler extends ButtonHandler {
     // METHODS
 
     // - FORCED
-    buttonInit(shop: CardShop): void {
-
-        // Filters
-        this.iterateFilters();
-
+    initSpecificButtons(shop: CardShop): void {
         // Preview Card Set
-        this.previewCardSet();
+        this.toPreview();
 
         // Return
         this.goBack();
@@ -48,26 +49,16 @@ export class ShopButtonHandler extends ButtonHandler {
     }
 
     // - OWN
-    /** Activates the filters */
-    iterateFilters(): void {
-        const filters: Filters = {
-            id: ["set", "hero", "mana"],
-            do: [
-                this.selectCardSet,
-                this.selectHero,
-                this.selectManaCost
-            ]
-        }
 
-        for (let i: number = 0; i < filters["id"].length; i++) {
-            if (filters["id"][i] === "set") {
-                for (let item of <any>document.getElementsByClassName(`${filters["id"][i]}-filter`)) {
-                    Utils.iterateUl(item.children[1].children, filters["do"][i]);
-                }
+    /** Iterates an array of HTMLElements by class or selects an HTMLElement by id and applies the filter   */
+    applyFilter(filter: string, filters: Filters): void {
+        if (filter === "cardSet") {
+            for (let cardSet of <any>document.getElementsByClassName(`${filter}-filter`)) {
+                Utils.iterateUl(cardSet.children[1].children, filters[filter]);
             }
-            else {
-                Utils.iterateUl(document.getElementById(`${filters["id"][i]}-filter`).children[1].children, filters["do"][i]);
-            }
+        }
+        else {
+            Utils.iterateUl(document.getElementById(`${filter}-filter`).children[1].children, filters[filter]);
         }
     }
 
@@ -91,10 +82,15 @@ export class ShopButtonHandler extends ButtonHandler {
         checkoutBtn.click();
     }
 
-    /** Call this method when the ShoppingCart is rendered */
+    /** Call this method when the ShoppingCart is rendered otherwise the EventHandler gets lost on re-rendering*/
     deleteCartPosition(shop: CardShop, id = "cart-del-btn"): void {
         const deleteBtn: Buttons.DeleteButton = new Buttons.DeleteButton(id, this, shop);
         deleteBtn.click();
+    }
+
+    editCartPosition(id = "cart-edit-btn"): void {
+        const editBtn: Buttons.EditButton = new Buttons.EditButton(id, this);
+        editBtn.click();
     }
 
     /** Clears the ShoppingCart */
@@ -109,8 +105,8 @@ export class ShopButtonHandler extends ButtonHandler {
         returnBtn.click();
     }
 
-    /** What happens when you click the Preview Card Set Button */
-    previewCardSet(id = "preview-card-set-btn"): void {
+    /** Activates button as link to the preview-page */
+    toPreview(id = "preview-card-set-btn"): void {
         const previewBtn: Buttons.PreviewButton = new Buttons.PreviewButton(id, this);
         previewBtn.click();
     }

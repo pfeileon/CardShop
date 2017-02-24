@@ -12,9 +12,11 @@ export const startTemplate = (rService: RenderService, data: { startPageData }) 
         <h1>Welcome to the Hearthstone Card Shop</h1>
     </header>
 
-    <section class="set-filter display-in-line">
+    <section class="cardSet-filter">
         <h2>Select the Card Set:
-            <span class="card-set-name">${data["previewPageData"][Object.keys(data["previewPageData"])[0]]}</span>
+            <span class="card-set-name">
+                ${data["previewPageData"][Object.keys(data["previewPageData"])[0]]}
+            </span>
         </h2>
 
         <div class="btn-group-justified" role="group" aria-label="CardSets">
