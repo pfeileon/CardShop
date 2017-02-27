@@ -6,6 +6,8 @@ import * as Utils from '../../misc/utilities';
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/fetchResource";
 import { cardModal } from "../../templates/modalTemplate";
+import { formTemplate } from "../../templates/formTemplate";
+import { accordionTemplate } from "../../templates/accordionTemplate";
 
 'use strict';
 
@@ -23,9 +25,6 @@ export class RenderResource extends RenderService {
     }
 
     // -- OWN
-    private lastSetName: string;
-    private lastCardData: any;
-    public get LastCardData() { return this.lastCardData; }
     private rDetail: RenderDetail;
 
     // CONSTRUCTOR
@@ -57,52 +56,41 @@ export class RenderResource extends RenderService {
 
     /** Adds dynamically generated content to the PreviewPage */
     renderPreview(shop: CardShop) {
-        let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
+        let shownCardSetHeader = document.querySelector("#previewSetSelection .card-set-name");
         const filters: {} = Utils.getFilters();
 
+        this.checkHeroFilter(filters);
+
+        const setName: string = filters["cardSet"];
+
+        this.rDetail.renderCards(this.fResource, setName, filters);
+
+        shownCardSetHeader.textContent = this.setPreviewHeading(filters);
+
+        this.rDetail.refreshFilters("preview");
+    }
+
+    setPreviewHeading(filters: {}): string {
+        let cardSet: string;
+        // Set Heading
+        if (filters["cardSet"] !== undefined && (<any>config.data.startPageData.cardSets).includes(filters["cardSet"])) {
+            return cardSet = filters["cardSet"];
+        }
+        else if (filters["cardSet"] !== undefined) {
+            Utils.createHash(`preview/{"cardSet":"Classic"}`);
+            return cardSet = "Classic";
+        }
+        else {
+            return cardSet = "none chosen";
+        }
+    }
+
+    checkHeroFilter(filters: {}) {
         if (filters["hero"] !== undefined && !(<any>config.data.previewPageData.heroes).includes(filters["hero"])) {
             alert("Invalid Hero! Showing Druid instead");
 
             Utils.createHash(`preview/{"cardSet":"${config.data.previewPageData.cardSetName}","hero":"Druid"}`);
         }
-
-        const setName: string = filters["cardSet"];
-
-        if (this.lastSetName === setName && setName !== undefined) {
-            this.rDetail.renderCards(this.lastCardData);
-        }
-        else {
-            this.fResource.getCardData(filters)
-                .then(cardData => {
-                    if (setName !== undefined) {
-                        this.lastSetName = setName;
-
-                        if (cardData !== undefined) {
-                            this.lastCardData = cardData;
-                        }
-                    }
-                    this.rDetail.renderCards(cardData);
-                })
-            window.addEventListener("resize", (e) => {
-                this.rDetail.renderCards(this.lastCardData);
-            });
-        }
-
-        let cardSet: string;
-        // Set Heading
-        if (filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
-            cardSet = filters["cardSet"];
-        }
-        else if (filters["cardSet"] !== undefined) {
-            Utils.createHash(`preview/{"cardSet":"Classic"}`);
-            cardSet = "Classic";
-        }
-        else {
-            cardSet = "none chosen";
-        }
-        shownCardSetHeader[1].textContent = cardSet;
-
-        this.rDetail.refreshFilters("preview");
     }
 
     renderCart(shop: CardShop): void {
@@ -111,7 +99,7 @@ export class RenderResource extends RenderService {
 
         if (localStorage.getItem("cart") !== (null && undefined)) {
             cartContent.innerHTML = `
-                <table id="cartContentTable">
+                <table id="cartContentTable" class="table">
                 </table>
             `;
 
@@ -133,7 +121,11 @@ export class RenderResource extends RenderService {
     }
 
     renderCheckout(shop: CardShop) {
-        // TODO ?
+        // TODO?
+        // Needs to be checked dynamically and not only on start if rendered here
+        // document.getElementById("checkoutHeader").insertAdjacentHTML("afterend", `${accordionTemplate(formTemplate)}`);
+        // shop.BHandler.cancelCheckout();
+        // shop.BHandler.confirmCheckout(shop);
     }
 
     renderError(shop: CardShop) {

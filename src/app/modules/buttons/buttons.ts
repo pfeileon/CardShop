@@ -168,7 +168,7 @@ export class PreviewButton extends Button {
             const hashValue: string = Utils.getHashValue();
             let cardSetName: string;
 
-            if (hashValue == undefined || "") {
+            if (hashValue === undefined || "" || null) {
                 cardSetName = "Classic";
                 Utils.createHash("Classic");
             }

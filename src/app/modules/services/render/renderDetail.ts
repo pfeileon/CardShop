@@ -4,6 +4,7 @@ import { RenderService } from "./renderService";
 import * as Utils from '../../misc/utilities';
 import { cardModal } from "../../templates/modalTemplate";
 import { CardShop } from "../../shop/cardShop";
+import { FetchResource } from "../fetch/FetchResource";
 
 "use strict";
 
@@ -20,13 +21,21 @@ const inputAmountRecord: Record = (item) => {
 }
 
 export class RenderDetail {
-    /** Inserts the images of the cards of a fetch call */
-    renderCards(cardData: any): void {
+    // PROPERTIES
+
+    private lastSetName: string;
+    private lastCardData: any;
+
+    // METHODS
+
+    filterCards(cardData: any): {} {
 
         // First remove old code
         document.getElementById("carouselCardWrapper").innerText = "";
         document.getElementById("carouselInd").innerText = "";
         document.getElementById("previewFooter").innerText = "";
+
+        let filteredCardData = {};
 
         let i = 0;
         for (let card of cardData) {
@@ -56,12 +65,35 @@ export class RenderDetail {
                         )))
 
                 if (heroFilterPassed && manaFilterPassed) {
-                    this.renderCarousel(card, i);
+                    filteredCardData[i] = card;
                     i++;
                 }
             }
         }
-        this.genCarouselInd();
+        return filteredCardData;
+    }
+
+    /** Inserts a carousel of the cards of a fetch call */
+    renderCards(fResource: FetchResource, setName: string, filters: {}) {
+        if (this.lastSetName === setName && setName !== undefined) {
+            this.renderCarousel(this.filterCards(this.lastCardData));
+        }
+        else {
+            fResource.getCardData(filters)
+                .then(cardData => {
+                    if (setName !== undefined) {
+                        this.lastSetName = setName;
+
+                        if (cardData !== undefined) {
+                            this.lastCardData = cardData;
+                        }
+                    }
+                    this.renderCarousel(this.filterCards(cardData));
+                })
+            window.addEventListener("resize", (e) => {
+                this.renderCarousel(this.filterCards(this.lastCardData));
+            });
+        }
     }
 
     /**
@@ -143,24 +175,29 @@ export class RenderDetail {
         }
     }
 
-    renderCarousel(card, i: number) {
-        let itemsPerSlide = this.determineItemsPerSlide();
-        let j = Math.floor(i / itemsPerSlide);
+    renderCarousel(filteredCardData: {}) {
+        for (let item in filteredCardData) {
+            let i = +item;
+            let card = filteredCardData[item];
+            let itemsPerSlide = this.determineItemsPerSlide();
+            let j = Math.floor(i / itemsPerSlide);
 
-        if (i === 0 || i % itemsPerSlide === 0) {
-            document.getElementById("carouselCardWrapper").insertAdjacentHTML("beforeend", `<div id="carouselItem${j}" class="item"></div>`);
+            if (i === 0 || i % itemsPerSlide === 0) {
+                document.getElementById("carouselCardWrapper").insertAdjacentHTML("beforeend", `<div id="carouselItem${j}" class="item"></div>`);
+            }
+
+            document.getElementById(`carouselItem${j}`).insertAdjacentHTML("beforeend", `<div id="carouselCardHelp${j}" class="text-center"</div>`);
+
+            // Render card image and its modal
+            document.getElementById(`carouselCardHelp${j}`).insertAdjacentHTML("beforeend", `<img role="button" data-toggle="modal" data-target="#cardModal${i}" src="${card.img}" alt="${card.name}" />`);
+            document.getElementById("previewFooter").insertAdjacentHTML("beforeend", `${cardModal(card, i)}`);
+
+            if (i === 0) {
+                document.getElementById("carouselItem0").classList.add("active");
+            }
+            this.hideCarouselControls(j);
         }
-
-        document.getElementById(`carouselItem${j}`).insertAdjacentHTML("beforeend", `<div id="carouselCardHelp${j}" class="text-center"</div>`);
-
-        // Render card image
-        document.getElementById(`carouselCardHelp${j}`).insertAdjacentHTML("beforeend", `<img role="button" data-toggle="modal" data-target="#cardModal${i}" src="${card.img}" alt="${card.name}" />`);
-        document.getElementById("previewFooter").insertAdjacentHTML("beforeend", `${cardModal(card, i)}`);
-
-        if (i === 0) {
-            document.getElementById("carouselItem0").classList.add("active");
-        }
-        this.hideCarouselControls(j);
+        this.genCarouselInd();
     }
 
     /** Automatically generates a carousel's indicators */

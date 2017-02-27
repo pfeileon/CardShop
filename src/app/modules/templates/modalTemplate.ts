@@ -33,7 +33,10 @@ const cardModalBody = (card: any) => {
           </div>
           <div class="col-sm-5">
             <div class="flavor well">
-              <span>${card.flavor}</span>
+              ${card.flavor}
+            </div>
+            <div class="artist well">
+              Artist: ${card.artist}
             </div>
           </div>
           <div class="clearfix"></div>`

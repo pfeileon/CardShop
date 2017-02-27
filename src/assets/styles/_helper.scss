@@ -1,11 +1,15 @@
 @import "_variables";
 @import "_fonts";
-
 * {
     list-style-type: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: "Belwe Bd BT";
 }
 
@@ -16,16 +20,39 @@ article {
     border-radius: 0.5em;
 }
 
+.cart-btn-row {
+    display: flex;
+    justify-content: space-between;
+    .return-btn,
+    .clear-btn,
+    .checkout-btn {
+        flex: 0 1 auto;
+    }
+}
+
+.form-row {
+    display: table;
+    &.personal {
+        width: 100%;
+    }
+    .form-cell {
+        display: table-cell;
+        &.left-cell {
+            width: 49%;
+            border-right: 1em solid transparent;
+        }
+    }
+    [name="cVV"] {
+        width: 8em;
+    }
+}
+
 .addHeading {
     font-size: 0.85em !important;
 }
 
 .no-display {
     display: none !important;
-}
-
-.btn-group-justified ul li {
-    display: inline !important;
 }
 
 .confirm-btn.disabled {
@@ -66,7 +93,8 @@ article {
         background-color: rgba($modalColor1, 0.9);
         border-radius: .5em;
     }
-    .flavor {
+    .flavor,
+    .artist {
         font-family: "ITC Franklin Gothic BookCd", "Franklin Gothic Medium", "Franklin Gothic";
         font-size: 12pt;
         margin-top: 70px;
@@ -77,6 +105,12 @@ article {
 // Carousel
 .carousel-control {
     background: none !important;
+}
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 }
 
 .carousel {

@@ -30,33 +30,39 @@ const checkoutButtonTemplate = (abbr: string, toggle: string, target: string) =>
     </button>`;
 }
 
-const personalData = `<div class="form-group">
-                        <label for="firstName">First Name</label>
-                        <input id="firstName" type="text" class="form-control" name="firstName" placeholder="First name" pattern="\\D{0,35}" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Last Name</label>
-                        <input id="lastName" type="text" class="form-control" name="lastName" placeholder="Last name" pattern="\\D{0,35}" required />
+const personalData = `<div class="form-group form-row personal">
+                        <div class="form-cell left-cell">
+                            <label for="firstName">First Name</label>
+                            <input id="firstName" type="text" class="form-control" name="firstName" placeholder="First name" pattern="\\D{0,35}" required />
+                        </div>
+                        <div class="form-cell">
+                            <label for="lastName">Last Name</label>
+                            <input id="lastName" type="text" class="form-control" name="lastName" placeholder="Last name" pattern="\\D{0,35}" required />
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="address">Address</label>
                         <input id="address" type="text" class="form-control" name="address" placeholder="Address" required />
                     </div>
-                    <div class="form-group">
-                        <label>City</label>
-                        <input id="city" type="text" class="form-control" name="city" placeholder="City" pattern="\\D{0,35}" required />
+                    <div class="form-group form-row personal">
+                        <div class="form-cell left-cell">
+                            <label for="zipCode">Zip-Code</label>
+                            <input id="zipCode" type="text" class="form-control" name="zipCode" placeholder="Zip-Code" required />
+                        </div>
+                        <div class="form-cell">
+                            <label>City</label>
+                            <input id="city" type="text" class="form-control" name="city" placeholder="City" pattern="\\D{0,35}" required />
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="country">Country</label>
-                        <input id="country" type="text" class="form-control" name="country" placeholder="Country" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="zipCode">Zip-Code</label>
-                        <input id="zipCode" type="text" class="form-control" name="zipCode" placeholder="Zip-Code" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="telephone">Telephone</label>
-                        <input id="telephone" type="phone" class="form-control" name="telephone" placeholder="Telephone" required />
+                    <div class="form-group form-row personal">
+                        <div class="form-cell left-cell">
+                            <label for="country">Country</label>
+                            <input id="country" type="text" class="form-control" name="country" placeholder="Country" required />
+                        </div>
+                        <div class="form-cell">
+                            <label for="telephone">Telephone</label>
+                            <input id="telephone" type="phone" class="form-control" name="telephone" placeholder="Telephone" required />
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="checkoutEmail">Email</label>
@@ -68,7 +74,7 @@ const personalData = `<div class="form-group">
                     </div>
 `;
 
-const monthOption = `<select class="form-control name="expiryMonth" id="expiryMonth" required>
+const monthOption = `<select class="form-control" name="expiryMonth" id="expiryMonth" required>
         <option>Month</option>
         <option value="01">Jan (01)</option>
         <option value="02">Feb (02)</option>
@@ -109,17 +115,16 @@ const creditCardData = `<div class="form-group">
                         <label for="cardNumber">Card Number</label>
                         <input id="cardNumber" type="text" class="form-control" name="cardNumber" placeholder="Card number" data-luhn="luhn" required />
                     </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="expiryMonth">Expiration Date</label>
-                        <div class="row">
-                            ${monthOption}
-                            ${yearOption}
+                    <div class="form-group form-row">
+                        <div class="form-cell left-cell">
+                            <label class="control-label" for="expiryMonth">Expiration Date</label>
+                            <div class="form-inline">
+                                ${monthOption}${yearOption}
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label" for="cVV">Card CVV</label>
-                        <input type="text" class="form-control" name="cVV" id="cVV" placeholder="Security code" pattern="\\d{3,3}" required />
+                        <div class="form-cell">
+                            <label class="control-label" for="cVV">Security Code</label>
+                            <input type="text" class="form-control" name="cVV" id="cVV" placeholder="Security code" pattern="\\d{3,3}" required />
+                        </div>
                     </div>
 `;
