@@ -121,11 +121,8 @@ export class RenderResource extends RenderService {
     }
 
     renderCheckout(shop: CardShop) {
-        // TODO?
-        // Needs to be checked dynamically and not only on start if rendered here
-        // document.getElementById("checkoutHeader").insertAdjacentHTML("afterend", `${accordionTemplate(formTemplate)}`);
-        // shop.BHandler.cancelCheckout();
-        // shop.BHandler.confirmCheckout(shop);
+        // Nothing to render
+        // All content is in the checkoutTemplate
     }
 
     renderError(shop: CardShop) {
