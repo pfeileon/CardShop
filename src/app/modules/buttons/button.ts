@@ -1,6 +1,5 @@
 import { Callback } from "../types/types";
 import { ButtonHandler } from "./buttonHandler";
-import * as Utils from "../misc/utilities";
 
 "use strict";
 

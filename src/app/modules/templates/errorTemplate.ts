@@ -1,3 +1,3 @@
 export const errorTemplate = (rService): string => {
-    return ``
+    return `Sorry...`
 }

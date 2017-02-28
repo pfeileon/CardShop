@@ -1,15 +1,14 @@
 import { Shopable } from "../types/types";
-import { PseudoSingleton } from '../spa/pseudoSingleton'
-import * as Utils from '../misc/utilities'
+import { PseudoSingleton } from '../spa/pseudoSingleton';
 import { StorageService } from '../services/storage/storageService';
-import { Customer } from './customer'
+import { Customer } from './customer';
 
 'use strict';
 
 export class ShoppingCart extends PseudoSingleton {
 
     //Properties
-    private static namePS: string;
+    private static namePS = "ShoppingCart";
     private static exists: boolean = false;
     private static pseudoSingletonArg: { exists: boolean, message: string } = {
         exists: ShoppingCart.exists,

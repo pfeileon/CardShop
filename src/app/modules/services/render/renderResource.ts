@@ -40,6 +40,7 @@ export class RenderResource extends RenderService {
         let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
 
         this.rDetail.renderItems(shop.Cart.Items);
+        
         const hashValue = Utils.getHashValue();
 
         let cardSet: string;

@@ -74,7 +74,7 @@ export class RenderDetail {
     }
 
     /** Inserts a carousel of the cards of a fetch call */
-    renderCards(fResource: FetchResource, setName: string, filters: {}) {
+    renderCards(fResource: FetchResource, setName: string, filters: {}): void {
         if (this.lastSetName === setName && setName !== undefined) {
             this.renderCarousel(this.filterCards(this.lastCardData));
         }
@@ -90,7 +90,7 @@ export class RenderDetail {
                     }
                     this.renderCarousel(this.filterCards(cardData));
                 })
-            window.addEventListener("resize", (e) => {
+            addEventListener("resize", (e) => {
                 this.renderCarousel(this.filterCards(this.lastCardData));
             });
         }
@@ -105,24 +105,28 @@ export class RenderDetail {
         // First remove all shown packs
         document.getElementById("startMain").innerText = "";
         for (let item of items) {
-            let packLink: string;
+            let pack = {};
             switch (item["setName"]) {
                 case "Classic":
-                    packLink = "http://www.hearthcards.net/packs/images/pack.png";
+                    pack["link"] = "http://www.hearthcards.net/packs/images/pack.png";
+                    pack["alt"] = item["setName"];
                     break;
                 case "The Grand Tournament":
-                    packLink = "http://www.hearthcards.net/packs/images/packtgt.png";
+                    pack["link"] = "http://www.hearthcards.net/packs/images/packtgt.png";
+                    pack["alt"] = item["setName"];
                     break;
                 case "Whispers of the Old Gods":
-                    packLink = "http://www.hearthcards.net/packs/images/packwotog.png";
+                    pack["link"] = "http://www.hearthcards.net/packs/images/packwotog.png";
+                    pack["alt"] = item["setName"];
                     break;
                 case "Mean Streets of Gadgetzan":
-                    packLink = "http://www.hearthcards.net/packs/images/packmsog.png";
+                    pack["link"] = "http://www.hearthcards.net/packs/images/packmsog.png";
+                    pack["alt"] = item["setName"];
                     break;
                 default:
                     break;
             }
-            document.getElementById("startMain").insertAdjacentHTML("beforeend", `<img src="${packLink}" />`);
+            document.getElementById("startMain").insertAdjacentHTML("beforeend", `<img src="${pack["link"]}" alt="${pack["alt"]}" />`);
         }
     }
 
@@ -186,7 +190,7 @@ export class RenderDetail {
                 document.getElementById("carouselCardWrapper").insertAdjacentHTML("beforeend", `<div id="carouselItem${j}" class="item"></div>`);
             }
 
-            document.getElementById(`carouselItem${j}`).insertAdjacentHTML("beforeend", `<div id="carouselCardHelp${j}" class="text-center"</div>`);
+            document.getElementById(`carouselItem${j}`).insertAdjacentHTML("beforeend", `<div id="carouselCardHelp${j}" class="text-center"></div>`);
 
             // Render card image and its modal
             document.getElementById(`carouselCardHelp${j}`).insertAdjacentHTML("beforeend", `<img role="button" data-toggle="modal" data-target="#cardModal${i}" src="${card.img}" alt="${card.name}" />`);
@@ -201,7 +205,7 @@ export class RenderDetail {
     }
 
     /** Automatically generates a carousel's indicators */
-    genCarouselInd() {
+    genCarouselInd(): void {
         let carInd = document.getElementById("carouselInd");
 
         let carWrap = document.getElementById("carouselCardWrapper");
@@ -216,7 +220,7 @@ export class RenderDetail {
     }
 
     /** Hides the carousel's controls if there is only one slide */
-    hideCarouselControls(numberOfSlides: number) {
+    hideCarouselControls(numberOfSlides: number): void {
         if (numberOfSlides === 0) {
             for (let item of <any>document.getElementsByClassName("carousel-control")) {
                 item.classList.add("hide");

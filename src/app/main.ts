@@ -1,5 +1,4 @@
 import '../assets/styles/styles.scss';
-import { FetchService } from './modules/services/fetch/fetchService';
 import { FetchResource } from './modules/services/fetch/fetchResource';
 import { RenderDetail } from './modules/services/render/renderDetail';
 import { RenderResource } from './modules/services/render/renderResource';
@@ -8,8 +7,6 @@ import { ShoppingCart } from './modules/shop/shoppingCart';
 import { ShopButtonHandler } from './modules/buttons/shopButtonHandler';
 import { StorageService } from './modules/services/storage/storageService';
 import { CardShop } from './modules/shop/cardShop';
-
-import { testing } from './modules/misc/tests';
 
 'use strict';
 
@@ -30,7 +27,4 @@ document.addEventListener('DOMContentLoaded', (start) => {
 
     // Start Application
     shop.start();
-
-    //Testing
-    // testing();
 });

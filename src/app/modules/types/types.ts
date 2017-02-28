@@ -1,5 +1,9 @@
 'use strict';
 
+export interface Filters {
+    [filter: string]: Callback<HTMLElement, void>;
+}
+
 /**
  * Generic type for callback functions
  * @param {T} arg - generic argument
@@ -10,7 +14,7 @@ export interface Callback<T, TResult> {
 }
 
 export interface Record {
-    (a: string | string[]): string;
+    (arg: string | string[]): string;
 }
 
 export interface Shopable {
@@ -22,7 +26,6 @@ export interface Headers { }
 export interface Request { url: string, init?: Init }
 export interface Response { json(); }
 export interface Promise<T> { then; }
-
 export interface Init {
     headers: Headers;
     method: string;

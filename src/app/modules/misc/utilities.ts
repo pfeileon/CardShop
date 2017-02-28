@@ -5,9 +5,9 @@ declare const fetch;
 
 'use strict';
 
-/** Iterate an UL(HTMLCollection) and doStuff per LI */
-export function iterateUl(ul: any, doStuff: Callback<HTMLElement, void>): void {
-    for (let li of ul) {
+/** Iterate a List (HTMLCollection, mostly <ul> or <ol>) and doStuff per item */
+export function iterateList(list: any, doStuff: Callback<HTMLElement, void>): void {
+    for (let li of list) {
         doStuff(li);
     }
 }
@@ -15,7 +15,7 @@ export function iterateUl(ul: any, doStuff: Callback<HTMLElement, void>): void {
 /** Adds an encoded hash-value to the URL */
 export function createHash(filters: string): void {
     if (filters !== undefined) {
-        window.location.hash = encodeURI(`#${filters}`)
+        window.location.hash = encodeURI(`#${filters}`);
     }
     else {
         window.location.hash = '#';
@@ -24,13 +24,13 @@ export function createHash(filters: string): void {
 
 /** Returns the string after the hash */
 export function getHashValue(seperator: string = "#", pos: number = 1): string {
-    return decodeURI(window.location.hash).split(seperator)[pos]
+    return decodeURI(window.location.hash).split(seperator)[pos];
 }
 
 /** Fakes a hashchange in order to update the content */
-export function fakeHashchange(): void {
+export function fakeHashchange(value = "fake"): void {
     let hashValue: string = getHashValue();
-    createHash(hashValue + "fake");
+    createHash(hashValue + value);
     createHash(hashValue);
 }
 
@@ -60,7 +60,10 @@ export function luhnAlgorithm(value: string) {
     return (nCheck % 10) === 0;
 }
 
-/** Toggles the class value of a specified HTMLElement */
+/** Toggles the class value of a specified HTMLElement
+ * 
+ * @param { string } cssClass - Class to toggle (default is "no-display")
+*/
 export function toggleCssClass(id: string, cssClass: string = "no-display"): void {
     document.getElementById(id).classList.toggle(cssClass);
 }

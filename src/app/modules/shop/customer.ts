@@ -1,4 +1,3 @@
-import { luhnAlgorithm } from "../misc/utilities";
 import { CreditCard } from './creditCard';
 import { Shopable } from '../types/types';
 
