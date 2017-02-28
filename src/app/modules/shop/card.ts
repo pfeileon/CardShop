@@ -24,8 +24,8 @@ export class Card {
     private imgGold: string;
     // private locale: Locale;
     private locale: string;
-    mechanics: { name: string }[];
-    // privateplayerClass: CardClass;
+    private mechanics: { name: string }[];
+    // private playerClass: CardClass;
     private playerClass: string;
     // private rarity: Rarity;
     private rarity: string;

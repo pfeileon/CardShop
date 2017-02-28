@@ -1,10 +1,11 @@
+import { Record } from "../../types/types";
 import { FetchResource } from "../fetch/fetchResource";
 import { SinglePageApplication } from "../../spa/singlePageApplication";
-import { toggleCssClass } from "../../misc/utilities";
+import * as Utils from "../../misc/utilities";
 
 "use strict";
 
-const record = (item) => {
+const record: Record = (item) => {
     return `<li data-id="${item}">${item}</li>`;
 };
 
@@ -52,7 +53,7 @@ export abstract class RenderService {
                 statesShown[i] = !statesShown[i];
             }
             if (statesShown[i]) {
-                toggleCssClass(pages[i])
+                Utils.toggleCssClass(pages[i]);
             }
         }
         this.renderState(state, spApp);
@@ -79,8 +80,14 @@ export abstract class RenderService {
         }
     }
 
-    /** Inserts an <ul> with the passed array as <li>-elements */
-    insertList(list: any[], Record: any = record): string {
+    /** Inserts an <ul>/<ol> with the passed array as <li>-elements
+     * 
+     * @param { number } type - 1(<ul>) is default, 2 generates an <ol>
+    */
+    insertList(list: any[], Record: any = record, type = 1): string {
+        if (type === 2) {
+            return `<ol>${list.map(item => Record(item)).join('')}</ol>`;
+        }
         return `<ul>${list.map(item => Record(item)).join('')}</ul>`;
     }
 

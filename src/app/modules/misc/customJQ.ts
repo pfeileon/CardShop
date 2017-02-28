@@ -1,5 +1,7 @@
 import { luhnAlgorithm } from "./utilities";
 
+// If absolutely necessary, here is the place to use jQuery
+
 "use strict";
 
 declare var $;

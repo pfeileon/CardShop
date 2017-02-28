@@ -5,21 +5,11 @@ import { config } from '../../config/config';
 import * as Utils from '../../misc/utilities';
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/fetchResource";
-import { cardModal } from "../../templates/modals";
+import { cardModal } from "../../templates/modalTemplate";
+import { formTemplate } from "../../templates/formTemplate";
+import { accordionTemplate } from "../../templates/accordionTemplate";
 
 'use strict';
-
-const deleteRecord = (item) => {
-    return `<li role="button" id="${item.replace(/ /gi, "-")}-del-btn" data-id="${item}-del-btn" class="cart-del-btn btn btn-warning">delete</li>`;
-}
-
-const inputPackRecord = (item) => {
-    return `<li data-id="${item}"><div class="input-pack btn btn-primary">${item}</div></li>`;
-};
-
-const inputAmountRecord = (item) => {
-    return `<li data-id="${item}"><input class="input-amount btn btn-default" type="number" name ="amount" value="${item}" min="1" max="100" pattern="[0-9]" /></li>`
-}
 
 export class RenderResource extends RenderService {
 
@@ -33,10 +23,8 @@ export class RenderResource extends RenderService {
         "checkout": this.renderCheckout.bind(this),
         "error": this.renderError.bind(this)
     }
-    
+
     // -- OWN
-    private lastSetName: string;
-    private lastCardData: any;
     private rDetail: RenderDetail;
 
     // CONSTRUCTOR
@@ -47,14 +35,12 @@ export class RenderResource extends RenderService {
 
     // METHODS
 
-    /**
-     * Adds dynamically generated content to the startPageData
-     * 
-     * and returns the card set heading as string */
+    /** Adds dynamically generated content to the startPageData */
     renderStart(shop: CardShop) {
         let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
 
-        this.rDetail.showItems(shop.Cart.Items);
+        this.rDetail.renderItems(shop.Cart.Items);
+        
         const hashValue = Utils.getHashValue();
 
         let cardSet: string;
@@ -66,118 +52,78 @@ export class RenderResource extends RenderService {
         }
         shownCardSetHeader[0].textContent = cardSet;
 
-        this.rDetail.refreshButtons(Object.keys(shop.StatePage)[0]);
+        this.rDetail.refreshFilters("start");
     }
 
-    /** Adds dynamically generated content to the PreviewPage
-     * 
-     * and returns the card set heading as string */
+    /** Adds dynamically generated content to the PreviewPage */
     renderPreview(shop: CardShop) {
-        let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
+        let shownCardSetHeader = document.querySelector("#previewSetSelection .card-set-name");
         const filters: {} = Utils.getFilters();
 
+        this.checkHeroFilter(filters);
+
+        const setName: string = filters["cardSet"];
+
+        this.rDetail.renderCards(this.fResource, setName, filters);
+
+        shownCardSetHeader.textContent = this.setPreviewHeading(filters);
+
+        this.rDetail.refreshFilters("preview");
+    }
+
+    setPreviewHeading(filters: {}): string {
+        let cardSet: string;
+        // Set Heading
+        if (filters["cardSet"] !== undefined && (<any>config.data.startPageData.cardSets).includes(filters["cardSet"])) {
+            return cardSet = filters["cardSet"];
+        }
+        else if (filters["cardSet"] !== undefined) {
+            Utils.createHash(`preview/{"cardSet":"Classic"}`);
+            return cardSet = "Classic";
+        }
+        else {
+            return cardSet = "none chosen";
+        }
+    }
+
+    checkHeroFilter(filters: {}) {
         if (filters["hero"] !== undefined && !(<any>config.data.previewPageData.heroes).includes(filters["hero"])) {
             alert("Invalid Hero! Showing Druid instead");
 
             Utils.createHash(`preview/{"cardSet":"${config.data.previewPageData.cardSetName}","hero":"Druid"}`);
         }
-
-        const setName: string = filters["cardSet"];
-
-        if (this.lastSetName === setName && setName !== undefined) {
-            this.rDetail.showCards(this.lastCardData);
-        }
-        else {
-            this.fResource.getCardData(filters)
-                .then(cardData => {
-                    if (setName !== undefined) {
-                        this.lastSetName = setName;
-
-                        if (cardData !== undefined) {
-                            this.lastCardData = cardData;
-                        }
-                    }
-                    this.rDetail.showCards(cardData);
-                })
-        }
-
-        let cardSet: string;
-        // Set Heading
-        if (filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
-            cardSet = filters["cardSet"];
-        }
-        else if (filters["cardSet"] !== undefined) {
-            Utils.createHash(`preview/{"cardSet":"Classic"}`);
-            cardSet = "Classic";
-        }
-        else {
-            cardSet = "none chosen";
-        }
-        shownCardSetHeader[1].textContent = cardSet;
-
-        this.rDetail.refreshButtons(<any>Object.keys(shop.StatePage)[1]);
     }
 
     renderCart(shop: CardShop): void {
-        if (localStorage.getItem("cart") !== null || undefined) {
+        let classList = document.getElementById("checkout-btn").classList;
+        let cartContent = document.getElementById("cart-content");
 
-            if (!document.getElementById("checkout-btn").classList.contains("btn-success")) {
-                document.getElementById("checkout-btn").classList.toggle("btn-success");
+        if (localStorage.getItem("cart") !== (null && undefined)) {
+            cartContent.innerHTML = `
+                <table id="cartContentTable" class="table">
+                </table>
+            `;
+
+            if (!classList.contains("btn-success")) {
+                classList.add("btn-success");
             }
 
-            let temp: {} = JSON.parse(localStorage.getItem("cart"));
-            let help: string[][] = [Object.keys(temp), (<any>Object).values(temp)];
-
-            let deleteList: string[] = [];
-            for (let i = 0; i < help[0].length; i++) {
-                deleteList.push(help[0][i]);
-            }
-
-            document.getElementById("cart-content-packs").innerHTML = `${this.insertList((<any>Array).from(help[0]), inputPackRecord)}`;
-            document.getElementById("cart-content-amount").innerHTML = `${this.insertList((<any>Array).from(help[1]), inputAmountRecord)}`;
-            document.getElementById("cart-content-delete").innerHTML = `${this.insertList(deleteList, deleteRecord)}`;
-
-            shop.BHandler.deleteCartPosition(shop);
-
-            let inputPackHelper: HTMLCollectionOf<Element> = document.getElementsByClassName("input-pack btn")
-            let j = 0;
-            for (let item of <any>inputPackHelper) {
-                item.id = `${item.classList[0]}-${j}`;
-                shop.BHandler.previewCardSet(item.id);
-                j++;
-            }
-
-            let inputAmountHelper: HTMLCollectionOf<Element> = document.getElementsByClassName("input-amount btn");
-            let i = 0;
-            for (let item of <any>inputAmountHelper) {
-                item.id = `cart-input-amount-${i}`;
-                item.addEventListener("input", (e) => {
-                    let amountOfPacks: number;
-                    amountOfPacks = +(<HTMLInputElement>item).value;
-                    let cartStorage = JSON.parse(localStorage.getItem("cart"));
-
-                    let prop = Object.keys(cartStorage);
-                    cartStorage[prop[+(item.id.substring(18))]] = amountOfPacks;
-
-                    localStorage.setItem("cart", JSON.stringify(cartStorage));
-
-                    Utils.createHash("cart/" + localStorage.getItem("cart"));
-                });
-                i++;
-            }
+            let cartObject = JSON.parse(localStorage.getItem("cart"));
+            this.rDetail.renderCartTable(shop, cartObject);
         }
         else {
-            if (document.getElementById("checkout-btn").classList.contains("btn-success")) {
-                document.getElementById("checkout-btn").classList.toggle("btn-success");
+            if (classList.contains("btn-success")) {
+                classList.remove("btn-success");
             }
-            document.getElementById("cart-content-packs").innerHTML = `<div class="well">Your cart is empty!</div>`;
-            document.getElementById("cart-content-amount").innerHTML = "";
-            document.getElementById("cart-content-delete").innerHTML = "";
+            cartContent.innerHTML = `
+                <div class="well">Your cart is empty!</div>
+            `;
         }
     }
 
     renderCheckout(shop: CardShop) {
-        // TODO ?
+        // Nothing to render
+        // All content is in the checkoutTemplate
     }
 
     renderError(shop: CardShop) {

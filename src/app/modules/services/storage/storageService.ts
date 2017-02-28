@@ -7,20 +7,22 @@ import { CardPack } from "../../shop/cardPack";
 export class StorageService {
     // METHODS
     cartItemsToObject = (items: Shopable[]): {} => {
-        return items.reduce((itemMap: any, item: Shopable) => {
-            itemMap[item.Key] = ++itemMap[item.Key] || 1;
-            return itemMap;
-        }, {});
+        return items.reduce(
+            (itemMap: {}, item: Shopable) => {
+                itemMap[item.Key] = ++itemMap[item.Key] || 1;
+                return itemMap;
+            }, {});
     }
 
     storageCartItemsToArray = (): Shopable[] => {
         let items: Shopable[] = [];
         if (localStorage.getItem("cart") !== null || undefined) {
-            let temp: {} = JSON.parse(localStorage.getItem("cart"));
-            let help: string[][] = [Object.keys(temp), (<any>Object).values(temp)];
-            for (let i = 0; i < help[0].length; i++) {
-                for (let j = 0; j < +help[1][i]; j++) {
-                    items.push(new CardPack(help[0][i]));
+            let cartObject: {} = JSON.parse(localStorage.getItem("cart"));
+
+            let cartArray: string[][] = [Object.keys(cartObject), (<any>Object).values(cartObject)];
+            for (let i = 0; i < cartArray[0].length; i++) {
+                for (let j = 0; j < +cartArray[1][i]; j++) {
+                    items.push(new CardPack(cartArray[0][i]));
                 }
             }
         }

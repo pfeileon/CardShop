@@ -1,6 +1,5 @@
 import { PseudoSingleton } from './pseudoSingleton'
 import { config } from '../config/config';
-import * as Utils from '../misc/utilities';
 import { FetchResource } from '../services/fetch/fetchResource';
 import { TemplateHandler } from '../templates/templateHandler';
 import { RenderService } from '../services/render/renderService';
@@ -14,7 +13,7 @@ export abstract class SinglePageApplication extends PseudoSingleton {
     // PROPERTIES
 
     // - STATIC
-    private static namePS: string;
+    private static namePS = "SPA";
     private static exists: boolean = false;
     private static ctorArg: { exists: boolean, message: string } = {
         exists: SinglePageApplication.exists,
@@ -24,7 +23,7 @@ export abstract class SinglePageApplication extends PseudoSingleton {
     // - OWN
     protected readonly statePage = config.statePage;
     public get StatePage() { return this.statePage; }
-    
+
     protected content: any;
     protected fResource: FetchResource;
     protected tHandler: TemplateHandler;
@@ -56,15 +55,15 @@ export abstract class SinglePageApplication extends PseudoSingleton {
         this.bHandler.initButtons(this);
 
         // User input is processed
-        window.addEventListener("hashchange", (e) => {
+        window.addEventListener("hashchange", (render) => {
             this.rService.render(this);
         });
 
         // Enable browser-history
         history.replaceState(this.content, "CardShop");
-    };
+    }
 
     // - ABSTRACT
     /** Implements a call of all methods needed at start-up for the specific implementation of SinglePageApplication  */
-    abstract loadSpecifics = (): void => { }
+    abstract loadSpecifics(): void;
 }

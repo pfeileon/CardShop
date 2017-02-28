@@ -14,7 +14,9 @@ export const startTemplate = (rService: RenderService, data: { startPageData }) 
 
     <section class="cardSet-filter">
         <h2>Select the Card Set:
-            <span class="card-set-name">${data["previewPageData"][Object.keys(data["previewPageData"])[0]]}</span>
+            <span class="card-set-name">
+                ${data["previewPageData"][Object.keys(data["previewPageData"])[0]]}
+            </span>
         </h2>
 
         <div class="btn-group-justified" role="group" aria-label="CardSets">

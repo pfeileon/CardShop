@@ -6,16 +6,18 @@ import { FetchResource } from '../services/fetch/fetchResource';
 
 /** Five Cards, randomly selected from a specific CardSet */
 export class CardPack implements Shopable {
-    // Properties
+    // PROPERTIES
     private setName: string;
     private cardPack: Card[];
     public get Key() { return this.setName; }
-    // Constructor
+
+    // CONSTRUCTOR
     /** Creates an instance of a CardPack of a specific CardSet */
     constructor(setName: string) {
         this.setName = setName;
     }
-    // Methods
+    
+    // METHODS
     /** Opens a purchased CardPack: Assign Cards to its Card[] */
     private openCardPack(fResource: FetchResource): void {
         fResource.getCardSet(this.setName + "?collectible=1")
