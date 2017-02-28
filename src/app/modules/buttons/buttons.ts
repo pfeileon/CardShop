@@ -1,42 +1,13 @@
 import { Button } from "./button";
-import { ShopButtonHandler } from "./shopButtonHandler";
+import { ShopButton } from "./shopButton";
 import { config } from "../config/config";
-import { Callback } from "../types/types";
 import * as Utils from "../misc/utilities";
-import { CardShop } from "../shop/cardShop";
 import { CardPack } from "../shop/cardPack";
 import { Customer } from "../shop/customer";
 import { CreditCard } from "../shop/creditCard";
-import { RenderService } from "../services/render/renderService";
-import { checkoutModal } from "../templates/modals";
+import { checkoutModal } from "../templates/modalTemplate";
 
 "use strict";
-
-abstract class ShopButton extends Button {
-    // PROPERTIES
-    protected shop: CardShop;
-    // CONSTRUCTOR
-    constructor(id: string, bHandler: ShopButtonHandler, shop?: CardShop) {
-        super(id, bHandler);
-        this.shop = shop;
-    }
-    
-    resetBtnClassList(element: HTMLElement, e: MouseEvent) {        
-        let isPrimary = false;
-        if (e.srcElement.classList.contains("btn-primary")) {
-            isPrimary = true;
-        }
-
-        if (Utils.isStartPage() || isPrimary) {
-            e.srcElement.classList.remove("btn-default");
-            e.srcElement.classList.add("btn-primary");
-        }
-        else if (!isPrimary) {
-            e.srcElement.classList.add("btn-default");
-            e.srcElement.classList.remove("btn-primary");
-        }
-    }
-}
 
 export class BuyButton extends Button {
     click = (): void => {
@@ -84,7 +55,6 @@ export class ConfirmButton extends ShopButton {
                     document.getElementById("checkoutFooter").insertAdjacentHTML("afterbegin", checkoutModal(this.shop.Customer));
                     this.shop.BHandler.buy();
                 }
-                console.log(this.shop.Customer);
             });
         }
     }
@@ -115,20 +85,35 @@ export class ClearButton extends ShopButton {
 
 export class DeleteButton extends ShopButton {
     click = (): void => {
-        for (let item of <any>document.getElementsByClassName(this.id)) {
-            item.addEventListener("click", (e) => {
-                let items = JSON.parse(localStorage.getItem("cart"));
-                if (Object.keys(items).length === 1) {
-                    localStorage.removeItem("cart");
-                    this.shop.Cart.Items = [];
-                }
-                else {
-                    delete items[`${(item.id.split("-del")[0]).replace(/-/gi, " ")}`];
-                    localStorage.setItem("cart", JSON.stringify(items));
-                }
-                Utils.createHash("cart/" + localStorage.getItem("cart"));
-            });
-        }
+        document.getElementById(this.id).addEventListener("click", (del: MouseEvent) => {
+            let items = JSON.parse(localStorage.getItem("cart"));
+            if (Object.keys(items).length === 1) {
+                localStorage.removeItem("cart");
+                this.shop.Cart.Items = [];
+            }
+            else {
+                delete items[`${((<any>del.target).id.split("-del")[0]).replace(/-/gi, " ")}`];
+                localStorage.setItem("cart", JSON.stringify(items));
+            }
+            Utils.createHash("cart/" + localStorage.getItem("cart"));
+        });
+    }
+}
+
+export class EditButton extends Button {
+    click = (): void => {
+        document.getElementById(this.id).addEventListener("input", (e) => {
+            let amount: number;
+            amount = +(<HTMLInputElement>e.target).value;
+            let cartStorage = JSON.parse(localStorage.getItem("cart"));
+
+            let prop = Object.keys(cartStorage);
+            cartStorage[prop[+((<any>e.target).id.substring(13))]] = amount;
+
+            localStorage.setItem("cart", JSON.stringify(cartStorage));
+
+            Utils.createHash("cart/" + localStorage.getItem("cart"));
+        });
     }
 }
 
@@ -154,14 +139,14 @@ export class PreviewButton extends Button {
             const hashValue: string = Utils.getHashValue();
             let cardSetName: string;
 
-            if (hashValue == undefined || "") {
+            if (hashValue === undefined || "" || null) {
                 cardSetName = "Classic";
                 Utils.createHash("Classic");
             }
-            else if (hashValue.indexOf("cart/") !== -1) {
+            else if ((<any>hashValue).includes("cart/")) {
                 cardSetName = document.getElementById(this.id).innerText;
             }
-            else if (config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
+            else if ((<any>config.data.startPageData.cardSets).includes(hashValue)) {
                 cardSetName = hashValue;
             }
             else {
@@ -181,39 +166,38 @@ export class AddToCartButton extends ShopButton {
         for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
             item.addEventListener("click", (e) => {
                 let setName: string;
-                const hashValue: string = Utils.getHashValue();
                 const filters: {} = Utils.getFilters();
-                
+                // Cast to <any> to make ".includes()" work
+                const hashValue = <any>Utils.getHashValue();
+                const cardSets = <any>config.data.startPageData.cardSets;
+
                 if (hashValue !== undefined || "" || null) {
-
-                    if ((<any>hashValue).includes("/") && filters["cardSet"] !== undefined && config.data.startPageData.cardSets.indexOf(filters["cardSet"]) !== -1) {
+                    if (hashValue.includes("/") && filters["cardSet"] !== undefined && cardSets.includes(filters["cardSet"])) {
                         setName = filters["cardSet"];
-
                     }
-                    else if ((<any>hashValue).includes("/") && config.data.startPageData.cardSets.indexOf(hashValue) !== -1) {
+                    else if (!hashValue.includes("/") && cardSets.includes(hashValue)) {
                         setName = hashValue;
                     }
                     else {
-                        alert("Please choose a Card Set first!");
-                        return;
+                        setName = "Classic";
                     }
                 }
                 else {
-                    alert("Please choose a Card Set first!");
-                    return;
+                    setName = "Classic";
                 }
 
-                const pack: CardPack = new CardPack(setName || "Classic");
+                const pack: CardPack = new CardPack(setName);
 
                 let amountOfPacks: number;
-                if ((<any>hashValue).includes("/")) {
-                    amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[0]).value;
+                const inputElements = document.getElementsByClassName("input-amount");
+                if (hashValue.includes("/")) {
+                    amountOfPacks = +(<HTMLInputElement>inputElements[0]).value;
                 }
                 else {
-                    amountOfPacks = +(<HTMLInputElement>document.getElementsByClassName("input-amount")[1]).value;
+                    amountOfPacks = +(<HTMLInputElement>inputElements[1]).value;
                 }
 
-                Utils.fakeHashchange();
+                Utils.fakeHashchange("item_added");
 
                 this.shop.Cart.fillCart(pack, amountOfPacks);
             });
@@ -236,11 +220,11 @@ export class GotoCartButton extends ShopButton {
 export class SetCardSetButton extends ShopButton {
     click = (cardSet: HTMLElement): void => {
         cardSet.addEventListener("click", (e: MouseEvent): void => {
-            const cardSetName: string = e.srcElement.attributes[0].value;
+            const cardSetName: string = (<any>e.target).attributes[0].value;
             config.data.previewPageData.cardSetName = cardSetName;
 
             this.resetBtnClassList(cardSet, e);
-            
+
             if (Utils.getHashValue() !== undefined && (<any>Utils.getHashValue()).includes("/")) {
                 let filter = Utils.getFilters();
                 if (filter["cardSet"] !== undefined && filter["cardSet"] === cardSetName && filter["hero"] !== undefined) {
@@ -262,7 +246,7 @@ export class SetCardSetButton extends ShopButton {
 export class SetHeroButton extends ShopButton {
     click = (hero: HTMLElement) => {
         hero.addEventListener("click", (e: MouseEvent): void => {
-            const heroValue: string = e.srcElement.attributes[0].value;
+            const heroValue: string = (<any>e.target).attributes[0].value;
 
             this.resetBtnClassList(hero, e);
 
@@ -282,10 +266,10 @@ export class SetHeroButton extends ShopButton {
 export class SetManaCostButton extends ShopButton {
     click = (manaCost: HTMLElement): void => {
         manaCost.addEventListener("click", (e: MouseEvent): void => {
-            if (e.srcElement.attributes[0] === undefined) {
+            if ((<any>e.target).attributes[0] === undefined) {
                 return;
             }
-            const manaCostValue: string = e.srcElement.attributes[0].value;
+            const manaCostValue: string = (<any>e.target).attributes[0].value;
 
             this.resetBtnClassList(manaCost, e);
 
@@ -301,4 +285,3 @@ export class SetManaCostButton extends ShopButton {
         });
     }
 }
-

@@ -8,10 +8,8 @@ import { validate } from "../misc/customJQ";
 
 export const checkoutTemplate = (rService: RenderService) => {
     return `<article class="container">
-        <h1 class="well">Checkout</h1>
-        
+        <h1 id="checkoutHeader" class="well">Checkout</h1>      
         ${accordionTemplate(formTemplate)}
-
 <footer id="checkoutFooter">
     <!-- Modal -->
 </footer>

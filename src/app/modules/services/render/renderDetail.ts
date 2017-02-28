@@ -1,51 +1,63 @@
-import { Shopable } from "../../types/types";
+import { Record, Shopable } from "../../types/types";
 import { config } from '../../config/config';
 import { RenderService } from "./renderService";
 import * as Utils from '../../misc/utilities';
-import { cardModal } from "../../templates/modals";
+import { cardModal } from "../../templates/modalTemplate";
+import { CardShop } from "../../shop/cardShop";
+import { FetchResource } from "../fetch/FetchResource";
 
 "use strict";
 
+const deleteRecord: Record = (item) => {
+    return `<button id="${(<any>item).replace(/ /gi, "-")}-del-btn" data-id="${item}-del-btn" class="cart-del-btn btn btn-warning">delete</button`;
+}
+
+const inputPackRecord: Record = (item) => {
+    return `<button data-id="${item}" class="input-pack btn btn-primary">${item}</button>`;
+};
+
+const inputAmountRecord: Record = (item) => {
+    return `<input data-id="${item}" class="input-amount btn btn-default" type="number" name ="amount" value="${item}" min="1" max="100" pattern="[0-9]" />`
+}
+
 export class RenderDetail {
-    /** Inserts the images of the cards of a fetch call */
-    showCards(cardData: any): void {
+    // PROPERTIES
 
-        let manaFilter: string = Utils.getFilters()["manaCost"];
-        let heroFilter: string = Utils.getFilters()["hero"];
+    private lastSetName: string;
+    private lastCardData: any;
 
-        let card: any;
-        let cardFilterPassed: boolean;
-        let heroFilterPassed: boolean;
-        let manaFilterPassed: boolean;
-        let setFilterPassed: boolean;
-        let i: number = 0;
+    // METHODS
+
+    filterCards(cardData: any): {} {
 
         // First remove old code
         document.getElementById("carouselCardWrapper").innerText = "";
         document.getElementById("carouselInd").innerText = "";
         document.getElementById("previewFooter").innerText = "";
 
-        // Iterate the list of cards
-        for (card of cardData) {
+        let filteredCardData = {};
 
-            cardFilterPassed = (
+        let i = 0;
+        for (let card of cardData) {
+
+            let cardFilterPassed = (
                 card.collectible &&
                 card.img !== undefined
             )
 
-            setFilterPassed = (
-                config.data.startPageData.cardSets.indexOf(card.cardSet) !== -1
-            );
+            let setFilterPassed = (<any>config.data.startPageData.cardSets).includes(card.cardSet);
 
             if (cardFilterPassed && setFilterPassed) {
 
-                heroFilterPassed = (
+                let heroFilter: string = Utils.getFilters()["hero"];
+                let heroFilterPassed = (
                     heroFilter === undefined || (
                         heroFilter !== undefined &&
                         card.playerClass === heroFilter
                     ))
 
-                manaFilterPassed = (
+                let manaFilter: string = Utils.getFilters()["manaCost"];
+                let manaFilterPassed = (
                     manaFilter === undefined || (
                         manaFilter !== undefined && (
                             (card.cost == manaFilter && manaFilter <= "9") ||
@@ -53,15 +65,35 @@ export class RenderDetail {
                         )))
 
                 if (heroFilterPassed && manaFilterPassed) {
-                    //Testing carousel
-                    this.renderCarousel(card, i);
-
+                    filteredCardData[i] = card;
                     i++;
                 }
             }
         }
-        // auto-generate bootstrap carousel indicators
-        this.genCarouselInd();
+        return filteredCardData;
+    }
+
+    /** Inserts a carousel of the cards of a fetch call */
+    renderCards(fResource: FetchResource, setName: string, filters: {}): void {
+        if (this.lastSetName === setName && setName !== undefined) {
+            this.renderCarousel(this.filterCards(this.lastCardData));
+        }
+        else {
+            fResource.getCardData(filters)
+                .then(cardData => {
+                    if (setName !== undefined) {
+                        this.lastSetName = setName;
+
+                        if (cardData !== undefined) {
+                            this.lastCardData = cardData;
+                        }
+                    }
+                    this.renderCarousel(this.filterCards(cardData));
+                })
+            addEventListener("resize", (e) => {
+                this.renderCarousel(this.filterCards(this.lastCardData));
+            });
+        }
     }
 
     /**
@@ -69,87 +101,111 @@ export class RenderDetail {
      * 
      * @param {CardPack} pack - The CardPack to be displayed
     */
-    showItems(items: Shopable[]): void {
+    renderItems(items: Shopable[]): void {
         // First remove all shown packs
         document.getElementById("startMain").innerText = "";
         for (let item of items) {
-            let packLink: string;
+            let pack = {};
             switch (item["setName"]) {
                 case "Classic":
-                    packLink = "http://www.hearthcards.net/packs/images/pack.png";
+                    pack["link"] = "http://www.hearthcards.net/packs/images/pack.png";
+                    pack["alt"] = item["setName"];
                     break;
                 case "The Grand Tournament":
-                    packLink = "http://www.hearthcards.net/packs/images/packtgt.png";
+                    pack["link"] = "http://www.hearthcards.net/packs/images/packtgt.png";
+                    pack["alt"] = item["setName"];
                     break;
                 case "Whispers of the Old Gods":
-                    packLink = "http://www.hearthcards.net/packs/images/packwotog.png";
+                    pack["link"] = "http://www.hearthcards.net/packs/images/packwotog.png";
+                    pack["alt"] = item["setName"];
                     break;
                 case "Mean Streets of Gadgetzan":
-                    packLink = "http://www.hearthcards.net/packs/images/packmsog.png";
+                    pack["link"] = "http://www.hearthcards.net/packs/images/packmsog.png";
+                    pack["alt"] = item["setName"];
                     break;
                 default:
                     break;
             }
-            document.getElementById("startMain").insertAdjacentHTML("beforeend", `<img src="${packLink}" />`);
+            document.getElementById("startMain").insertAdjacentHTML("beforeend", `<img src="${pack["link"]}" alt="${pack["alt"]}" />`);
         }
     }
 
-    refreshButtons(state: string) {
-        let temp = document.getElementsByClassName("btn-group-justified");
-        let btnList: HTMLCollection;
-        let i: number;
+    /** Renders the items in the cart as editable table
+     * 
+     * EventHandlers are added here (not on start) otherwise they get lost on re-rendering
+    */
+    renderCartTable(shop: CardShop, cartObject: {}) {
+        for (let item in cartObject) {
+            let cartTable = <HTMLTableElement>document.getElementById("cartContentTable");
+            let cartTableRow = cartTable.insertRow();
 
-        if (state === "start") {
-            i = 0;
-        }
-        else if (state === "preview") {
-            i = 1;
+            let cartTableCell = cartTableRow.insertCell();
+            cartTableCell.innerHTML = inputPackRecord(item);
+            cartTableCell.children[0].id = `input-pack-${Object.keys(cartObject).indexOf(item)}`;
+            shop.BHandler.toPreview(cartTableCell.children[0].id);
 
-            btnList = temp[i + 1].children[0].children;
-            this.refreshButtonsHelpFunction(btnList, Utils.getHeroFilter());
-            btnList = temp[i + 2].children[0].children;
-            this.refreshButtonsHelpFunction(btnList, Utils.getManaFilter());
+            cartTableCell = cartTableRow.insertCell();
+            cartTableCell.innerHTML = inputAmountRecord(cartObject[item]);
+            cartTableCell.children[0].id = `input-amount-${Object.keys(cartObject).indexOf(item)}`;
+            shop.BHandler.editCartPosition(cartTableCell.children[0].id);
+
+            cartTableCell = cartTableRow.insertCell();
+            cartTableCell.innerHTML = deleteRecord(item);
+            shop.BHandler.deleteCartPosition(shop, cartTableCell.children[0].id);
         }
-        
-        btnList = temp[i].children[0].children;
-        this.refreshButtonsHelpFunction(btnList, Utils.getCardSetFilter());
     }
 
-    refreshButtonsHelpFunction(btnList: HTMLCollection, filter: string) {
-        for (let item of <any>btnList) {
-            if (item.attributes["data-id"].value === filter) {
-                item.children[0].classList.remove("btn-default");
-                item.children[0].classList.add("btn-primary");
+    refreshFilters(state: string) {
+        let btnList = document.querySelector(`#${state}-page .cardSet-filter .btn-group-justified`).children[0].children;
+        this.refreshButtons(btnList, Utils.getCardSetFilter());
+        if (state === "preview") {
+            btnList = document.querySelector("#hero-filter .btn-group-justified").children[0].children;
+            this.refreshButtons(btnList, Utils.getHeroFilter());
+            btnList = document.querySelector("#mana-filter .btn-group-justified").children[0].children;
+            this.refreshButtons(btnList, Utils.getManaFilter());
+        }
+    }
+
+    refreshButtons(btnList: HTMLCollection, filter: string) {
+        for (let btn of <any>btnList) {
+            if (btn.attributes["data-id"].value === filter) {
+                btn.classList.remove("btn-default");
+                btn.classList.add("btn-primary");
             }
             else {
-                item.children[0].classList.add("btn-default");
-                item.children[0].classList.remove("btn-primary");
+                btn.classList.add("btn-default");
+                btn.classList.remove("btn-primary");
             }
         }
     }
 
-    renderCarousel(card, i: number) {
-        let numberOfImagesPerSlide = this.determineNumberOfImagesPerSlide();
-        let j = Math.floor(i / numberOfImagesPerSlide);
+    renderCarousel(filteredCardData: {}) {
+        for (let item in filteredCardData) {
+            let i = +item;
+            let card = filteredCardData[item];
+            let itemsPerSlide = this.determineItemsPerSlide();
+            let j = Math.floor(i / itemsPerSlide);
 
-        if (i === 0 || i % numberOfImagesPerSlide === 0) {
-            document.getElementById("carouselCardWrapper").insertAdjacentHTML("beforeend", `<div id="carouselItem${j}" class="item"></div>`);
+            if (i === 0 || i % itemsPerSlide === 0) {
+                document.getElementById("carouselCardWrapper").insertAdjacentHTML("beforeend", `<div id="carouselItem${j}" class="item"></div>`);
+            }
+
+            document.getElementById(`carouselItem${j}`).insertAdjacentHTML("beforeend", `<div id="carouselCardHelp${j}" class="text-center"></div>`);
+
+            // Render card image and its modal
+            document.getElementById(`carouselCardHelp${j}`).insertAdjacentHTML("beforeend", `<img role="button" data-toggle="modal" data-target="#cardModal${i}" src="${card.img}" alt="${card.name}" />`);
+            document.getElementById("previewFooter").insertAdjacentHTML("beforeend", `${cardModal(card, i)}`);
+
+            if (i === 0) {
+                document.getElementById("carouselItem0").classList.add("active");
+            }
+            this.hideCarouselControls(j);
         }
-
-        document.getElementById(`carouselItem${j}`).insertAdjacentHTML("beforeend", `<div id="carouselCardHelp${j}" class="text-center"</div>`);
-
-        // Render card image
-        document.getElementById(`carouselCardHelp${j}`).insertAdjacentHTML("beforeend", `<img role="button" data-toggle="modal" data-target="#cardModal${i}" src="${card.img}" alt="${card.name}" />`);
-        document.getElementById("previewFooter").insertAdjacentHTML("beforeend", `${cardModal(card, i)}`);
-
-        if (i === 0) {
-            document.getElementById("carouselItem0").classList.add("active");
-        }
-        this.hideCarouselControls(j);
+        this.genCarouselInd();
     }
 
     /** Automatically generates a carousel's indicators */
-    genCarouselInd() {
+    genCarouselInd(): void {
         let carInd = document.getElementById("carouselInd");
 
         let carWrap = document.getElementById("carouselCardWrapper");
@@ -164,7 +220,7 @@ export class RenderDetail {
     }
 
     /** Hides the carousel's controls if there is only one slide */
-    hideCarouselControls(numberOfSlides: number) {
+    hideCarouselControls(numberOfSlides: number): void {
         if (numberOfSlides === 0) {
             for (let item of <any>document.getElementsByClassName("carousel-control")) {
                 item.classList.add("hide");
@@ -180,23 +236,23 @@ export class RenderDetail {
     }
 
     /** Determines how many Images are shown per slide based on the "innerWidth"-property */
-    determineNumberOfImagesPerSlide(): number {
+    determineItemsPerSlide(): number {
         let x: number;
         let w = window.innerWidth;
-        if (w < 600) {
+        if (w < 576) {
+            x = 1;
+        }
+        if (w >= 576) {
             x = 2;
         }
-        if (w >= 600) {
+        if (w >= 768) {
             x = 3;
         }
-        if (w >= 800) {
+        if (w >= 992) {
             x = 4;
         }
-        if (w >= 1024) {
+        if (w > 1200) {
             x = 5;
-        }
-        if (w > 1600) {
-            x = 6;
         }
         return x;
     }

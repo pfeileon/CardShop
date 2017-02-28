@@ -1,15 +1,9 @@
-import { config } from '../config/config';
-import * as Utils from '../misc/utilities';
-import { FetchResource } from '../services/fetch/fetchResource';
 import { TemplateHandler } from '../templates/templateHandler';
-import { RenderService } from '../services/render/renderService';
 import { ShoppingCart } from './shoppingCart';
 import { SinglePageApplication } from '../spa/singlePageApplication';
-import { ButtonHandler } from '../buttons/buttonHandler';
 import { ShopButtonHandler } from '../buttons/shopButtonHandler';
 import { StorageService } from '../services/storage/storageService';
 import { Customer } from "./customer";
-import * as Buttons from '../buttons/buttons';
 
 'use strict';
 
@@ -27,7 +21,7 @@ export class CardShop extends SinglePageApplication {
 
     public get THandler() { return this.tHandler; }
 
-    public get BHandler(): ShopButtonHandler { return <ShopButtonHandler>this.bHandler; }
+    public get BHandler() { return <ShopButtonHandler>this.bHandler; }
 
     // CONSTRUCTOR
     /** Warns after first instantiation */
@@ -44,13 +38,13 @@ export class CardShop extends SinglePageApplication {
     // - FORCED
 
     /** Called by SinglePageApplication.start() */
-    loadSpecifics = (): void => {
+    loadSpecifics(): void {
         this.sService.storageInit(this.cart);
-        window.addEventListener("hashchange", (e) => {
+        addEventListener("hashchange", (setCart) => {
             this.sService.setCart(this.cart);
         });
         // Updates other window or tab when storage changes
-        window.addEventListener("storage", (e) => {
+        addEventListener("storage", (setCart) => {
             this.sService.setCart(this.cart);
         });
     }
