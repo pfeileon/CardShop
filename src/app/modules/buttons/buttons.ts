@@ -1,11 +1,15 @@
 import { Button } from "./button";
+import { FilterButton } from "./filterButton";
 import { ShopButton } from "./shopButton";
+import { ShopFilterButton } from "./shopFilterButton";
 import { config } from "../config/config";
 import * as Utils from "../misc/utilities";
 import { CardPack } from "../shop/cardPack";
 import { Customer } from "../shop/customer";
 import { CreditCard } from "../shop/creditCard";
 import { checkoutModal } from "../templates/modalTemplate";
+import { ShopButtonHandler } from "./shopButtonHandler";
+import { FilterResource } from "../services/filter/filterResource";
 
 "use strict";
 
@@ -117,7 +121,7 @@ export class EditButton extends Button {
     }
 }
 
-export class ReturnButton extends Button {
+export class ReturnButton extends FilterButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
@@ -125,7 +129,7 @@ export class ReturnButton extends Button {
                     Utils.createHash(localStorage.getItem("lastHash"));
                 }
                 else {
-                    let temp = Utils.getFilters()["cardSet"];
+                    let temp = this.FilterService.getFilters()["cardSet"];
                     Utils.createHash(temp);
                 }
             });
@@ -154,19 +158,18 @@ export class PreviewButton extends Button {
                             Showing "Classic" instead.`)
                 cardSetName = "Classic";
             }
-
-            config.data.cardSetName = cardSetName;
+            
             Utils.createHash(`preview/{"cardSet":"${cardSetName}","hero":"Druid"}`);
         });
     }
 }
 
-export class AddToCartButton extends ShopButton {
+export class AddToCartButton extends ShopFilterButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
             item.addEventListener("click", (e) => {
                 let setName: string;
-                const filters: {} = Utils.getFilters();
+                const filters: {} = this.FilterService.getFilters();
                 // Cast to <any> to make ".includes()" work
                 const hashValue = <any>Utils.getHashValue();
                 const cardSets = <any>config.data.cardSets;
@@ -217,16 +220,15 @@ export class GotoCartButton extends ShopButton {
 }
 
 /** Sets the hash-value according to the selected CardSet */
-export class SetCardSetButton extends ShopButton {
+export class SetCardSetButton extends ShopFilterButton {
     click = (cardSet: HTMLElement): void => {
         cardSet.addEventListener("click", (e: MouseEvent): void => {
             const cardSetName: string = (<any>e.target).attributes[0].value;
-            config.data.cardSetName = cardSetName;
 
             this.resetBtnClassList(cardSet, e);
 
             if (Utils.getHashValue() !== undefined && (<any>Utils.getHashValue()).includes("/")) {
-                let filter = Utils.getFilters();
+                let filter = this.FilterService.getFilters();
                 if (filter["cardSet"] !== undefined && filter["cardSet"] === cardSetName && filter["hero"] !== undefined) {
                     delete (filter["cardSet"]);
                 }
@@ -243,14 +245,14 @@ export class SetCardSetButton extends ShopButton {
 }
 
 /** Sets the hash according to the selected hero */
-export class SetHeroButton extends ShopButton {
+export class SetHeroButton extends ShopFilterButton {
     click = (hero: HTMLElement) => {
         hero.addEventListener("click", (e: MouseEvent): void => {
             const heroValue: string = (<any>e.target).attributes[0].value;
 
             this.resetBtnClassList(hero, e);
 
-            let filter = Utils.getFilters();
+            let filter = this.FilterService.getFilters();
             if (filter["hero"] !== undefined && filter["hero"] === heroValue && filter["cardSet"] !== undefined) {
                 delete (filter["hero"]);
             }
@@ -263,7 +265,7 @@ export class SetHeroButton extends ShopButton {
 }
 
 /** Sets the hash according to the selected mana-cost */
-export class SetManaCostButton extends ShopButton {
+export class SetManaCostButton extends ShopFilterButton {
     click = (manaCost: HTMLElement): void => {
         manaCost.addEventListener("click", (e: MouseEvent): void => {
             if ((<any>e.target).attributes[0] === undefined) {
@@ -273,7 +275,7 @@ export class SetManaCostButton extends ShopButton {
 
             this.resetBtnClassList(manaCost, e);
 
-            let filter = Utils.getFilters();
+            let filter = this.FilterService.getFilters();
             if (filter["manaCost"] !== undefined && filter["manaCost"] === manaCostValue) {
                 delete (filter["manaCost"]);
             }

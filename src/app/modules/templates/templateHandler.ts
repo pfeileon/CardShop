@@ -7,7 +7,6 @@ import { cartTemplate } from "../templates/cartTemplate";
 import { checkoutTemplate } from "../templates/checkoutTemplate";
 import { errorTemplate } from "../templates/errorTemplate";
 import { ShoppingCart } from "../shop/shoppingCart";
-import { StorageService } from "../services/storage/storageService";
 import { validate } from "../misc/customJQ";
 
 const templates = (rService: RenderService): Template[] => {

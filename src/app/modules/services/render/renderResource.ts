@@ -1,8 +1,9 @@
+import { FilterResource } from "../filter/filterResource";
 import { RenderService } from "./renderService";
 import { RenderDetail } from "./renderDetail";
 import { Shopable } from "../../types/types";
 import { config } from '../../config/config';
-import * as Utils from '../../misc/utilities';
+import { getHashValue } from '../../misc/utilities';
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/fetchResource";
 import { cardModal } from "../../templates/modalTemplate";
@@ -16,7 +17,7 @@ export class RenderResource extends RenderService {
     // PROPERTIES
 
     // -- FORCED
-    protected stateRenderers = {
+    protected readonly stateRenderers = {
         "start": this.renderStart.bind(this),
         "preview": this.renderPreview.bind(this),
         "cart": this.renderCart.bind(this),
@@ -26,10 +27,12 @@ export class RenderResource extends RenderService {
 
     // -- OWN
     private rDetail: RenderDetail;
+    private fResource = <FetchResource>this.fService;
+    private filterResource = <FilterResource>this.filterService;
 
     // CONSTRUCTOR
-    constructor(fResource: FetchResource, rDetail: RenderDetail) {
-        super(fResource);
+    constructor(fResource: FetchResource, filterResource: FilterResource, rDetail: RenderDetail) {
+        super(fResource, filterResource);
         this.rDetail = rDetail;
     }
 
@@ -41,7 +44,7 @@ export class RenderResource extends RenderService {
 
         this.rDetail.renderItems(shop.Cart.Items);
 
-        const hashValue = Utils.getHashValue();
+        const hashValue = getHashValue();
 
         let cardSet: string;
         if ((<any>config.data.cardSets).includes(hashValue)) {
@@ -52,7 +55,7 @@ export class RenderResource extends RenderService {
         }
         shownCardSetHeader[0].textContent = cardSet;
 
-        this.rDetail.refreshFilters("start");
+        this.filterResource.refreshFilters("start");
     }
 
     /** Adds dynamically generated content to the PreviewPage */
@@ -61,57 +64,17 @@ export class RenderResource extends RenderService {
         let shownHeroHeader = document.querySelector("span.hero-filter-heading");
         let shownManaHeader = document.querySelector("span.mana-filter-heading");
 
-        const filters = this.checkFilters();
+        const filters = this.filterResource.checkFilters();
 
         const setName = filters["cardSet"];
 
-        this.rDetail.renderCards(this.fResource, setName, filters);
+        this.rDetail.renderCards(this.filterResource, this.fResource, setName, filters);
 
-        shownCardSetHeader.textContent = this.setPreviewHeading(filters);
+        shownCardSetHeader.textContent = filters["cardSet"] || "all";
         shownHeroHeader.textContent = filters["hero"] || "all";
         shownManaHeader.textContent = filters["manaCost"] || "all";
 
-        this.rDetail.refreshFilters("preview");
-    }
-
-    setPreviewHeading(filters: {}): string {
-        let cardSet: string;
-        // Set Heading
-        if (filters["cardSet"] !== undefined && (<any>config.data.cardSets).includes(filters["cardSet"])) {
-            return cardSet = filters["cardSet"];
-        }
-        else if (filters["cardSet"] !== undefined) {
-            Utils.createHash(`preview/{"cardSet":"Classic"}`);
-            return cardSet = "Classic";
-        }
-        else {
-            return cardSet = "all";
-        }
-    }
-
-    checkFilters(): {} {
-        let filters = Utils.getFilters();
-        filters = this.checkCardSetFilter(filters);
-        filters = this.checkHeroFilter(filters);
-        return filters;
-    }
-
-    checkCardSetFilter(filters: {}): {} {
-        if (filters["cardSet"] !== undefined && !(<any>config.data.cardSets).includes(filters["cardSet"])) {
-            Utils.createHash(`preview/{"cardSet":"Classic","hero":"Druid"}`);
-            filters = Utils.getFilters();
-            alert("Invalid Card Set! Showing Classic instead");
-        }
-        return filters;
-    }
-
-    checkHeroFilter(filters: {}): {} {
-        if (filters["hero"] !== undefined && !(<any>config.data.heroes).includes(filters["hero"])) {
-            Utils.createHash(`preview/{"cardSet":"${config.data.cardSetName}","hero":"Druid"}`);
-            filters = Utils.getFilters();
-            alert("Invalid Hero! Showing Druid instead");
-        }
-        return filters;
+        this.filterResource.refreshFilters("preview");
     }
 
     renderCart(shop: CardShop): void {

@@ -1,5 +1,6 @@
 import '../assets/styles/styles.scss';
 import { FetchResource } from './modules/services/fetch/fetchResource';
+import { FilterResource } from './modules/services/filter/filterResource';
 import { RenderDetail } from './modules/services/render/renderDetail';
 import { RenderResource } from './modules/services/render/renderResource';
 import { TemplateHandler } from './modules/templates/templateHandler';
@@ -14,8 +15,9 @@ document.addEventListener('DOMContentLoaded', (start) => {
 
     // Initialization
     const fResource: FetchResource = new FetchResource();
+    const filterResource: FilterResource = new FilterResource();
     const rDetail: RenderDetail = new RenderDetail();
-    const rResource: RenderResource = new RenderResource(fResource, rDetail);
+    const rResource: RenderResource = new RenderResource(fResource, filterResource, rDetail);
 
     const tHandler: TemplateHandler = new TemplateHandler(rResource);
     const bHandler: ShopButtonHandler = new ShopButtonHandler(rResource);

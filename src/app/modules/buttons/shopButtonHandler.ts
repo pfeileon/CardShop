@@ -9,10 +9,12 @@ import * as Buttons from "./buttons";
 export class ShopButtonHandler extends ButtonHandler {
     // PROPERTIES
     protected readonly filters: Filters = {
-        "cardSet": this.selectCardSet,
-        "hero": this.selectHero,
-        "mana": this.selectManaCost
+        "cardSet": this.selectCardSet.bind(this),
+        "hero": this.selectHero.bind(this),
+        "mana": this.selectManaCost.bind(this)
     }
+    private filterResource = this.filterService;
+    public get FilterResource() { return this.filterResource; }
 
     // CONSTRUCTOR
     constructor(rResource: RenderResource) {

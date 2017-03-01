@@ -1,5 +1,3 @@
-import * as Utils from '../misc/utilities';
-
 'use strict'
 
 /** Generic interface for exported config constants */
@@ -11,8 +9,10 @@ interface Config<R, S, T> {
 
 /** Interface for Config.api */
 interface HearthstoneAPI {
-    url: string;
-    mashApeKey: string;
+    request: {
+        url: string;
+        headers: {}
+    }
 }
 
 interface CardShopStates {
@@ -25,16 +25,21 @@ interface CardShopStates {
 
 /** Interface for Config.data */
 interface CardShopData {
-    cardSetName: string;
     cardSets: string[];
     heroes: string[],
     mana: number[]
 }
 
+const key = "X-Mashape-Authorization";
+const headers = {};
+headers[key] = "aCMgPO6J9ZmshlRIBc6BEJBGXW5Zp13EcMsjsnWOEWLa1mIRqb";
+
 export const config: Config<HearthstoneAPI, CardShopStates, CardShopData> = {
     api: {
-        url: 'https://omgvamp-hearthstone-v1.p.mashape.com/cards',
-        mashApeKey: 'aCMgPO6J9ZmshlRIBc6BEJBGXW5Zp13EcMsjsnWOEWLa1mIRqb'
+        request: {
+            url: 'https://omgvamp-hearthstone-v1.p.mashape.com/cards',
+            headers: headers
+        }
     },
     statePage: {
         "start": "start-page",
@@ -44,7 +49,6 @@ export const config: Config<HearthstoneAPI, CardShopStates, CardShopData> = {
         "error": "error-page"
     },
     data: {
-        cardSetName: Utils.getCardSetFilter() || 'Classic',
         cardSets: [
             'Classic',
             'The Grand Tournament',

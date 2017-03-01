@@ -6,20 +6,16 @@ import { Headers, Request, Response, Promise, Init } from '../../types/types';
 'use strict';
 
 export abstract class FetchService {
-
-    /** Returns all data from a hearthstoneAPI-endpoint */
+    /** Returns all data from an-endpoint */
     query = (url?: string, init?: Init, request?: Request): Promise<Init> => {
-        url = url || config.api.url;
+        url = url || config.api.request.url;
 
         init = init || {
-            headers: { 'X-Mashape-Authorization': config.api.mashApeKey },
+            headers: config.api.request.headers,
             method: 'GET'
         };
 
-        request = request || {
-            url,
-            init
-        }
+        request = request || { url, init } || config.api.request;
 
         return this.fetchAsync(request);
     }

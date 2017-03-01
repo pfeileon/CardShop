@@ -1,7 +1,7 @@
 import { Button } from "./button";
 import { ShopButtonHandler } from "./shopButtonHandler";
 import { CardShop } from "../shop/cardShop";
-import * as Utils from "../misc/utilities";
+import { isStartPage } from "../misc/utilities";
 
 export abstract class ShopButton extends Button {
     // PROPERTIES
@@ -18,7 +18,7 @@ export abstract class ShopButton extends Button {
             isPrimary = true;
         }
 
-        if (Utils.isStartPage() || isPrimary) {
+        if (isStartPage() || isPrimary) {
             (<any>e.target).classList.remove("btn-default");
             (<any>e.target).classList.add("btn-primary");
         }

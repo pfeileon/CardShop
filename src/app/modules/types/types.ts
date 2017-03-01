@@ -1,4 +1,10 @@
+import { FilterService } from "../services/filter/filterService";
+
 'use strict';
+
+export interface IFilterButton {
+    FilterService: FilterService;
+}
 
 export interface Filters {
     [filter: string]: Callback<HTMLElement, void>;

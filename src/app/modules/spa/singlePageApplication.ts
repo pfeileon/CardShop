@@ -1,6 +1,6 @@
 import { PseudoSingleton } from './pseudoSingleton'
 import { config } from '../config/config';
-import { FetchResource } from '../services/fetch/fetchResource';
+import { FetchService } from '../services/fetch/fetchService';
 import { TemplateHandler } from '../templates/templateHandler';
 import { RenderService } from '../services/render/renderService';
 import { ButtonHandler } from '../buttons/buttonHandler';
@@ -25,7 +25,7 @@ export abstract class SinglePageApplication extends PseudoSingleton {
     public get StatePage() { return this.statePage; }
 
     protected content: any;
-    protected fResource: FetchResource;
+    protected fService: FetchService;
     protected tHandler: TemplateHandler;
     protected rService: RenderService;
     protected bHandler: ButtonHandler;
@@ -36,7 +36,7 @@ export abstract class SinglePageApplication extends PseudoSingleton {
         super(SinglePageApplication.ctorArg);
         this.bHandler = bHandler;
         this.rService = bHandler.RService;
-        this.fResource = this.rService.FResource;
+        this.fService = this.rService.FService;
         this.content = tHandler.insertAllTemplates();
     }
 
