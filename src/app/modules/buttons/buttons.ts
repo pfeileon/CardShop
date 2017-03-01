@@ -3,7 +3,7 @@ import { FilterButton } from "./filterButton";
 import { ShopButton } from "./shopButton";
 import { ShopFilterButton } from "./shopFilterButton";
 import { config } from "../config/config";
-import * as Utils from "../misc/utilities";
+import { createHash, fakeHashchange, getHashValue } from "../misc/utilities";
 import { CardPack } from "../shop/cardPack";
 import { Customer } from "../shop/customer";
 import { CreditCard } from "../shop/creditCard";
@@ -26,8 +26,8 @@ export class CancelButton extends Button {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
                 if (item.id === "cancelPD") {
-                    Utils.createHash("");
-                    Utils.createHash("cart/" + localStorage.getItem("cart"));
+                    createHash("");
+                    createHash("cart/" + localStorage.getItem("cart"));
                 }
                 if (item.id === "cancelCCD") {
                     document.getElementById("personalDataHeading").click();
@@ -71,7 +71,7 @@ export class CheckoutButton extends ShopButton {
                 alert("Your cart is empty!");
             }
             else {
-                Utils.createHash("checkout/");
+                createHash("checkout/");
             }
         });
     }
@@ -82,7 +82,7 @@ export class ClearButton extends ShopButton {
         document.getElementById(this.id).addEventListener("click", (e) => {
             localStorage.removeItem("cart");
             this.shop.Cart.Items = [];
-            Utils.createHash("cart/");
+            createHash("cart/");
         });
     }
 }
@@ -99,7 +99,7 @@ export class DeleteButton extends ShopButton {
                 delete items[`${((<any>del.target).id.split("-del")[0]).replace(/-/gi, " ")}`];
                 localStorage.setItem("cart", JSON.stringify(items));
             }
-            Utils.createHash("cart/" + localStorage.getItem("cart"));
+            createHash("cart/" + localStorage.getItem("cart"));
         });
     }
 }
@@ -116,7 +116,7 @@ export class EditButton extends Button {
 
             localStorage.setItem("cart", JSON.stringify(cartStorage));
 
-            Utils.createHash("cart/" + localStorage.getItem("cart"));
+            createHash("cart/" + localStorage.getItem("cart"));
         });
     }
 }
@@ -125,12 +125,12 @@ export class ReturnButton extends FilterButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
-                if ((<any>Utils.getHashValue()).includes("cart/")) {
-                    Utils.createHash(localStorage.getItem("lastHash"));
+                if ((<any>getHashValue()).includes("cart/")) {
+                    createHash(localStorage.getItem("lastHash"));
                 }
                 else {
                     let temp = this.FilterService.getFilters()["cardSet"];
-                    Utils.createHash(temp);
+                    createHash(temp);
                 }
             });
         }
@@ -140,12 +140,12 @@ export class ReturnButton extends FilterButton {
 export class PreviewButton extends Button {
     click = (): void => {
         document.getElementById(this.id).addEventListener("click", (e) => {
-            const hashValue: string = Utils.getHashValue();
+            const hashValue: string = getHashValue();
             let cardSetName: string;
 
             if (hashValue === undefined || "" || null) {
                 cardSetName = "Classic";
-                Utils.createHash("Classic");
+                createHash("Classic");
             }
             else if ((<any>hashValue).includes("cart/")) {
                 cardSetName = document.getElementById(this.id).innerText;
@@ -159,7 +159,7 @@ export class PreviewButton extends Button {
                 cardSetName = "Classic";
             }
             
-            Utils.createHash(`preview/{"cardSet":"${cardSetName}","hero":"Druid"}`);
+            createHash(`preview/{"cardSet":"${cardSetName}","hero":"Druid"}`);
         });
     }
 }
@@ -171,7 +171,7 @@ export class AddToCartButton extends ShopFilterButton {
                 let setName: string;
                 const filters: {} = this.FilterService.getFilters();
                 // Cast to <any> to make ".includes()" work
-                const hashValue = <any>Utils.getHashValue();
+                const hashValue = <any>getHashValue();
                 const cardSets = <any>config.data.cardSets;
 
                 if (hashValue !== undefined || "" || null) {
@@ -200,7 +200,7 @@ export class AddToCartButton extends ShopFilterButton {
                     amountOfPacks = +(<HTMLInputElement>inputElements[1]).value;
                 }
 
-                Utils.fakeHashchange("item_added");
+                fakeHashchange("item_added");
 
                 this.shop.Cart.fillCart(pack, amountOfPacks);
             });
@@ -212,8 +212,8 @@ export class GotoCartButton extends ShopButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
-                localStorage.setItem("lastHash", Utils.getHashValue());
-                Utils.createHash("cart/" + localStorage.getItem("cart"));
+                localStorage.setItem("lastHash", getHashValue());
+                createHash("cart/" + localStorage.getItem("cart"));
             });
         }
     }
@@ -227,7 +227,7 @@ export class SetCardSetButton extends ShopFilterButton {
 
             this.resetBtnClassList(cardSet, e);
 
-            if (Utils.getHashValue() !== undefined && (<any>Utils.getHashValue()).includes("/")) {
+            if (getHashValue() !== undefined && (<any>getHashValue()).includes("/")) {
                 let filter = this.FilterService.getFilters();
                 if (filter["cardSet"] !== undefined && filter["cardSet"] === cardSetName && filter["hero"] !== undefined) {
                     delete (filter["cardSet"]);
@@ -235,10 +235,10 @@ export class SetCardSetButton extends ShopFilterButton {
                 else {
                     filter["cardSet"] = cardSetName;
                 }
-                Utils.createHash(`preview/${JSON.stringify(filter)}`);
+                createHash(`preview/${JSON.stringify(filter)}`);
             }
             else {
-                Utils.createHash(cardSetName);
+                createHash(cardSetName);
             }
         });
     }
@@ -259,7 +259,7 @@ export class SetHeroButton extends ShopFilterButton {
             else {
                 filter["hero"] = heroValue;
             }
-            Utils.createHash(`preview/${JSON.stringify(filter)}`);
+            createHash(`preview/${JSON.stringify(filter)}`);
         });
     }
 }
@@ -283,7 +283,7 @@ export class SetManaCostButton extends ShopFilterButton {
                 filter["manaCost"] = manaCostValue;
             }
 
-            Utils.createHash(`preview/${JSON.stringify(filter)}`);
+            createHash(`preview/${JSON.stringify(filter)}`);
         });
     }
 }

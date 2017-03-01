@@ -8,10 +8,12 @@ import * as Buttons from "./buttons";
 
 export class ShopButtonHandler extends ButtonHandler {
     // PROPERTIES
-    protected readonly filters: Filters = {
-        "cardSet": this.selectCardSet.bind(this),
-        "hero": this.selectHero.bind(this),
-        "mana": this.selectManaCost.bind(this)
+    protected readonly filters = (shop): Filters => {
+        return {
+            "cardSet": this.selectCardSet.bind(shop),
+            "hero": this.selectHero.bind(shop),
+            "mana": this.selectManaCost.bind(shop)
+        }
     }
     private filterResource = this.filterService;
     public get FilterResource() { return this.filterResource; }
@@ -59,46 +61,48 @@ export class ShopButtonHandler extends ButtonHandler {
     }
 
     addToCart(shop: CardShop, id = "add-to-cart-btn"): void {
-        const addToCartBtn: Buttons.AddToCartButton = new Buttons.AddToCartButton(id, this, shop);
+        const addToCartBtn: Buttons.AddToCartButton = new Buttons.AddToCartButton(id, shop);
         addToCartBtn.click();
     }
 
     gotoCart(shop: CardShop, id = "goto-cart-btn"): void {
-        const gotoCartBtn: Buttons.GotoCartButton = new Buttons.GotoCartButton(id, this, shop);
+        const gotoCartBtn: Buttons.GotoCartButton = new Buttons.GotoCartButton(id, shop);
         gotoCartBtn.click();
     }
 
-    selectCardSet(cardSet: HTMLElement): void {
-        const setCardSetBtn: Buttons.SetCardSetButton = new Buttons.SetCardSetButton("set-card-set-btn", this);
+    // Filters
+
+    selectCardSet(cardSet: HTMLElement, shop): void {
+        const setCardSetBtn: Buttons.SetCardSetButton = new Buttons.SetCardSetButton("set-card-set-btn", shop);
         setCardSetBtn.click(cardSet);
     }
 
-    selectHero(hero: HTMLElement): void {
-        const setHeroBtn: Buttons.SetHeroButton = new Buttons.SetHeroButton("set-hero-set-btn", this);
+    selectHero(hero: HTMLElement, shop): void {
+        const setHeroBtn: Buttons.SetHeroButton = new Buttons.SetHeroButton("set-hero-set-btn", shop);
         setHeroBtn.click(hero);
     }
 
-    selectManaCost(manaCost: HTMLElement): void {
-        const setManaCostBtn: Buttons.SetManaCostButton = new Buttons.SetManaCostButton("set-mana-set-btn", this);
+    selectManaCost(manaCost: HTMLElement, shop): void {
+        const setManaCostBtn: Buttons.SetManaCostButton = new Buttons.SetManaCostButton("set-mana-set-btn", shop);
         setManaCostBtn.click(manaCost);
     }
 
     // Shopping Cart
 
     checkout(shop: CardShop, id = "checkout-btn"): void {
-        const checkoutBtn: Buttons.CheckoutButton = new Buttons.CheckoutButton(id, this, shop);
+        const checkoutBtn: Buttons.CheckoutButton = new Buttons.CheckoutButton(id, shop);
         checkoutBtn.click();
     }
 
     /** Clears the ShoppingCart */
     clearCart(shop: CardShop, id = "cart-clear-btn"): void {
-        const clearBtn: Buttons.ClearButton = new Buttons.ClearButton(id, this, shop);
+        const clearBtn: Buttons.ClearButton = new Buttons.ClearButton(id, shop);
         clearBtn.click();
     }
 
     /** Call when ShoppingCart is rendered otherwise EventHandler gets lost on re-rendering*/
     deleteCartPosition(shop: CardShop, id = "cart-del-btn"): void {
-        const deleteBtn: Buttons.DeleteButton = new Buttons.DeleteButton(id, this, shop);
+        const deleteBtn: Buttons.DeleteButton = new Buttons.DeleteButton(id, shop);
         deleteBtn.click();
     }
 
@@ -121,7 +125,7 @@ export class ShopButtonHandler extends ButtonHandler {
     }
 
     confirmCheckout(shop: CardShop, id = "confirm-btn"): void {
-        const confirmBtn: Buttons.ConfirmButton = new Buttons.ConfirmButton(id, this, shop);
+        const confirmBtn: Buttons.ConfirmButton = new Buttons.ConfirmButton(id, shop);
         confirmBtn.click();
     }
 }

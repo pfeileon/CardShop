@@ -7,7 +7,7 @@ import { RenderService } from '../services/render/renderService';
 
 export abstract class ButtonHandler {
     //PROPERTIES
-    protected abstract readonly filters: Filters;
+    protected abstract readonly filters: Function = (SinglePageApplication: Filters) => { };
     protected fService: FetchService;
     protected rService: RenderService;
     public get RService() { return this.rService; }
