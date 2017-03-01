@@ -45,7 +45,7 @@ export class RenderDetail {
                 card.img !== undefined
             )
 
-            let setFilterPassed = (<any>config.data.startPageData.cardSets).includes(card.cardSet);
+            let setFilterPassed = (<any>config.data.cardSets).includes(card.cardSet);
 
             if (cardFilterPassed && setFilterPassed) {
 

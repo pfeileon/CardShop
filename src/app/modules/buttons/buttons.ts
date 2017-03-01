@@ -146,7 +146,7 @@ export class PreviewButton extends Button {
             else if ((<any>hashValue).includes("cart/")) {
                 cardSetName = document.getElementById(this.id).innerText;
             }
-            else if ((<any>config.data.startPageData.cardSets).includes(hashValue)) {
+            else if ((<any>config.data.cardSets).includes(hashValue)) {
                 cardSetName = hashValue;
             }
             else {
@@ -155,7 +155,7 @@ export class PreviewButton extends Button {
                 cardSetName = "Classic";
             }
 
-            config.data.previewPageData.cardSetName = cardSetName;
+            config.data.cardSetName = cardSetName;
             Utils.createHash(`preview/{"cardSet":"${cardSetName}","hero":"Druid"}`);
         });
     }
@@ -169,7 +169,7 @@ export class AddToCartButton extends ShopButton {
                 const filters: {} = Utils.getFilters();
                 // Cast to <any> to make ".includes()" work
                 const hashValue = <any>Utils.getHashValue();
-                const cardSets = <any>config.data.startPageData.cardSets;
+                const cardSets = <any>config.data.cardSets;
 
                 if (hashValue !== undefined || "" || null) {
                     if (hashValue.includes("/") && filters["cardSet"] !== undefined && cardSets.includes(filters["cardSet"])) {
@@ -221,7 +221,7 @@ export class SetCardSetButton extends ShopButton {
     click = (cardSet: HTMLElement): void => {
         cardSet.addEventListener("click", (e: MouseEvent): void => {
             const cardSetName: string = (<any>e.target).attributes[0].value;
-            config.data.previewPageData.cardSetName = cardSetName;
+            config.data.cardSetName = cardSetName;
 
             this.resetBtnClassList(cardSet, e);
 

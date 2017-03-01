@@ -56,17 +56,17 @@ const checkoutModalHeader = (id: string) => {
 }
 
 const checkoutModalBody = (customer: any) => {
-  return `<table>
-              <tr>
+  return `<div class="panel"><table class="table table-striped">
+              <tr class="info">
                   <td>Name:</td><td>${customer.fName + " " + customer.lName}</td>
               </tr>
-              <tr>
+              <tr class="info">
                   <td>Address:</td><td>${customer.address + ", " + customer.zipCode + " " + customer.city + ", " + customer.country}</td>
               </tr>
-              <tr>
+              <tr class="warning">
                   <td>Credit card:</td><td>${customer.creditCard.owner + ", " + customer.creditCard.cardNumber + ", " + customer.creditCard.validThru}</td>
               </tr>
-          </table>`;
+          </table></div>`;
 }
 
 const checkoutModalFooter = () => {

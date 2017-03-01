@@ -25,14 +25,10 @@ interface CardShopStates {
 
 /** Interface for Config.data */
 interface CardShopData {
-    startPageData: {
-        cardSets: string[];
-    },
-    previewPageData: {
-        cardSetName: string;
-        heroes: string[],
-        mana: number[]
-    }
+    cardSetName: string;
+    cardSets: string[];
+    heroes: string[],
+    mana: number[]
 }
 
 export const config: Config<HearthstoneAPI, CardShopStates, CardShopData> = {
@@ -48,29 +44,25 @@ export const config: Config<HearthstoneAPI, CardShopStates, CardShopData> = {
         "error": "error-page"
     },
     data: {
-        startPageData: {
-            cardSets: [
-                'Classic',
-                'The Grand Tournament',
-                'Whispers of the Old Gods',
-                'Mean Streets of Gadgetzan'
-            ]
-        },
-        previewPageData: {
-            cardSetName: Utils.getHashValue() || 'Classic',
-            heroes: [
-                'Druid',
-                'Hunter',
-                'Mage',
-                'Paladin',
-                'Priest',
-                'Rogue',
-                'Shaman',
-                'Warlock',
-                'Warrior',
-                'Neutral'
-            ],
-            mana: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        }
+        cardSetName: Utils.getCardSetFilter() || 'Classic',
+        cardSets: [
+            'Classic',
+            'The Grand Tournament',
+            'Whispers of the Old Gods',
+            'Mean Streets of Gadgetzan'
+        ],
+        heroes: [
+            'Druid',
+            'Hunter',
+            'Mage',
+            'Paladin',
+            'Priest',
+            'Rogue',
+            'Shaman',
+            'Warlock',
+            'Warrior',
+            'Neutral'
+        ],
+        mana: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     }
 }

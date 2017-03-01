@@ -40,11 +40,11 @@ export class RenderResource extends RenderService {
         let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
 
         this.rDetail.renderItems(shop.Cart.Items);
-        
+
         const hashValue = Utils.getHashValue();
 
         let cardSet: string;
-        if ((<any>config.data.startPageData.cardSets).includes(hashValue)) {
+        if ((<any>config.data.cardSets).includes(hashValue)) {
             cardSet = hashValue;
         }
         else {
@@ -58,15 +58,18 @@ export class RenderResource extends RenderService {
     /** Adds dynamically generated content to the PreviewPage */
     renderPreview(shop: CardShop) {
         let shownCardSetHeader = document.querySelector("#previewSetSelection .card-set-name");
-        const filters: {} = Utils.getFilters();
+        let shownHeroHeader = document.querySelector("span.hero-filter-heading");
+        let shownManaHeader = document.querySelector("span.mana-filter-heading");
 
-        this.checkHeroFilter(filters);
+        const filters = this.checkFilters();
 
-        const setName: string = filters["cardSet"];
+        const setName = filters["cardSet"];
 
         this.rDetail.renderCards(this.fResource, setName, filters);
 
         shownCardSetHeader.textContent = this.setPreviewHeading(filters);
+        shownHeroHeader.textContent = filters["hero"] || "all";
+        shownManaHeader.textContent = filters["manaCost"] || "all";
 
         this.rDetail.refreshFilters("preview");
     }
@@ -74,7 +77,7 @@ export class RenderResource extends RenderService {
     setPreviewHeading(filters: {}): string {
         let cardSet: string;
         // Set Heading
-        if (filters["cardSet"] !== undefined && (<any>config.data.startPageData.cardSets).includes(filters["cardSet"])) {
+        if (filters["cardSet"] !== undefined && (<any>config.data.cardSets).includes(filters["cardSet"])) {
             return cardSet = filters["cardSet"];
         }
         else if (filters["cardSet"] !== undefined) {
@@ -82,16 +85,33 @@ export class RenderResource extends RenderService {
             return cardSet = "Classic";
         }
         else {
-            return cardSet = "none chosen";
+            return cardSet = "all";
         }
     }
 
-    checkHeroFilter(filters: {}) {
-        if (filters["hero"] !== undefined && !(<any>config.data.previewPageData.heroes).includes(filters["hero"])) {
-            alert("Invalid Hero! Showing Druid instead");
+    checkFilters(): {} {
+        let filters = Utils.getFilters();
+        filters = this.checkCardSetFilter(filters);
+        filters = this.checkHeroFilter(filters);
+        return filters;
+    }
 
-            Utils.createHash(`preview/{"cardSet":"${config.data.previewPageData.cardSetName}","hero":"Druid"}`);
+    checkCardSetFilter(filters: {}): {} {
+        if (filters["cardSet"] !== undefined && !(<any>config.data.cardSets).includes(filters["cardSet"])) {
+            Utils.createHash(`preview/{"cardSet":"Classic","hero":"Druid"}`);
+            filters = Utils.getFilters();
+            alert("Invalid Card Set! Showing Classic instead");
         }
+        return filters;
+    }
+
+    checkHeroFilter(filters: {}): {} {
+        if (filters["hero"] !== undefined && !(<any>config.data.heroes).includes(filters["hero"])) {
+            Utils.createHash(`preview/{"cardSet":"${config.data.cardSetName}","hero":"Druid"}`);
+            filters = Utils.getFilters();
+            alert("Invalid Hero! Showing Druid instead");
+        }
+        return filters;
     }
 
     renderCart(shop: CardShop): void {
@@ -100,7 +120,7 @@ export class RenderResource extends RenderService {
 
         if (localStorage.getItem("cart") !== (null && undefined)) {
             cartContent.innerHTML = `
-                <table id="cartContentTable" class="table">
+                <table id="cartContentTable" class="table table-hover">
                 </table>
             `;
 

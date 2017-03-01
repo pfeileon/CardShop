@@ -4,7 +4,7 @@ import { cartButtonTemplate, btnRecord } from "./snippets";
 'use strict'
 
 /** Start Page Template */
-export const startTemplate = (rService: RenderService, data: { startPageData }) => {
+export const startTemplate = (rService: RenderService, data: {}) => {
     return `<article class="container">
 
     <header id="startHeader">
@@ -15,12 +15,12 @@ export const startTemplate = (rService: RenderService, data: { startPageData }) 
     <section class="cardSet-filter">
         <h2>Select the Card Set:
             <span class="card-set-name">
-                ${data["previewPageData"][Object.keys(data["previewPageData"])[0]]}
+                ${data["cardSetName"]}
             </span>
         </h2>
 
         <div class="btn-group-justified" role="group" aria-label="CardSets">
-            ${rService.insertList(data.startPageData[Object.keys(data.startPageData)[0]], btnRecord)}
+            ${rService.insertList(data["cardSets"], btnRecord)}
         </div>
         
         <button id="preview-card-set-btn" class="btn btn-info" type="button">Preview Card Set</button>
