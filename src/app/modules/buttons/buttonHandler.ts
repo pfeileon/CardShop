@@ -26,10 +26,12 @@ export abstract class ButtonHandler {
     // - OWN
     /** Initializes all buttons which are rendered on start */
     initButtons(spApp: SinglePageApplication) {
-        this.filterService.initFilters(this.filters);
+        this.filterService.initFilters(this.foo(spApp));
         this.initSpecificButtons(spApp);
     }
 
     // - ABSTRACT
     abstract initSpecificButtons(spApp: SinglePageApplication);
+
+    abstract foo = (singlePageApplication): Filters => { return }
 }

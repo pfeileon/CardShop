@@ -7,8 +7,8 @@ export abstract class ShopButton extends Button {
     // PROPERTIES
     protected shop: CardShop;
     // CONSTRUCTOR
-    constructor(id: string, bHandler, shop?: CardShop) {
-        super(id, bHandler);
+    constructor(id: string, shop: CardShop) {
+        super(id, shop.BHandler);
         this.shop = shop;
     }
     // METHODS
