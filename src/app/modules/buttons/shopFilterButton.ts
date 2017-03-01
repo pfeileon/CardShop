@@ -8,8 +8,8 @@ import { FilterService } from "../services/filter/filterService";
 export abstract class ShopFilterButton extends ShopButton implements IFilterButton {
     private filterService: FilterService;
     public get FilterService() { return this.filterService };
-    constructor(id, shop) {
-        super(id, shop)
+    constructor(id, bHandler, shop?) {
+        super(id, bHandler)
         this.filterService = this.bHandler.FilterService;
     }
 }

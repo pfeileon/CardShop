@@ -8,12 +8,11 @@ import * as Buttons from "./buttons";
 
 export class ShopButtonHandler extends ButtonHandler {
     // PROPERTIES
-    protected readonly filters = (shop): Filters => {
-        return {
-            "cardSet": this.selectCardSet.bind(shop),
-            "hero": this.selectHero.bind(shop),
-            "mana": this.selectManaCost.bind(shop)
-        }
+    protected readonly filters: Filters = {
+        "cardSet": this.selectCardSet.bind(this),
+        "hero": this.selectHero.bind(this),
+        "mana": this.selectManaCost.bind(this)
+
     }
     private filterResource = this.filterService;
     public get FilterResource() { return this.filterResource; }
@@ -72,18 +71,18 @@ export class ShopButtonHandler extends ButtonHandler {
 
     // Filters
 
-    selectCardSet(cardSet: HTMLElement, shop): void {
-        const setCardSetBtn: Buttons.SetCardSetButton = new Buttons.SetCardSetButton("set-card-set-btn", shop);
+    selectCardSet(cardSet: HTMLElement): void {
+        const setCardSetBtn: Buttons.SetCardSetButton = new Buttons.SetCardSetButton("set-card-set-btn", this);
         setCardSetBtn.click(cardSet);
     }
 
-    selectHero(hero: HTMLElement, shop): void {
-        const setHeroBtn: Buttons.SetHeroButton = new Buttons.SetHeroButton("set-hero-set-btn", shop);
+    selectHero(hero: HTMLElement): void {
+        const setHeroBtn: Buttons.SetHeroButton = new Buttons.SetHeroButton("set-hero-set-btn", this);
         setHeroBtn.click(hero);
     }
 
-    selectManaCost(manaCost: HTMLElement, shop): void {
-        const setManaCostBtn: Buttons.SetManaCostButton = new Buttons.SetManaCostButton("set-mana-set-btn", shop);
+    selectManaCost(manaCost: HTMLElement): void {
+        const setManaCostBtn: Buttons.SetManaCostButton = new Buttons.SetManaCostButton("set-mana-set-btn", this);
         setManaCostBtn.click(manaCost);
     }
 
