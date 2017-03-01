@@ -7,20 +7,16 @@ import * as Buttons from "./buttons";
 "use strict";
 
 export class ShopButtonHandler extends ButtonHandler {
-    foo = (shop): Filters => {
+    // PROPERTIES
+    // - FORCED
+        protected readonly filters = (shop): Filters => {
         return {
             "cardSet": this.selectCardSet.bind(shop),
             "hero": this.selectHero.bind(shop),
             "mana": this.selectManaCost.bind(shop)
         }
     }
-    
-    // PROPERTIES
-    protected readonly filters: Filters = {
-        "cardSet": this.selectCardSet.bind(this),
-        "hero": this.selectHero.bind(this),
-        "mana": this.selectManaCost.bind(this)
-    }
+    // - OWN
     private filterResource = this.filterService;
     public get FilterResource() { return this.filterResource; }
 
