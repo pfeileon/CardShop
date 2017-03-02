@@ -1,5 +1,5 @@
 import { Shopable } from "../types/types";
-import { StorageService } from '../services/storage/storageService';
+import { StorageResource } from '../services/storage/storageResource';
 import { Customer } from './customer';
 
 'use strict';
@@ -7,8 +7,8 @@ import { Customer } from './customer';
 export class ShoppingCart {
 
     //Properties
-    private sService: StorageService;
-    public get SService() { return this.sService; }
+    private sResource: StorageResource;
+    public get SResource() { return this.sResource; }
 
     private customer: Customer;
     /** All items in the cart */
@@ -19,8 +19,8 @@ export class ShoppingCart {
 
     //Constructor
     /** Warns after first instantiation */
-    constructor(sService: StorageService) {
-        this.sService = sService;
+    constructor(sResource: StorageResource) {
+        this.sResource = sResource;
     }
 
     //Methods
@@ -34,7 +34,7 @@ export class ShoppingCart {
         for (let i: number = 0; i < amount; i++) {
             this.items.push(item);
         }
-        this.sService.populateStorage(this.items);
+        this.sResource.populateStorage(this);
         return this.items;
     }
 }
