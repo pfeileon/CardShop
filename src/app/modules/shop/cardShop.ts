@@ -10,8 +10,6 @@ import { Customer } from "./customer";
 /** Start via inherited method "start()" */
 export class CardShop extends SinglePageApplication {
     // PROPERTIES
-    private sResource: StorageResource;
-    
     private cart: ShoppingCart;
     public get Cart() { return this.cart; }
 
@@ -27,7 +25,6 @@ export class CardShop extends SinglePageApplication {
         this.tHandler = tHandler;
         this.bHandler = bHandler;
         this.cart = cart;
-        this.sResource = cart.SResource;
     }
 
     // METHODS
@@ -36,14 +33,7 @@ export class CardShop extends SinglePageApplication {
 
     /** Called by SinglePageApplication.start() */
     loadSpecifics(): void {
-        this.sResource.storageInit("cart", this.cart);
-        addEventListener("hashchange", (setCart) => {
-            this.sResource.setCart(this.cart);
-        });
-        // Updates other window or tab when storage changes
-        addEventListener("storage", (setCart) => {
-            this.sResource.setCart(this.cart);
-        });
+        this.cart.initCart();
     }
 
     // - OWN

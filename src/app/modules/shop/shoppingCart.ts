@@ -10,10 +10,8 @@ export class ShoppingCart {
     private sResource: StorageResource;
     public get SResource() { return this.sResource; }
 
-    private customer: Customer;
     /** All items in the cart */
     private items: Shopable[] = new Array<Shopable>();
-
     public get Items() { return this.items; }
     public set Items(Items) { this.items = Items }
 
@@ -24,6 +22,17 @@ export class ShoppingCart {
     }
 
     //Methods
+
+    initCart() {
+        this.sResource.storageInit("cart", this);
+        addEventListener("hashchange", (setCart) => {
+            this.sResource.setCart(this);
+        });
+        // Updates other window or tab when storage changes
+        addEventListener("storage", (setCart) => {
+            this.sResource.setCart(this);
+        });
+    }
 
     /**
      * Fills the ShoppingCart with items and returns them
