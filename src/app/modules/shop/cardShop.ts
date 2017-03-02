@@ -1,7 +1,7 @@
-import { TemplateHandler } from '../templates/templateHandler';
+import { TemplateHandler } from '../services/templates/templateHandler';
 import { ShoppingCart } from './shoppingCart';
 import { SinglePageApplication } from '../spa/singlePageApplication';
-import { ShopButtonHandler } from '../buttons/shopButtonHandler';
+import { ShopButtonHandler } from '../services/buttons/shopButtonHandler';
 import { StorageService } from '../services/storage/storageService';
 import { Customer } from "./customer";
 

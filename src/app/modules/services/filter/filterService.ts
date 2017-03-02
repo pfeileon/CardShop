@@ -1,6 +1,6 @@
 import { Filters } from "../../types/types";
 import { config } from "../../config/config";
-import { getHashValue, iterateList } from "../../misc/utilities";
+import { getHashValue, iterateList } from "../misc/utilities";
 
 "use strict";
 

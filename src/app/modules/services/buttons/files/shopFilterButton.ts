@@ -1,7 +1,7 @@
-import { IFilterButton } from "../types/types";
-import { ShopButtonHandler } from "./shopButtonHandler";
+import { IFilterButton } from "../../../types/types";
+import { ShopButtonHandler } from "../shopButtonHandler";
 import { ShopButton } from "./shopButton";
-import { FilterService } from "../services/filter/filterService";
+import { FilterService } from "../../filter/filterService";
 
 "use strict";
 

@@ -2,14 +2,12 @@ import { Button } from "./button";
 import { FilterButton } from "./filterButton";
 import { ShopButton } from "./shopButton";
 import { ShopFilterButton } from "./shopFilterButton";
-import { config } from "../config/config";
-import { createHash, fakeHashchange, getHashValue } from "../misc/utilities";
-import { CardPack } from "../shop/cardPack";
-import { Customer } from "../shop/customer";
-import { CreditCard } from "../shop/creditCard";
-import { checkoutModal } from "../templates/modalTemplate";
-import { ShopButtonHandler } from "./shopButtonHandler";
-import { FilterResource } from "../services/filter/filterResource";
+import { config } from "../../../config/config";
+import { createHash, fakeHashchange, getHashValue } from "../../misc/utilities";
+import { CardPack } from "../../../shop/cardPack";
+import { Customer } from "../../../shop/customer";
+import { CreditCard } from "../../../shop/creditCard";
+import { checkoutModal } from "../../templates/files/modalTemplate";
 
 "use strict";
 

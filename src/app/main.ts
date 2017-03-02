@@ -3,9 +3,9 @@ import { FetchResource } from './modules/services/fetch/fetchResource';
 import { FilterResource } from './modules/services/filter/filterResource';
 import { RenderDetail } from './modules/services/render/renderDetail';
 import { RenderResource } from './modules/services/render/renderResource';
-import { ShopTemplateHandler } from './modules/templates/shopTemplateHandler';
+import { ShopTemplateHandler } from './modules/services/templates/shopTemplateHandler';
 import { ShoppingCart } from './modules/shop/shoppingCart';
-import { ShopButtonHandler } from './modules/buttons/shopButtonHandler';
+import { ShopButtonHandler } from './modules/services/buttons/shopButtonHandler';
 import { StorageService } from './modules/services/storage/storageService';
 import { CardShop } from './modules/shop/cardShop';
 

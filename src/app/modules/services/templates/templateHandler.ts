@@ -1,5 +1,5 @@
-import { Template } from '../types/types';
-import { RenderService } from '../services/render/renderService';
+import { Template } from '../../types/types';
+import { RenderService } from '../render/renderService';
 
 export abstract class TemplateHandler {
 

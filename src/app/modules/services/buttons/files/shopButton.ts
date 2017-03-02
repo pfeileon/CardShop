@@ -1,7 +1,7 @@
 import { Button } from "./button";
-import { ShopButtonHandler } from "./shopButtonHandler";
-import { CardShop } from "../shop/cardShop";
-import { isStartPage } from "../misc/utilities";
+import { ShopButtonHandler } from "../shopButtonHandler";
+import { CardShop } from "../../../shop/cardShop";
+import { isStartPage } from "../../misc/utilities";
 
 export abstract class ShopButton extends Button {
     // PROPERTIES

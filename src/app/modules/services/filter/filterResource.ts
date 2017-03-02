@@ -1,6 +1,6 @@
 import { FilterService } from "./filterService";
 import { config } from "../../config/config";
-import { createHash } from "../../misc/utilities";
+import { createHash } from "../misc/utilities";
 
 "use strict";
 

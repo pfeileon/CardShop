@@ -1,4 +1,4 @@
-import { luhnAlgorithm } from '../misc/utilities';
+import { luhnAlgorithm } from '../services/misc/utilities';
 
 'use strict';
 

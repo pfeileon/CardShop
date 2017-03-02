@@ -1,5 +1,5 @@
-import { IFilterButton } from "../types/types";
-import { ButtonHandler } from "./buttonHandler";
+import { IFilterButton } from "../../../types/types";
+import { ButtonHandler } from "../buttonHandler";
 import { Button } from "./button";
 
 "use strict";

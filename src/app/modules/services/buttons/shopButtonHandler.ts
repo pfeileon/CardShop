@@ -1,8 +1,8 @@
-import { Filters } from "../types/types";
+import { Filters } from "../../types/types";
 import { ButtonHandler } from "./buttonHandler";
-import { RenderResource } from "../services/render/renderResource";
-import { CardShop } from "../shop/cardShop";
-import * as Buttons from "./buttons";
+import { RenderResource } from "../render/renderResource";
+import { CardShop } from "../../shop/cardShop";
+import * as Buttons from "./files/buttons";
 
 "use strict";
 

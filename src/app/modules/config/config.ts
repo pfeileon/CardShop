@@ -30,15 +30,13 @@ interface CardShopData {
     mana: number[]
 }
 
-const key = "X-Mashape-Authorization";
-const headers = {};
-headers[key] = "aCMgPO6J9ZmshlRIBc6BEJBGXW5Zp13EcMsjsnWOEWLa1mIRqb";
-
 export const config: Config<HearthstoneAPI, CardShopStates, CardShopData> = {
     api: {
         request: {
             url: 'https://omgvamp-hearthstone-v1.p.mashape.com/cards',
-            headers: headers
+            headers: {
+                "X-Mashape-Authorization": "aCMgPO6J9ZmshlRIBc6BEJBGXW5Zp13EcMsjsnWOEWLa1mIRqb"
+            }
         }
     },
     statePage: {

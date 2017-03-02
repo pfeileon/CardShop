@@ -1,25 +1,15 @@
-import { PseudoSingleton } from './pseudoSingleton'
 import { config } from '../config/config';
 import { FetchService } from '../services/fetch/fetchService';
-import { TemplateHandler } from '../templates/templateHandler';
+import { TemplateHandler } from '../services/templates/templateHandler';
 import { RenderService } from '../services/render/renderService';
-import { ButtonHandler } from '../buttons/buttonHandler';
+import { ButtonHandler } from '../services/buttons/buttonHandler';
 
 
 'use strict';
 
 /** Abstract basis for the SPA */
-export abstract class SinglePageApplication extends PseudoSingleton {
+export abstract class SinglePageApplication {
     // PROPERTIES
-
-    // - STATIC
-    private static namePS = "SPA";
-    private static exists: boolean = false;
-    private static ctorArg: { exists: boolean, message: string } = {
-        exists: SinglePageApplication.exists,
-        message: `${SinglePageApplication.namePS}: ${PseudoSingleton.message}`
-    };
-
     // - OWN
     protected readonly statePage = config.statePage;
     public get StatePage() { return this.statePage; }
@@ -33,7 +23,6 @@ export abstract class SinglePageApplication extends PseudoSingleton {
     // CONSTRUCTOR
     /** Warns after first instantiation */
     constructor(tHandler: TemplateHandler, bHandler: ButtonHandler) {
-        super(SinglePageApplication.ctorArg);
         this.bHandler = bHandler;
         this.rService = bHandler.RService;
         this.fService = this.rService.FService;

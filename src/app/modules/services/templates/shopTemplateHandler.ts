@@ -1,12 +1,12 @@
 import { TemplateHandler } from "./templateHandler";
-import { RenderService } from '../services/render/renderService';
-import { Template } from '../types/types';
-import { startTemplate } from './startTemplate';
-import { previewTemplate } from './previewTemplate';
-import { cartTemplate } from "../templates/cartTemplate";
-import { checkoutTemplate } from "../templates/checkoutTemplate";
-import { errorTemplate } from "../templates/errorTemplate";
-import { config } from '../config/config';
+import { RenderService } from '../render/renderService';
+import { Template } from '../../types/types';
+import { startTemplate } from './files/startTemplate';
+import { previewTemplate } from './files/previewTemplate';
+import { cartTemplate } from "./files/cartTemplate";
+import { checkoutTemplate } from "./files/checkoutTemplate";
+import { errorTemplate } from "./files/errorTemplate";
+import { config } from '../../config/config';
 
 "use strict";
 

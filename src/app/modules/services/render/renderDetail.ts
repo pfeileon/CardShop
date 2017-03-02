@@ -1,7 +1,7 @@
 import { Record, Shopable } from "../../types/types";
 import { config } from '../../config/config';
 import { RenderService } from "./renderService";
-import { cardModal } from "../../templates/modalTemplate";
+import { cardModal } from "../templates/files/modalTemplate";
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/FetchResource";
 import { FilterResource } from "../filter/filterResource";

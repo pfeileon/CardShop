@@ -1,4 +1,4 @@
-import { RenderService } from '../services/render/renderService';
+import { RenderService } from '../../render/renderService';
 import { cartButtonTemplate, btnRecord } from "./snippets";
 import { carousel } from "./carouselTemplate";
 

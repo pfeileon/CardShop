@@ -1,7 +1,7 @@
-import { Filters } from "../types/types";
-import { SinglePageApplication } from '../spa/singlePageApplication';
-import { FetchService } from '../services/fetch/fetchService';
-import { RenderService } from '../services/render/renderService';
+import { Filters } from "../../types/types";
+import { SinglePageApplication } from '../../spa/singlePageApplication';
+import { FetchService } from '../fetch/fetchService';
+import { RenderService } from '../render/renderService';
 
 'use strict';
 

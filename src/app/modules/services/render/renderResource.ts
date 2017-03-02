@@ -2,10 +2,10 @@ import { FilterResource } from "../filter/filterResource";
 import { RenderService } from "./renderService";
 import { RenderDetail } from "./renderDetail";
 import { config } from '../../config/config';
-import { getHashValue } from '../../misc/utilities';
+import { getHashValue } from '../misc/utilities';
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/fetchResource";
-import { validate } from "../../misc/customJQ";
+import { validate } from "../misc/customJQ";
 
 'use strict';
 

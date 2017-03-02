@@ -45,27 +45,3 @@ export interface Template {
     where: string,
     html: string
 }
-
-/** Generic interface for exported config constants */
-export interface Config<S, T> {
-    api: S;
-    data: T;
-}
-
-/** Interface for Config.api */
-export interface HearthstoneAPI {
-    url: string;
-    mashApeKey: string;
-}
-
-/** Interface for Config.data */
-export interface HardcodedData {
-    startPageData: {
-        cardSets: string[];
-    },
-    previewPageData: {
-        cardSetName: string;
-        heroes: string[],
-        mana: number[]
-    }
-}

@@ -1,20 +1,12 @@
 import { Shopable } from "../types/types";
-import { PseudoSingleton } from '../spa/pseudoSingleton';
 import { StorageService } from '../services/storage/storageService';
 import { Customer } from './customer';
 
 'use strict';
 
-export class ShoppingCart extends PseudoSingleton {
+export class ShoppingCart {
 
     //Properties
-    private static namePS = "ShoppingCart";
-    private static exists: boolean = false;
-    private static pseudoSingletonArg: { exists: boolean, message: string } = {
-        exists: ShoppingCart.exists,
-        message: `${ShoppingCart.namePS}: ${PseudoSingleton.message}`
-    };
-
     private sService: StorageService;
     public get SService() { return this.sService; }
 
@@ -28,7 +20,6 @@ export class ShoppingCart extends PseudoSingleton {
     //Constructor
     /** Warns after first instantiation */
     constructor(sService: StorageService) {
-        super(ShoppingCart.pseudoSingletonArg);
         this.sService = sService;
     }
 
