@@ -9,7 +9,7 @@ export abstract class ShopFilterButton extends ShopButton implements IFilterButt
     private filterService: FilterService;
     public get FilterService() { return this.filterService };
     constructor(id, shop) {
-        super(id, shop.BHandler)
-        this.filterService = shop.BHandler.FilterService;
+        super(id, shop)
+        this.filterService = this.bHandler.FilterService;
     }
 }

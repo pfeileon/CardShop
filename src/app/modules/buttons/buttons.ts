@@ -57,7 +57,7 @@ export class ConfirmButton extends ShopButton {
                     localStorage.setItem("customer", JSON.stringify(this.shop.Customer));
                     document.getElementById("checkoutFooter").innerText = "";
                     document.getElementById("checkoutFooter").insertAdjacentHTML("afterbegin", checkoutModal(this.shop.Customer));
-                    this.shop.BHandler.buy();
+                    this.BHandler.buy();
                 }
             });
         }

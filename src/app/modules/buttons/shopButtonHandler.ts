@@ -11,9 +11,9 @@ export class ShopButtonHandler extends ButtonHandler {
     // - FORCED
         protected readonly filters = (shop): Filters => {
         return {
-            "cardSet": this.selectCardSet.bind(shop),
-            "hero": this.selectHero.bind(shop),
-            "mana": this.selectManaCost.bind(shop)
+            "cardSet": this.selectCardSet.bind(this, shop),
+            "hero": this.selectHero.bind(this, shop),
+            "mana": this.selectManaCost.bind(this, shop)
         }
     }
     // - OWN
@@ -74,18 +74,18 @@ export class ShopButtonHandler extends ButtonHandler {
 
     // Filters
 
-    selectCardSet(cardSet: HTMLElement): void {
-        const setCardSetBtn: Buttons.SetCardSetButton = new Buttons.SetCardSetButton("set-card-set-btn", this);
+    selectCardSet(shop: CardShop, cardSet: HTMLElement): void {
+        const setCardSetBtn: Buttons.SetCardSetButton = new Buttons.SetCardSetButton("set-card-set-btn", shop);
         setCardSetBtn.click(cardSet);
     }
 
-    selectHero(hero: HTMLElement): void {
-        const setHeroBtn: Buttons.SetHeroButton = new Buttons.SetHeroButton("set-hero-set-btn", this);
+    selectHero(shop: CardShop, hero: HTMLElement): void {
+        const setHeroBtn: Buttons.SetHeroButton = new Buttons.SetHeroButton("set-hero-set-btn", shop);
         setHeroBtn.click(hero);
     }
 
-    selectManaCost(manaCost: HTMLElement): void {
-        const setManaCostBtn: Buttons.SetManaCostButton = new Buttons.SetManaCostButton("set-mana-set-btn", this);
+    selectManaCost(shop: CardShop, manaCost: HTMLElement): void {
+        const setManaCostBtn: Buttons.SetManaCostButton = new Buttons.SetManaCostButton("set-mana-set-btn", shop);
         setManaCostBtn.click(manaCost);
     }
 

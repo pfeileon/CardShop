@@ -1,14 +1,11 @@
 import { FilterResource } from "../filter/filterResource";
 import { RenderService } from "./renderService";
 import { RenderDetail } from "./renderDetail";
-import { Shopable } from "../../types/types";
 import { config } from '../../config/config';
 import { getHashValue } from '../../misc/utilities';
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/fetchResource";
-import { cardModal } from "../../templates/modalTemplate";
-import { formTemplate } from "../../templates/formTemplate";
-import { accordionTemplate } from "../../templates/accordionTemplate";
+import { validate } from "../../misc/customJQ";
 
 'use strict';
 
@@ -105,8 +102,7 @@ export class RenderResource extends RenderService {
     }
 
     renderCheckout(shop: CardShop) {
-        // Nothing to render
-        // All content is in the checkoutTemplate
+        validate();
     }
 
     renderError(shop: CardShop) {

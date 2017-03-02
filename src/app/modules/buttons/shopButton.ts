@@ -6,6 +6,7 @@ import { isStartPage } from "../misc/utilities";
 export abstract class ShopButton extends Button {
     // PROPERTIES
     protected shop: CardShop;
+    public get BHandler() { return <ShopButtonHandler>this.bHandler; }
     // CONSTRUCTOR
     constructor(id: string, shop: CardShop) {
         super(id, shop.BHandler);

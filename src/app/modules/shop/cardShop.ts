@@ -10,16 +10,13 @@ import { Customer } from "./customer";
 /** Start via inherited method "start()" */
 export class CardShop extends SinglePageApplication {
     // PROPERTIES
+    private sService: StorageService;
+    
     private cart: ShoppingCart;
     public get Cart() { return this.cart; }
 
     private customer: Customer;
     public get Customer() { return this.customer; }
-
-    private sService: StorageService;
-    public get SService() { return this.sService; }
-
-    public get THandler() { return this.tHandler; }
 
     public get BHandler() { return <ShopButtonHandler>this.bHandler; }
 
@@ -48,6 +45,8 @@ export class CardShop extends SinglePageApplication {
             this.sService.setCart(this.cart);
         });
     }
+
+    // - OWN
 
     setCustomer(customer: Customer): void {
         customer.FName = (<HTMLInputElement>document.getElementById("firstName")).value;
