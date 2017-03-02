@@ -1,4 +1,4 @@
-import * as Utils from '../misc/utilities';
+import { luhnAlgorithm } from '../services/misc/utilities';
 
 'use strict';
 
@@ -40,6 +40,6 @@ export class CreditCard {
         }
 
         //true or false
-        return Utils.luhnAlgorithm(cardNumber);
+        return luhnAlgorithm(cardNumber);
     }
 }

@@ -4,14 +4,6 @@ import { FetchService } from '../fetch/fetchService';
 
 'use strict';
 
-const request: Request = {
-    url: "config.api.url",
-    init: {
-        headers: { 'X-Mashape-Authorization': config.api.mashApeKey },
-        method: 'GET'
-    }
-}
-
 export class FetchResource extends FetchService{
 
     getCardData = (filter: {}): Promise<Init> => {
@@ -32,24 +24,24 @@ export class FetchResource extends FetchService{
 
     /** Returns all the cards */
     getAllCards = (): Promise<Init> => {
-        return this.query(config.api.url);
+        return this.query();
     }
 
     /** Returns single card data from the hearthstoneAPI */
     getSingleCard = (cardName: string): Promise<Init> => {
-        const url = config.api.url + '/' + cardName;
+        const url = config.api.request.url + '/' + cardName;
         return this.query(url);
     }
 
     /** Returns card data of a cardSet from the hearthstoneAPI */
     getCardSet = (setName: string): Promise<Init> => {
-        const url = config.api.url + '/sets/' + setName;
+        const url = config.api.request.url + '/sets/' + setName;
         return this.query(url);
     }
 
     /** Returns card data of a heroClass from the hearthstoneAPI */
     getClassCards = (className: string): Promise<Init> => {
-        const url = config.api.url + '/classes/' + className;
+        const url = config.api.request.url + '/classes/' + className;
         return this.query(url);
     }
 }

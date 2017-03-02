@@ -1,11 +1,11 @@
-import { RenderService } from '../services/render/renderService';
+import { RenderService } from '../../render/renderService';
 import { cartButtonTemplate, btnRecord } from "./snippets";
 import { carousel } from "./carouselTemplate";
 
 'use strict';
 
 /** Set Preview Template */
-export const previewTemplate = (rService: RenderService, data: { previewPageData }) => {
+export const previewTemplate = (rService: RenderService, data: {}) => {
     return `<article class="container">
     <header id="previewHeader">
         <button id="set-return-btn" type="button" class="btn btn-default return-btn">Return</button>
@@ -13,23 +13,23 @@ export const previewTemplate = (rService: RenderService, data: { previewPageData
     </header>
 
     <section id="previewSetSelection" class="cardSet-filter">
-        <h1><span class="addHeading">Card Set: </span><span class="card-set-name">${data.previewPageData[Object.keys(data.previewPageData)[0]]}</span></h1>
+        <h1><span class="addHeading">Card Set: </span><span class="card-set-name">${data["cardSetName"]}</span></h1>
          <div class="btn-group-justified" role="group" aria-label="CardSets">
-            ${rService.insertList(data["startPageData"][Object.keys(data["startPageData"])[0]], btnRecord)}
+            ${rService.insertList(data["cardSets"], btnRecord)}
         </div>
     </section>
 
     <section id="preview-filters" class="filters">
         <section id="hero-filter" class="hero-filter">
-            <h2>Select Hero:</h2>
+            <h2>Select Hero: <span class="hero-filter-heading"></span></h2>
             <div class="btn-group-justified" role="group" aria-label="Heroes">
-                ${rService.insertList(data.previewPageData[Object.keys(data.previewPageData)[1]], btnRecord)}
+                ${rService.insertList(data["heroes"], btnRecord)}
             </div>
         </section>
-        <section id ="mana-filter" class="mana-filter">
-            <h2>Mana Cost:</h2>
+        <section id="mana-filter" class="mana-filter">
+            <h2>Mana Cost: <span class="mana-filter-heading"></span></h2>
             <div class="btn-group-justified" role="group" aria-label="Mana">
-                ${rService.insertList(data.previewPageData[Object.keys(data.previewPageData)[2]], btnRecord)}
+                ${rService.insertList(data["mana"], btnRecord)}
             </div>
         </section>
     </section>
