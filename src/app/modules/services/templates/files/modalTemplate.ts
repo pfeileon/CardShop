@@ -64,7 +64,7 @@ const checkoutModalBody = (customer: any) => {
                   <td>Address:</td><td>${customer.address + ", " + customer.zipCode + " " + customer.city + ", " + customer.country}</td>
               </tr>
               <tr class="warning">
-                  <td>Credit card:</td><td>${customer.creditCard.owner + ", " + customer.creditCard.cardNumber + ", " + customer.creditCard.validThru}</td>
+                  <td>Credit card:</td><td>${customer.creditCard.owner + ", " + customer.creditCard.cardNumber + ", " + (customer.creditCard.validThru.getUTCMonth()+1) + ".20" + customer.creditCard.validThru.getUTCFullYear()}</td>
               </tr>
           </table></div>`;
 }
