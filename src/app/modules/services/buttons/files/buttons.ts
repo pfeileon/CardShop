@@ -1,11 +1,13 @@
 import { Button } from "./button";
+import { FilterButton } from "./filterButton";
 import { ShopButton } from "./shopButton";
-import { config } from "../config/config";
-import * as Utils from "../misc/utilities";
-import { CardPack } from "../shop/cardPack";
-import { Customer } from "../shop/customer";
-import { CreditCard } from "../shop/creditCard";
-import { checkoutModal } from "../templates/modalTemplate";
+import { ShopFilterButton } from "./shopFilterButton";
+import { config } from "../../../config/config";
+import { createHash, fakeHashchange, getHashValue } from "../../misc/utilities";
+import { CardPack } from "../../../shop/cardPack";
+import { Customer } from "../../../shop/customer";
+import { CreditCard } from "../../../shop/creditCard";
+import { checkoutModal } from "../../templates/files/modalTemplate";
 
 "use strict";
 
@@ -22,8 +24,8 @@ export class CancelButton extends Button {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
                 if (item.id === "cancelPD") {
-                    Utils.createHash("");
-                    Utils.createHash("cart/" + localStorage.getItem("cart"));
+                    createHash("");
+                    createHash("cart/" + localStorage.getItem("cart"));
                 }
                 if (item.id === "cancelCCD") {
                     document.getElementById("personalDataHeading").click();
@@ -53,7 +55,7 @@ export class ConfirmButton extends ShopButton {
                     localStorage.setItem("customer", JSON.stringify(this.shop.Customer));
                     document.getElementById("checkoutFooter").innerText = "";
                     document.getElementById("checkoutFooter").insertAdjacentHTML("afterbegin", checkoutModal(this.shop.Customer));
-                    this.shop.BHandler.buy();
+                    this.BHandler.buy();
                 }
             });
         }
@@ -67,7 +69,7 @@ export class CheckoutButton extends ShopButton {
                 alert("Your cart is empty!");
             }
             else {
-                Utils.createHash("checkout/");
+                createHash("checkout/");
             }
         });
     }
@@ -78,7 +80,7 @@ export class ClearButton extends ShopButton {
         document.getElementById(this.id).addEventListener("click", (e) => {
             localStorage.removeItem("cart");
             this.shop.Cart.Items = [];
-            Utils.createHash("cart/");
+            createHash("cart/");
         });
     }
 }
@@ -95,7 +97,7 @@ export class DeleteButton extends ShopButton {
                 delete items[`${((<any>del.target).id.split("-del")[0]).replace(/-/gi, " ")}`];
                 localStorage.setItem("cart", JSON.stringify(items));
             }
-            Utils.createHash("cart/" + localStorage.getItem("cart"));
+            createHash("cart/" + localStorage.getItem("cart"));
         });
     }
 }
@@ -112,21 +114,21 @@ export class EditButton extends Button {
 
             localStorage.setItem("cart", JSON.stringify(cartStorage));
 
-            Utils.createHash("cart/" + localStorage.getItem("cart"));
+            createHash("cart/" + localStorage.getItem("cart"));
         });
     }
 }
 
-export class ReturnButton extends Button {
+export class ReturnButton extends FilterButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
-                if ((<any>Utils.getHashValue()).includes("cart/")) {
-                    Utils.createHash(localStorage.getItem("lastHash"));
+                if ((<any>getHashValue()).includes("cart/")) {
+                    createHash(localStorage.getItem("lastHash"));
                 }
                 else {
-                    let temp = Utils.getFilters()["cardSet"];
-                    Utils.createHash(temp);
+                    let temp = this.FilterService.getFilters()["cardSet"];
+                    createHash(temp);
                 }
             });
         }
@@ -136,17 +138,17 @@ export class ReturnButton extends Button {
 export class PreviewButton extends Button {
     click = (): void => {
         document.getElementById(this.id).addEventListener("click", (e) => {
-            const hashValue: string = Utils.getHashValue();
+            const hashValue: string = getHashValue();
             let cardSetName: string;
 
             if (hashValue === undefined || "" || null) {
                 cardSetName = "Classic";
-                Utils.createHash("Classic");
+                createHash("Classic");
             }
             else if ((<any>hashValue).includes("cart/")) {
                 cardSetName = document.getElementById(this.id).innerText;
             }
-            else if ((<any>config.data.startPageData.cardSets).includes(hashValue)) {
+            else if ((<any>config.data.cardSets).includes(hashValue)) {
                 cardSetName = hashValue;
             }
             else {
@@ -154,22 +156,21 @@ export class PreviewButton extends Button {
                             Showing "Classic" instead.`)
                 cardSetName = "Classic";
             }
-
-            config.data.previewPageData.cardSetName = cardSetName;
-            Utils.createHash(`preview/{"cardSet":"${cardSetName}","hero":"Druid"}`);
+            
+            createHash(`preview/{"cardSet":"${cardSetName}","hero":"Druid"}`);
         });
     }
 }
 
-export class AddToCartButton extends ShopButton {
+export class AddToCartButton extends ShopFilterButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
             item.addEventListener("click", (e) => {
                 let setName: string;
-                const filters: {} = Utils.getFilters();
+                const filters: {} = this.FilterService.getFilters();
                 // Cast to <any> to make ".includes()" work
-                const hashValue = <any>Utils.getHashValue();
-                const cardSets = <any>config.data.startPageData.cardSets;
+                const hashValue = <any>getHashValue();
+                const cardSets = <any>config.data.cardSets;
 
                 if (hashValue !== undefined || "" || null) {
                     if (hashValue.includes("/") && filters["cardSet"] !== undefined && cardSets.includes(filters["cardSet"])) {
@@ -197,7 +198,7 @@ export class AddToCartButton extends ShopButton {
                     amountOfPacks = +(<HTMLInputElement>inputElements[1]).value;
                 }
 
-                Utils.fakeHashchange("item_added");
+                fakeHashchange("item_added");
 
                 this.shop.Cart.fillCart(pack, amountOfPacks);
             });
@@ -209,61 +210,60 @@ export class GotoCartButton extends ShopButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
-                localStorage.setItem("lastHash", Utils.getHashValue());
-                Utils.createHash("cart/" + localStorage.getItem("cart"));
+                localStorage.setItem("lastHash", getHashValue());
+                createHash("cart/" + localStorage.getItem("cart"));
             });
         }
     }
 }
 
 /** Sets the hash-value according to the selected CardSet */
-export class SetCardSetButton extends ShopButton {
+export class SetCardSetButton extends ShopFilterButton {
     click = (cardSet: HTMLElement): void => {
         cardSet.addEventListener("click", (e: MouseEvent): void => {
             const cardSetName: string = (<any>e.target).attributes[0].value;
-            config.data.previewPageData.cardSetName = cardSetName;
 
             this.resetBtnClassList(cardSet, e);
 
-            if (Utils.getHashValue() !== undefined && (<any>Utils.getHashValue()).includes("/")) {
-                let filter = Utils.getFilters();
+            if (getHashValue() !== undefined && (<any>getHashValue()).includes("/")) {
+                let filter = this.FilterService.getFilters();
                 if (filter["cardSet"] !== undefined && filter["cardSet"] === cardSetName && filter["hero"] !== undefined) {
                     delete (filter["cardSet"]);
                 }
                 else {
                     filter["cardSet"] = cardSetName;
                 }
-                Utils.createHash(`preview/${JSON.stringify(filter)}`);
+                createHash(`preview/${JSON.stringify(filter)}`);
             }
             else {
-                Utils.createHash(cardSetName);
+                createHash(cardSetName);
             }
         });
     }
 }
 
 /** Sets the hash according to the selected hero */
-export class SetHeroButton extends ShopButton {
+export class SetHeroButton extends ShopFilterButton {
     click = (hero: HTMLElement) => {
         hero.addEventListener("click", (e: MouseEvent): void => {
             const heroValue: string = (<any>e.target).attributes[0].value;
 
             this.resetBtnClassList(hero, e);
 
-            let filter = Utils.getFilters();
+            let filter = this.FilterService.getFilters();
             if (filter["hero"] !== undefined && filter["hero"] === heroValue && filter["cardSet"] !== undefined) {
                 delete (filter["hero"]);
             }
             else {
                 filter["hero"] = heroValue;
             }
-            Utils.createHash(`preview/${JSON.stringify(filter)}`);
+            createHash(`preview/${JSON.stringify(filter)}`);
         });
     }
 }
 
 /** Sets the hash according to the selected mana-cost */
-export class SetManaCostButton extends ShopButton {
+export class SetManaCostButton extends ShopFilterButton {
     click = (manaCost: HTMLElement): void => {
         manaCost.addEventListener("click", (e: MouseEvent): void => {
             if ((<any>e.target).attributes[0] === undefined) {
@@ -273,7 +273,7 @@ export class SetManaCostButton extends ShopButton {
 
             this.resetBtnClassList(manaCost, e);
 
-            let filter = Utils.getFilters();
+            let filter = this.FilterService.getFilters();
             if (filter["manaCost"] !== undefined && filter["manaCost"] === manaCostValue) {
                 delete (filter["manaCost"]);
             }
@@ -281,7 +281,7 @@ export class SetManaCostButton extends ShopButton {
                 filter["manaCost"] = manaCostValue;
             }
 
-            Utils.createHash(`preview/${JSON.stringify(filter)}`);
+            createHash(`preview/${JSON.stringify(filter)}`);
         });
     }
 }

@@ -1,4 +1,4 @@
-import { Callback, Promise, Request, Response } from '../types/types'
+import { Callback, Promise, Request, Response } from '../../types/types'
 declare const fetch;
 
 // A collection of utility functions
@@ -58,49 +58,6 @@ export function luhnAlgorithm(value: string) {
     }
 
     return (nCheck % 10) === 0;
-}
-
-/** Toggles the class value of a specified HTMLElement
- * 
- * @param { string } cssClass - Class to toggle (default is "no-display")
-*/
-export function toggleCssClass(id: string, cssClass: string = "no-display"): void {
-    document.getElementById(id).classList.toggle(cssClass);
-}
-
-export function getFilters(): {} {
-    const hashValue = getHashValue();
-    let filters: {};
-    if (hashValue !== undefined && (<any>hashValue).includes("/{")) {
-        filters = JSON.parse(hashValue.split("/")[1]);
-    }
-    else {
-        filters = hashValue;
-    }
-    return filters;
-}
-
-export function getCardSetFilter(): string {
-    let temp = JSON.stringify(getFilters());
-    if (temp !== undefined) {
-        if ((<any>temp).includes("{")) {
-            temp = getFilters()["cardSet"];
-        }
-        else {
-            temp = temp.replace(/"/g, "");
-        }
-    }
-    return temp;
-}
-
-export function getHeroFilter(): string {
-    let temp = getFilters()["hero"];
-    return temp;
-}
-
-export function getManaFilter(): string {
-    let temp = getFilters()["manaCost"];
-    return temp;
 }
 
 /** Determines if the user is on the start page */

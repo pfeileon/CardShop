@@ -1,10 +1,10 @@
 import { Record, Shopable } from "../../types/types";
 import { config } from '../../config/config';
 import { RenderService } from "./renderService";
-import * as Utils from '../../misc/utilities';
-import { cardModal } from "../../templates/modalTemplate";
+import { cardModal } from "../templates/files/modalTemplate";
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/FetchResource";
+import { FilterResource } from "../filter/filterResource";
 
 "use strict";
 
@@ -22,61 +22,15 @@ const inputAmountRecord: Record = (item) => {
 
 export class RenderDetail {
     // PROPERTIES
-
     private lastSetName: string;
     private lastCardData: any;
 
     // METHODS
 
-    filterCards(cardData: any): {} {
-
-        // First remove old code
-        document.getElementById("carouselCardWrapper").innerText = "";
-        document.getElementById("carouselInd").innerText = "";
-        document.getElementById("previewFooter").innerText = "";
-
-        let filteredCardData = {};
-
-        let i = 0;
-        for (let card of cardData) {
-
-            let cardFilterPassed = (
-                card.collectible &&
-                card.img !== undefined
-            )
-
-            let setFilterPassed = (<any>config.data.startPageData.cardSets).includes(card.cardSet);
-
-            if (cardFilterPassed && setFilterPassed) {
-
-                let heroFilter: string = Utils.getFilters()["hero"];
-                let heroFilterPassed = (
-                    heroFilter === undefined || (
-                        heroFilter !== undefined &&
-                        card.playerClass === heroFilter
-                    ))
-
-                let manaFilter: string = Utils.getFilters()["manaCost"];
-                let manaFilterPassed = (
-                    manaFilter === undefined || (
-                        manaFilter !== undefined && (
-                            (card.cost == manaFilter && manaFilter <= "9") ||
-                            (manaFilter == "10" && card.cost >= "10")
-                        )))
-
-                if (heroFilterPassed && manaFilterPassed) {
-                    filteredCardData[i] = card;
-                    i++;
-                }
-            }
-        }
-        return filteredCardData;
-    }
-
     /** Inserts a carousel of the cards of a fetch call */
-    renderCards(fResource: FetchResource, setName: string, filters: {}): void {
+    renderCards(filterResource: FilterResource, fResource: FetchResource, setName: string, filters: {}): void {
         if (this.lastSetName === setName && setName !== undefined) {
-            this.renderCarousel(this.filterCards(this.lastCardData));
+            this.renderCarousel(filterResource.filterCards(this.lastCardData));
         }
         else {
             fResource.getCardData(filters)
@@ -88,10 +42,10 @@ export class RenderDetail {
                             this.lastCardData = cardData;
                         }
                     }
-                    this.renderCarousel(this.filterCards(cardData));
+                    this.renderCarousel(filterResource.filterCards(cardData));
                 })
             addEventListener("resize", (e) => {
-                this.renderCarousel(this.filterCards(this.lastCardData));
+                this.renderCarousel(filterResource.filterCards(this.lastCardData));
             });
         }
     }
@@ -155,31 +109,11 @@ export class RenderDetail {
         }
     }
 
-    refreshFilters(state: string) {
-        let btnList = document.querySelector(`#${state}-page .cardSet-filter .btn-group-justified`).children[0].children;
-        this.refreshButtons(btnList, Utils.getCardSetFilter());
-        if (state === "preview") {
-            btnList = document.querySelector("#hero-filter .btn-group-justified").children[0].children;
-            this.refreshButtons(btnList, Utils.getHeroFilter());
-            btnList = document.querySelector("#mana-filter .btn-group-justified").children[0].children;
-            this.refreshButtons(btnList, Utils.getManaFilter());
-        }
-    }
-
-    refreshButtons(btnList: HTMLCollection, filter: string) {
-        for (let btn of <any>btnList) {
-            if (btn.attributes["data-id"].value === filter) {
-                btn.classList.remove("btn-default");
-                btn.classList.add("btn-primary");
-            }
-            else {
-                btn.classList.add("btn-default");
-                btn.classList.remove("btn-primary");
-            }
-        }
-    }
-
     renderCarousel(filteredCardData: {}) {
+        // First remove old code
+        document.getElementById("carouselCardWrapper").innerText = "";
+        document.getElementById("carouselInd").innerText = "";
+        document.getElementById("previewFooter").innerText = "";
         for (let item in filteredCardData) {
             let i = +item;
             let card = filteredCardData[item];

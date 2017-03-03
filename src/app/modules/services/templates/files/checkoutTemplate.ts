@@ -1,8 +1,8 @@
-import { RenderService } from '../services/render/renderService';
-import { luhnAlgorithm } from "../misc/utilities";
+import { RenderService } from '../../render/renderService';
+import { luhnAlgorithm } from "../../misc/utilities";
 import { formTemplate } from "./formTemplate";
 import { accordionTemplate } from "./accordionTemplate";
-import { validate } from "../misc/customJQ";
+import { validate } from "../../misc/customJQ";
 
 "use strict";
 
