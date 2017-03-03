@@ -1,5 +1,5 @@
-import { Callback } from "../types/types";
-import { ButtonHandler } from "./buttonHandler";
+import { Callback } from "../../../types/types";
+import { ButtonHandler } from "./../buttonHandler";
 
 "use strict";
 

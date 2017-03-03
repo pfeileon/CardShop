@@ -1,38 +1,38 @@
 import { Shopable } from "../types/types";
-import { PseudoSingleton } from '../spa/pseudoSingleton';
-import { StorageService } from '../services/storage/storageService';
+import { StorageResource } from '../services/storage/storageResource';
 import { Customer } from './customer';
 
 'use strict';
 
-export class ShoppingCart extends PseudoSingleton {
+export class ShoppingCart {
 
     //Properties
-    private static namePS = "ShoppingCart";
-    private static exists: boolean = false;
-    private static pseudoSingletonArg: { exists: boolean, message: string } = {
-        exists: ShoppingCart.exists,
-        message: `${ShoppingCart.namePS}: ${PseudoSingleton.message}`
-    };
+    private sResource: StorageResource;
+    public get SResource() { return this.sResource; }
 
-    private sService: StorageService;
-    public get SService() { return this.sService; }
-
-    private customer: Customer;
     /** All items in the cart */
     private items: Shopable[] = new Array<Shopable>();
-
     public get Items() { return this.items; }
     public set Items(Items) { this.items = Items }
 
     //Constructor
     /** Warns after first instantiation */
-    constructor(sService: StorageService) {
-        super(ShoppingCart.pseudoSingletonArg);
-        this.sService = sService;
+    constructor(sResource: StorageResource) {
+        this.sResource = sResource;
     }
 
     //Methods
+
+    initCart() {
+        this.sResource.storageInit("cart", this);
+        addEventListener("hashchange", (setCart) => {
+            this.sResource.setCart(this);
+        });
+        // Updates other window or tab when storage changes
+        addEventListener("storage", (setCart) => {
+            this.sResource.setCart(this);
+        });
+    }
 
     /**
      * Fills the ShoppingCart with items and returns them
@@ -43,7 +43,7 @@ export class ShoppingCart extends PseudoSingleton {
         for (let i: number = 0; i < amount; i++) {
             this.items.push(item);
         }
-        this.sService.populateStorage(this.items);
+        this.sResource.populateStorage(this);
         return this.items;
     }
 }

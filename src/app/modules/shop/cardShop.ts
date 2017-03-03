@@ -1,8 +1,8 @@
-import { TemplateHandler } from '../templates/templateHandler';
+import { TemplateHandler } from '../services/templates/templateHandler';
 import { ShoppingCart } from './shoppingCart';
 import { SinglePageApplication } from '../spa/singlePageApplication';
-import { ShopButtonHandler } from '../buttons/shopButtonHandler';
-import { StorageService } from '../services/storage/storageService';
+import { ShopButtonHandler } from '../services/buttons/shopButtonHandler';
+import { StorageResource } from '../services/storage/storageResource';
 import { Customer } from "./customer";
 
 'use strict';
@@ -16,11 +16,6 @@ export class CardShop extends SinglePageApplication {
     private customer: Customer;
     public get Customer() { return this.customer; }
 
-    private sService: StorageService;
-    public get SService() { return this.sService; }
-
-    public get THandler() { return this.tHandler; }
-
     public get BHandler() { return <ShopButtonHandler>this.bHandler; }
 
     // CONSTRUCTOR
@@ -30,7 +25,6 @@ export class CardShop extends SinglePageApplication {
         this.tHandler = tHandler;
         this.bHandler = bHandler;
         this.cart = cart;
-        this.sService = cart.SService;
     }
 
     // METHODS
@@ -39,15 +33,10 @@ export class CardShop extends SinglePageApplication {
 
     /** Called by SinglePageApplication.start() */
     loadSpecifics(): void {
-        this.sService.storageInit(this.cart);
-        addEventListener("hashchange", (setCart) => {
-            this.sService.setCart(this.cart);
-        });
-        // Updates other window or tab when storage changes
-        addEventListener("storage", (setCart) => {
-            this.sService.setCart(this.cart);
-        });
+        this.cart.initCart();
     }
+
+    // - OWN
 
     setCustomer(customer: Customer): void {
         customer.FName = (<HTMLInputElement>document.getElementById("firstName")).value;

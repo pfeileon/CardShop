@@ -1,4 +1,4 @@
-import { RenderService } from '../services/render/renderService';
+import { RenderService } from '../../render/renderService';
 "use strict";
 
 export const cartTemplate = (rService: RenderService) => {

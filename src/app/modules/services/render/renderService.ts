@@ -1,7 +1,7 @@
 import { Record } from "../../types/types";
-import { FetchResource } from "../fetch/fetchResource";
+import { FetchService } from "../fetch/fetchService";
+import { FilterService } from "../filter/filterService";
 import { SinglePageApplication } from "../../spa/singlePageApplication";
-import * as Utils from "../../misc/utilities";
 
 "use strict";
 
@@ -11,12 +11,19 @@ const record: Record = (item) => {
 
 export abstract class RenderService {
     // PROPERTIES
-    protected fResource: FetchResource;
-    public get FResource() { return this.fResource; }
+
+    // -- ABSTRACT
+    protected abstract readonly stateRenderers = {};
+    // - OWN
+    protected fService: FetchService;
+    public get FService() { return this.fService; }
+    protected filterService: FilterService;
+    public get FilterService() { return this.filterService };
 
     // CONSTRUCTOR
-    constructor(fResource: FetchResource) {
-        this.fResource = fResource;
+    constructor(fService: FetchService, filterService: FilterService) {
+        this.fService = fService;
+        this.filterService = filterService;
     }
 
     // METHODS
@@ -53,7 +60,7 @@ export abstract class RenderService {
                 statesShown[i] = !statesShown[i];
             }
             if (statesShown[i]) {
-                Utils.toggleCssClass(pages[i]);
+                document.getElementById(pages[i]).classList.toggle("no-display");
             }
         }
         this.renderState(state, spApp);
@@ -90,8 +97,4 @@ export abstract class RenderService {
         }
         return `<ul>${list.map(item => Record(item)).join('')}</ul>`;
     }
-
-    // -- ABSTRACT
-
-    protected abstract stateRenderers = {};
 }
