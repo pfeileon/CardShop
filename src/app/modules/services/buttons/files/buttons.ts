@@ -192,10 +192,10 @@ export class AddToCartButton extends ShopFilterButton {
                 let amountOfPacks: number;
                 const inputElements = document.getElementsByClassName("input-amount");
                 if (hashValue.includes("/")) {
-                    amountOfPacks = +(<HTMLInputElement>inputElements[0]).value;
+                    amountOfPacks = +(<HTMLInputElement>inputElements[1]).value;
                 }
                 else {
-                    amountOfPacks = +(<HTMLInputElement>inputElements[1]).value;
+                    amountOfPacks = +(<HTMLInputElement>inputElements[0]).value;
                 }
 
                 fakeHashchange("item_added");
