@@ -26,6 +26,16 @@ module.exports = function (env) {
             }, {
                 test: /\.(eot|otf|svg|ttf|woff|woff2)$/,
                 loader: 'file-loader?name=assets/fonts/[name].[ext]'
+            },
+            {
+                test: /\.(png|jpg|svg)$/,
+                use: {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 15000,
+                        name: '[name].[ext]',
+                    },
+                },
             }]
         },
         devtool: 'source-map',
