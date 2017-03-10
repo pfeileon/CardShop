@@ -191,10 +191,13 @@ export class AddToCartButton extends ShopFilterButton {
 
                 let amountOfPacks: number;
                 const inputElements = document.getElementsByClassName("input-amount");
-                if (hashValue.includes("/")) {
+                if (hashValue !== undefined && hashValue.includes("/")) {
                     amountOfPacks = +(<HTMLInputElement>inputElements[1]).value;
                 }
                 else {
+                    if (document.querySelector("#start-page span.card-set-name").innerHTML === "" || undefined) {
+                        createHash("Classic");
+                    }
                     amountOfPacks = +(<HTMLInputElement>inputElements[0]).value;
                 }
 
