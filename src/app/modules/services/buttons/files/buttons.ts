@@ -156,7 +156,7 @@ export class PreviewButton extends Button {
                             Showing "Classic" instead.`)
                 cardSetName = "Classic";
             }
-            
+
             createHash(`preview/{"cardSet":"${cardSetName}","hero":"Druid"}`);
         });
     }
@@ -213,6 +213,9 @@ export class GotoCartButton extends ShopButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
+                if (document.querySelector("#start-page span.card-set-name").innerHTML === "" || undefined) {
+                    createHash("Classic");
+                }
                 localStorage.setItem("lastHash", getHashValue());
                 createHash("cart/" + localStorage.getItem("cart"));
             });
