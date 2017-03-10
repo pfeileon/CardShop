@@ -25,17 +25,17 @@ module.exports = function (env) {
             rules: [
                 {
                     test: /bootstrap.+\.(jsx|js)$/,
-                    loader: 'imports-loader?jQuery=jquery,$=jquery'
+                    use: 'imports-loader?jQuery=jquery,$=jquery'
                 },
                 {
                     test: /\.ts$/,
-                    loader: 'awesome-typescript-loader?sourceMap'
+                    use: 'awesome-typescript-loader?sourceMap'
                 }, {
                     test: /\.scss$/,
-                    loaders: ['style-loader', 'css-loader?sourceMap', 'sass-loader?sourceMap']
+                    use: ['style-loader', 'css-loader?sourceMap', 'sass-loader?sourceMap']
                 }, {
                     test: /\.(eot|otf|svg|ttf|woff|woff2)$/,
-                    loader: 'file-loader?name=assets/fonts/[name].[ext]'
+                    use: 'file-loader?name=[name].[ext]'
                 },
                 {
                     test: /\.(png|jpg|svg)$/,
