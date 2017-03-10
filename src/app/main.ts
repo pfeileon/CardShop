@@ -1,6 +1,5 @@
 import 'jquery';
 import 'bootstrap-loader';
-import 'bootstrap';
 import 'bootstrap-validator';
 import '../assets/styles/styles.scss';
 import { FetchResource } from './modules/services/fetch/fetchResource';
