@@ -5,6 +5,10 @@ import { cardModal } from "../templates/files/modalTemplate";
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/FetchResource";
 import { FilterResource } from "../filter/filterResource";
+import '../../../../assets/images/cardPacks/packClassic.png';
+import '../../../../assets/images/cardPacks/packTgt.png';
+import '../../../../assets/images/cardPacks/packWotog.png';
+import '../../../../assets/images/cardPacks/packMsog.png';
 
 "use strict";
 
@@ -62,19 +66,19 @@ export class RenderDetail {
             let pack = {};
             switch (item["setName"]) {
                 case "Classic":
-                    pack["link"] = "http://www.hearthcards.net/packs/images/pack.png";
+                    pack["link"] = "packClassic.png";
                     pack["alt"] = item["setName"];
                     break;
                 case "The Grand Tournament":
-                    pack["link"] = "http://www.hearthcards.net/packs/images/packtgt.png";
+                    pack["link"] = "packTgt.png";
                     pack["alt"] = item["setName"];
                     break;
                 case "Whispers of the Old Gods":
-                    pack["link"] = "http://www.hearthcards.net/packs/images/packwotog.png";
+                    pack["link"] = "packWotog.png";
                     pack["alt"] = item["setName"];
                     break;
                 case "Mean Streets of Gadgetzan":
-                    pack["link"] = "http://www.hearthcards.net/packs/images/packmsog.png";
+                    pack["link"] = "packMsog.png";
                     pack["alt"] = item["setName"];
                     break;
                 default:

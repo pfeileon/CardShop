@@ -9,19 +9,28 @@
   },
   "devDependencies": {
     "awesome-typescript-loader": "^3.0.0-beta.17",
-    "css-loader": "^0.26.1",
+    "bootstrap-loader": "^2.0.0-beta.22",
+    "bootstrap-sass": "^3.3.7",
+    "bootstrap-validator": "^0.11.9",
+    "css-loader": "^0.26.4",
     "file-loader": "^0.9.0",
     "html-loader": "^0.4.4",
     "html-webpack-plugin": "v2.26.0",
     "image-webpack-loader": "^3.2.0",
-    "node-sass": "^4.1.1",
+    "jquery": "^3.1.1",
+    "node-sass": "^4.5.0",
+    "resolve-url-loader": "^2.0.2",
     "sass-loader": "^4.1.1",
-    "style-loader": "^0.13.1",
+    "style-loader": "^0.13.2",
     "typescript": "^2.1.4",
+    "url-loader": "^0.5.8",
     "webpack": "v2.2.0-rc.3",
     "webpack-dev-server": "v2.2.0-rc.0"
   },
   "dependencies": {
-    "bootstrap-sass": "^3.3.7"
+    "bootstrap": "^3.3.7",
+    "bootstrap-sass": "^3.3.7",
+    "bootstrap-validator": "^0.11.9",
+    "jquery": "^3.1.1"
   }
 }

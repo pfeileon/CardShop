@@ -1,3 +1,7 @@
+import 'jquery';
+import 'bootstrap-loader';
+import 'bootstrap';
+import 'bootstrap-validator';
 import '../assets/styles/styles.scss';
 import { FetchResource } from './modules/services/fetch/fetchResource';
 import { FilterResource } from './modules/services/filter/filterResource';
@@ -12,7 +16,6 @@ import { CardShop } from './modules/shop/cardShop';
 'use strict';
 
 document.addEventListener('DOMContentLoaded', (start) => {
-
     // Initialization
     const fResource: FetchResource = new FetchResource();
     const filterResource: FilterResource = new FilterResource();
