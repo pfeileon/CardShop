@@ -10,7 +10,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: "Belwe Bd BT";
+    font-family: "Belwe Bd BT" !important;
 }
 
 article {
@@ -89,13 +89,13 @@ article {
     border-radius: .5em;
     .modal-header,
     .modal-footer {
-        font-family: "Belwe Bd BT";
+        font-family: "Belwe Bd BT" !important;
         background-color: rgba($modalColor1, 0.9);
         border-radius: .5em;
     }
     .flavor,
     .artist {
-        font-family: "ITC Franklin Gothic BookCd", "Franklin Gothic Medium", "Franklin Gothic";
+        font-family: "ITC Franklin Gothic BookCd", "Franklin Gothic Medium", "Franklin Gothic" !important;
         font-size: 12pt;
         margin-top: 70px;
         background-color: rgba($modalColor2, 0.9);
