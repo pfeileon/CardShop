@@ -106,7 +106,13 @@ export class EditButton extends Button {
     click = (): void => {
         document.getElementById(this.id).addEventListener("input", (e) => {
             let amount: number;
-            amount = +(<HTMLInputElement>e.target).value;
+            let value = +(<HTMLInputElement>e.target).value;
+            if (value < 101) {
+                amount = value;
+            }
+            else {
+                amount = 100;
+            }
             let cartStorage = JSON.parse(localStorage.getItem("cart"));
 
             let prop = Object.keys(cartStorage);
