@@ -17,7 +17,7 @@ module.exports = function (env) {
                 $: "jquery",
                 jquery: "jQuery"
             }),
-            new ExtractTextPlugin('style.css'),
+            new ExtractTextPlugin('styles.css'),
             new HtmlWebpackPlugin({
                 template: './src/app/index.html',
                 inject: 'head'
