@@ -15,6 +15,7 @@ import { CardShop } from './modules/shop/cardShop';
 'use strict';
 
 document.addEventListener('DOMContentLoaded', (start) => {
+    console.log(localStorage);
     // Initialization
     const fResource: FetchResource = new FetchResource();
     const filterResource: FilterResource = new FilterResource();

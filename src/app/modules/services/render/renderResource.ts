@@ -2,7 +2,7 @@ import { FilterResource } from "../filter/filterResource";
 import { RenderService } from "./renderService";
 import { RenderDetail } from "./renderDetail";
 import { config } from '../../config/config';
-import { getHashValue } from '../misc/utilities';
+import { createHash, getHashValue } from '../misc/utilities';
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/fetchResource";
 import { validate } from "../misc/customJQ";
@@ -78,7 +78,13 @@ export class RenderResource extends RenderService {
         let classList = document.getElementById("checkout-btn").classList;
         let cartContent = document.getElementById("cart-content");
 
-        if (localStorage.getItem("cart") !== (null && undefined)) {
+        let urlCart = getHashValue().split("/")[1];
+        let storageCart = localStorage.getItem("cart");
+
+        let isFromStorage = storageCart !== (null && undefined);
+        let isFromUrl = urlCart !== ("" && null && undefined);
+
+        if (isFromStorage || isFromUrl) {
             cartContent.innerHTML = `
                 <table id="cartContentTable" class="table table-hover">
                 </table>
@@ -88,10 +94,23 @@ export class RenderResource extends RenderService {
                 classList.add("btn-success");
             }
 
-            let cartObject = JSON.parse(localStorage.getItem("cart"));
-            this.rDetail.renderCartTable(shop, cartObject);
+            let cartObject;
+            if (isFromUrl && !isFromStorage) {
+                if (confirm("Do you really want to set your cart via address?")) {
+                    cartObject = JSON.parse(urlCart);
+                    localStorage.setItem("cart", urlCart);
+                    isFromStorage = true;
+                }
+                else {
+                    createHash("cart/")
+                }
+            }
+            if (isFromStorage) {
+                cartObject = JSON.parse(storageCart);
+                this.rDetail.renderCartTable(shop, cartObject);
+            }
         }
-        else {
+        if (!isFromStorage) {
             if (classList.contains("btn-success")) {
                 classList.remove("btn-success");
             }
