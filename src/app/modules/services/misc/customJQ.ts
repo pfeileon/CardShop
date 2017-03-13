@@ -1,6 +1,5 @@
 import { luhnAlgorithm } from "./utilities";
-declare const require;
-var $ = require('jquery');
+declare const $;
 
 // If absolutely necessary, here is the place to use jQuery
 

@@ -8,15 +8,18 @@
     "build": "node_modules/.bin/webpack"
   },
   "devDependencies": {
-    "awesome-typescript-loader": "^3.0.0-beta.17",
+    "awesome-typescript-loader": "^3.1.2",
+    "bootstrap": "^3.3.7",
     "bootstrap-loader": "^2.0.0-beta.22",
     "bootstrap-sass": "^3.3.7",
     "bootstrap-validator": "^0.11.9",
     "css-loader": "^0.26.4",
+    "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.9.0",
     "html-loader": "^0.4.4",
-    "html-webpack-plugin": "v2.26.0",
+    "html-webpack-plugin": "^2.26.0",
     "image-webpack-loader": "^3.2.0",
+	"imports-loader": "^0.7.1",
     "jquery": "^3.1.1",
     "node-sass": "^4.5.0",
     "resolve-url-loader": "^2.0.2",
@@ -24,13 +27,30 @@
     "style-loader": "^0.13.2",
     "typescript": "^2.1.4",
     "url-loader": "^0.5.8",
-    "webpack": "v2.2.0-rc.3",
-    "webpack-dev-server": "v2.2.0-rc.0"
+    "webpack": "^2.2.0-rc.3",
+    "webpack-dev-server": "^2.2.0-rc.0"
   },
   "dependencies": {
+    "awesome-typescript-loader": "^3.1.2",
     "bootstrap": "^3.3.7",
+    "bootstrap-loader": "^2.0.0-beta.22",
     "bootstrap-sass": "^3.3.7",
     "bootstrap-validator": "^0.11.9",
-    "jquery": "^3.1.1"
+    "css-loader": "^0.26.4",
+	"extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.9.0",
+    "html-loader": "^0.4.4",
+    "html-webpack-plugin": "^2.26.0",
+    "image-webpack-loader": "^3.2.0",
+	"imports-loader": "^0.7.1",
+    "jquery": "^3.1.1",
+    "node-sass": "^4.5.0",
+    "resolve-url-loader": "^2.0.2",
+    "sass-loader": "^4.1.1",
+    "style-loader": "^0.13.2",
+    "typescript": "^2.1.4",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.2.0-rc.3",
+    "webpack-dev-server": "^2.2.0-rc.0"
   }
 }
