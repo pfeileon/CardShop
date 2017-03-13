@@ -2,7 +2,7 @@ import { FilterResource } from "../filter/filterResource";
 import { RenderService } from "./renderService";
 import { RenderDetail } from "./renderDetail";
 import { config } from '../../config/config';
-import { createHash, getHashValue } from '../misc/utilities';
+import { setHashValue, getHashValue } from '../misc/utilities';
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/fetchResource";
 import { validate } from "../misc/customJQ";
@@ -89,7 +89,7 @@ export class RenderResource extends RenderService {
                 classList.add("btn-success");
             }
             cartObjectString = shop.Cart.SResource.validateCartObject(cartObjectString);
-            createHash(`cart/${cartObjectString}`);
+            setHashValue(`cart/${cartObjectString}`);
             const cartObject = JSON.parse(cartObjectString);
             this.rDetail.renderCartTable(shop, cartObject);
         }
@@ -112,6 +112,6 @@ export class RenderResource extends RenderService {
 
     renderError(shop: CardShop) {
         document.getElementById("error-page").insertAdjacentHTML("afterbegin", "<h1>Error!</h1><a href='#start'>To start-page...</a>");
-        createHash("error/");
+        setHashValue("error/");
     }
 }

@@ -1,6 +1,6 @@
 import { StorageService } from "./storageService";
 import { config } from '../../config/config';
-import { checkArrayItemInString, createHash, getHashValue } from '../misc/utilities';
+import { checkArrayItemInString, setHashValue, getHashValue } from '../misc/utilities';
 import { Shopable } from "../../types/types";
 import { ShoppingCart } from "../../shop/shoppingCart";
 import { CardPack } from "../../shop/cardPack";
@@ -66,13 +66,13 @@ export class StorageResource extends StorageService {
 
     /** Populates the storage with the passed object-string and adds it to the url on demand */
     setCartFromString(cartObjectString: string) {
-        createHash("cart/");
+        setHashValue("cart/");
 
         if (this.validateObject(cartObjectString, config.data.cardSets)) {
             if (confirm("Do you really want to set your shopping cart via URL (= address)?")) {
                 cartObjectString = this.validateCartObject(cartObjectString);
                 localStorage.setItem("cart", cartObjectString);
-                createHash(`cart/${cartObjectString}`);
+                setHashValue(`cart/${cartObjectString}`);
             }
         }
     }
