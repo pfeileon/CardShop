@@ -75,10 +75,11 @@ export class RenderResource extends RenderService {
     }
 
     renderCart(shop: CardShop): void {
-        let classList = document.getElementById("checkout-btn").classList;
-        let cartContent = document.getElementById("cart-content");
+        const classList = document.getElementById("checkout-btn").classList;
+        const cartContent = document.getElementById("cart-content");
+        let cartObjectString = localStorage.getItem("cart");
 
-        if (localStorage.getItem("cart") !== (null && undefined)) {
+        if (cartObjectString !== (null && undefined)) {
             cartContent.innerHTML = `
                 <table id="cartContentTable" class="table table-hover">
                 </table>
@@ -87,9 +88,9 @@ export class RenderResource extends RenderService {
             if (!classList.contains("btn-success")) {
                 classList.add("btn-success");
             }
-            let cartObjectString = shop.Cart.SResource.validateCartObject(localStorage.getItem("cart"));
+            cartObjectString = shop.Cart.SResource.validateCartObject(cartObjectString);
             createHash(`cart/${cartObjectString}`);
-            let cartObject = JSON.parse(cartObjectString);
+            const cartObject = JSON.parse(cartObjectString);
             this.rDetail.renderCartTable(shop, cartObject);
         }
         else {
@@ -99,7 +100,9 @@ export class RenderResource extends RenderService {
             cartContent.innerHTML = `
                 <div class="well">Your cart is empty!</div>
             `;
-            shop.Cart.SResource.setCartFromUrl();
+            cartObjectString = getHashValue().split("/")[1];
+            shop.Cart.SResource.setCartFromString(cartObjectString);
+            shop.Cart.SResource.populateCart(shop.Cart);
         }
     }
 
@@ -108,6 +111,7 @@ export class RenderResource extends RenderService {
     }
 
     renderError(shop: CardShop) {
-        document.getElementById("error-page").insertAdjacentHTML("afterbegin", "<h1>Error!</h1>");
+        document.getElementById("error-page").insertAdjacentHTML("afterbegin", "<h1>Error!</h1><a href='#start'>To start-page...</a>");
+        createHash("error/");
     }
 }
