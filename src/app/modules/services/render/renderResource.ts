@@ -5,7 +5,7 @@ import { config } from '../../config/config';
 import { setHashValue, getHashValue } from '../misc/utilities';
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/fetchResource";
-import { validate } from "../misc/customJQ";
+import { tooltip, validate } from "../misc/customJQ";
 
 'use strict';
 
@@ -53,6 +53,7 @@ export class RenderResource extends RenderService {
         shownCardSetHeader[0].textContent = cardSet;
 
         this.filterResource.refreshFilters("start");
+        tooltip();
     }
 
     /** Adds dynamically generated content to the PreviewPage */
