@@ -2,7 +2,7 @@ import { FilterResource } from "../filter/filterResource";
 import { RenderService } from "./renderService";
 import { RenderDetail } from "./renderDetail";
 import { config } from '../../config/config';
-import { getHashValue } from '../misc/utilities';
+import { createHash, getHashValue } from '../misc/utilities';
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/fetchResource";
 import { validate } from "../misc/customJQ";
@@ -87,8 +87,9 @@ export class RenderResource extends RenderService {
             if (!classList.contains("btn-success")) {
                 classList.add("btn-success");
             }
-
-            let cartObject = JSON.parse(localStorage.getItem("cart"));
+            let cartObjectString = shop.Cart.SResource.validateCartObject(localStorage.getItem("cart"));
+            createHash(`cart/${cartObjectString}`);
+            let cartObject = JSON.parse(cartObjectString);
             this.rDetail.renderCartTable(shop, cartObject);
         }
         else {
@@ -98,6 +99,7 @@ export class RenderResource extends RenderService {
             cartContent.innerHTML = `
                 <div class="well">Your cart is empty!</div>
             `;
+            shop.Cart.SResource.setCartFromUrl();
         }
     }
 

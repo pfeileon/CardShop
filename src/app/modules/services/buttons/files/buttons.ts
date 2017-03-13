@@ -198,23 +198,13 @@ export class AddToCartButton extends ShopFilterButton {
                 let amountOfPacks: number;
                 const inputElements = document.getElementsByClassName("input-amount");
                 if (hashValue !== undefined && hashValue.includes("/")) {
-                    if (+(<HTMLInputElement>inputElements[1]).value < 11) {
-                        amountOfPacks = +(<HTMLInputElement>inputElements[0]).value;
-                    }
-                    else {
-                        (<any>inputElements[0]).value = null;
-                    }
+                    amountOfPacks = this.checkInputAmount(<HTMLInputElement>inputElements[1]);
                 }
                 else {
                     if (document.querySelector("#start-page span.card-set-name").innerHTML === "" || undefined) {
                         createHash("Classic");
                     }
-                    if (+(<HTMLInputElement>inputElements[0]).value < 11) {
-                        amountOfPacks = +(<HTMLInputElement>inputElements[0]).value;
-                    }
-                    else {
-                        (<any>inputElements[0]).value = null;
-                    }
+                    amountOfPacks = this.checkInputAmount(<HTMLInputElement>inputElements[0]);
                 }
 
                 fakeHashchange("item_added");
@@ -222,6 +212,18 @@ export class AddToCartButton extends ShopFilterButton {
                 this.shop.Cart.fillCart(pack, amountOfPacks);
             });
         }
+    }
+
+    checkInputAmount(input: HTMLInputElement): number {
+        let amountOfPacks: number = null;
+        if (+input.value < 1 || null) {
+            amountOfPacks = 1;
+        }
+        else if (+input.value < 11) {
+            amountOfPacks = +(input).value;
+        }
+        (<any>input).value = amountOfPacks;
+        return amountOfPacks;
     }
 }
 

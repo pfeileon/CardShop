@@ -22,6 +22,11 @@ export function createHash(filters: string): void {
     }
 }
 
+/** Checks if a string contains any item of an array */
+export function checkArrayItemInString(myString, myArray: any[]): boolean {
+    return (myArray).some(element => myString.includes(`${element}`));
+}
+
 /** Returns the string after the hash */
 export function getHashValue(seperator: string = "#", pos: number = 1): string {
     return decodeURI(window.location.hash).split(seperator)[pos];

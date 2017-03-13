@@ -1,4 +1,6 @@
 import { StorageService } from "./storageService";
+import { config } from '../../config/config';
+import { checkArrayItemInString, createHash, getHashValue } from '../misc/utilities';
 import { Shopable } from "../../types/types";
 import { ShoppingCart } from "../../shop/shoppingCart";
 import { CardPack } from "../../shop/cardPack";
@@ -54,5 +56,49 @@ export class StorageResource extends StorageService {
 
     setCart(cart: ShoppingCart) {
         cart.Items = this.storageCartItemsToArray();
+    }
+
+    setCartFromUrl() {
+        let cartObjectString = getHashValue().split("/")[1];
+        let isValidObject: boolean;
+
+        try {
+            JSON.parse(cartObjectString);
+            isValidObject = true;
+        }
+        catch (e) {
+            isValidObject = false;
+        }
+
+        if (isValidObject) {
+            isValidObject = checkArrayItemInString(cartObjectString, config.data.cardSets);
+        }
+
+        // TODO: den createHash-Teil sollte man eigentlich ins renderResource packen.
+
+        if (isValidObject) {
+            if (confirm("Do you really want to set your shopping cart via URL (= address)?")) {
+                cartObjectString = this.validateCartObject(cartObjectString);
+                localStorage.setItem("cart", cartObjectString);
+                createHash(`cart/${cartObjectString}`);
+            }
+            else {
+                createHash("cart/");
+            }
+        }
+        else {
+            createHash("cart/");
+        }
+    }
+
+    validateCartObject(cartObjectString: string) {
+        const cartObject = JSON.parse(cartObjectString);
+
+        for (let item in cartObject) {
+            if (!(<any>config.data.cardSets).includes(item)) {
+                delete cartObject[item];
+            }
+        }
+        return JSON.stringify(cartObject);
     }
 }
