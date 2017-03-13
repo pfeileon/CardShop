@@ -106,7 +106,13 @@ export class EditButton extends Button {
     click = (): void => {
         document.getElementById(this.id).addEventListener("input", (e) => {
             let amount: number;
-            amount = +(<HTMLInputElement>e.target).value;
+            let value = +(<HTMLInputElement>e.target).value;
+            if (value < 101) {
+                amount = value;
+            }
+            else {
+                amount = 100;
+            }
             let cartStorage = JSON.parse(localStorage.getItem("cart"));
 
             let prop = Object.keys(cartStorage);
@@ -192,13 +198,23 @@ export class AddToCartButton extends ShopFilterButton {
                 let amountOfPacks: number;
                 const inputElements = document.getElementsByClassName("input-amount");
                 if (hashValue !== undefined && hashValue.includes("/")) {
-                    amountOfPacks = +(<HTMLInputElement>inputElements[1]).value;
+                    if (+(<HTMLInputElement>inputElements[1]).value < 11) {
+                        amountOfPacks = +(<HTMLInputElement>inputElements[0]).value;
+                    }
+                    else {
+                        (<any>inputElements[0]).value = null;
+                    }
                 }
                 else {
                     if (document.querySelector("#start-page span.card-set-name").innerHTML === "" || undefined) {
                         createHash("Classic");
                     }
-                    amountOfPacks = +(<HTMLInputElement>inputElements[0]).value;
+                    if (+(<HTMLInputElement>inputElements[0]).value < 11) {
+                        amountOfPacks = +(<HTMLInputElement>inputElements[0]).value;
+                    }
+                    else {
+                        (<any>inputElements[0]).value = null;
+                    }
                 }
 
                 fakeHashchange("item_added");
