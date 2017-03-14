@@ -21,3 +21,9 @@ export function validate() {
         }
     });
 }
+
+export function tooltip() {
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+}
