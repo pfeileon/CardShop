@@ -25,7 +25,21 @@ export function validate() {
 export function tooltip() {
     $(function () {
         $('[data-toggle="tooltip"]').tooltip({
-            placement:"right", title:"Tooltip"
+            placement: "right", title: "Tooltip"
         })
     })
+}
+
+export function addToCartTooltip(element) {
+    $(element).tooltip({
+        placement: "bottom", title: "Added to cart!", trigger: "click"
+    })
+}
+
+export function hideTooltip(element) {
+    $(element).tooltip('hide');
+}
+
+export function showTooltip(element) {
+    $(element).tooltip('show');
 }

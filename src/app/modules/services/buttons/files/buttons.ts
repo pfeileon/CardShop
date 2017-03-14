@@ -8,6 +8,7 @@ import { CardPack } from "../../../shop/cardPack";
 import { Customer } from "../../../shop/customer";
 import { CreditCard } from "../../../shop/creditCard";
 import { checkoutModal } from "../../templates/files/modalTemplate";
+import { addToCartTooltip, hideTooltip, showTooltip } from "../../misc/customJQ";
 
 "use strict";
 
@@ -181,8 +182,14 @@ export class PreviewButton extends Button {
 
 export class AddToCartButton extends ShopFilterButton {
     click = (): void => {
+        // TODO: bug with hideTooltip(), on every other click event fires almost immediately
+        let timeoutId: number;
         for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
+            addToCartTooltip(item);
             item.addEventListener("click", (e) => {
+                clearTimeout(timeoutId);
+                showTooltip(item);
+
                 const filters: {} = this.FilterService.getFilters();
                 const hashValue = <any>getHashValue();
                 const cardSets = <any>config.data.cardSets;
@@ -196,6 +203,10 @@ export class AddToCartButton extends ShopFilterButton {
                 if (isStartPage()) {
                     fakeHashChange("item_added");
                 }
+
+                timeoutId = setTimeout(function() {
+                    hideTooltip(item);
+                }, 2000)
             });
         }
     }
