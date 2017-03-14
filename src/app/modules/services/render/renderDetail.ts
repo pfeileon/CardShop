@@ -106,9 +106,9 @@ export class RenderDetail {
             shop.BHandler.editCartPosition(cartTableCell.children[0].id);
 
             cartTableCell = cartTableRow.insertCell();
-            cartTableCell.innerHTML = `<button class="btn btn-default">à 10 Gold</button>`;
+            cartTableCell.innerHTML = `<span class="btn btn-default active" style="background-color: #eeeeee; cursor:default;">à 10 Gold</span>`;
             cartTableCell = cartTableRow.insertCell();
-            cartTableCell.innerHTML = `<button class="btn btn-info">${cartObject[item]*10} Gold</button>`;
+            cartTableCell.innerHTML = `<span class="btn btn-info active" style="background-color: #82CFFD; cursor:default;">${cartObject[item]*10} Gold</span>`;
 
             cartTableCell = cartTableRow.insertCell();
             cartTableCell.innerHTML = deleteRecord(item);

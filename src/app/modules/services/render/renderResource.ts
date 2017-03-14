@@ -73,6 +73,7 @@ export class RenderResource extends RenderService {
         shownManaHeader.textContent = filters["manaCost"] || "all";
 
         this.filterResource.refreshFilters("preview");
+        tooltip();
     }
 
     renderCart(shop: CardShop): void {

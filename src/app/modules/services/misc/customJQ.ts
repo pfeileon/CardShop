@@ -24,6 +24,8 @@ export function validate() {
 
 export function tooltip() {
     $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
+        $('[data-toggle="tooltip"]').tooltip({
+            placement:"right", title:"Tooltip"
+        })
     })
 }
