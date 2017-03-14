@@ -1,3 +1,4 @@
+import { config } from '../../config/config';
 import { Record } from "../../types/types";
 import { FetchService } from "../fetch/fetchService";
 import { FilterService } from "../filter/filterService";
@@ -33,9 +34,13 @@ export abstract class RenderService {
     /** Renders the page according to the hash */
     render(spApp: SinglePageApplication): void {
         let state;
+        let uri = decodeURI(window.location.hash);
 
-        if ((<any>decodeURI(window.location.hash)).includes("/")) {
-            state = (decodeURI(window.location.hash.split("/")[0])).replace("#", "");
+        if ((<any>uri).includes("/")) {
+            state = (uri.split("/")[0]).replace("#", "");
+            if (!(<any>Object).keys(config.statePage).includes(state)) {
+                state = "error";
+            }
         }
         else {
             state = "start";

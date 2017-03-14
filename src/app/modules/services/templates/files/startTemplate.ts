@@ -23,7 +23,7 @@ export const startTemplate = (rService: RenderService, data: {}) => {
             ${rService.insertList(data["cardSets"], btnRecord)}
         </div>
         
-        <button id="preview-card-set-btn" class="btn btn-info" type="button">Preview Card Set</button>
+        <button id="preview-card-set-btn" data-toggle="tooltip" data-placement="top" title="Lets you browse all available cards" class="btn btn-info" type="button">Preview Card Set</button>
     </section>
 
     <section id="startMain" class="well start-slider">
