@@ -73,6 +73,11 @@ export class FilterResource extends FilterService {
     refreshFilters(state: string) {
         let btnList = document.querySelector(`#${state}-page .cardSet-filter .btn-group-justified`).children[0].children;
         this.refreshFilterButtons(btnList, this.getCardSetFilter());
+        if (state === "start") {
+            btnList = document.querySelector(`#${state}-page .cardSet-filter .btn-group-justified`).children[1].children;
+            this.refreshFilterButtons(btnList, this.getCardSetFilter());
+        }
+
         if (state === "preview") {
             btnList = document.querySelector("#hero-filter .btn-group-justified").children[0].children;
             this.refreshFilterButtons(btnList, this.getHeroFilter());

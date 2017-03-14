@@ -9,3 +9,24 @@ export const cartButtonTemplate = `<input class="input-amount" type= "number" na
 export const btnRecord = (item) => {
     return `<li data-id="${item}" role="button" class="btn btn-default">${item}</li>`;
 }
+
+export const imgBtnRecord = (item) => {
+    let link;
+    switch (item) {
+        case "Classic":
+            link = "packClassic.png";
+            break;
+        case "The Grand Tournament":
+            link = "packTgt.png";
+            break;
+        case "Whispers of the Old Gods":
+            link = "packWotog.png";
+            break;
+        case "Mean Streets of Gadgetzan":
+            link = "packMsog.png";
+            break;
+        default:
+            link = "";
+    }
+    return `<li data-id="${item}" role="button" class="btn btn-default" style="background-image: url('${link}');background-repeat: no-repeat;background-position: center;"><img src="${link}" alt="${item}" style="visibility: hidden;"></li>`;
+}
