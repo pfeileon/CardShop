@@ -3,11 +3,12 @@ import { FilterButton } from "./filterButton";
 import { ShopButton } from "./shopButton";
 import { ShopFilterButton } from "./shopFilterButton";
 import { config } from "../../../config/config";
-import { createHash, fakeHashchange, getHashValue } from "../../misc/utilities";
+import { setHashValue, fakeHashChange, getHashValue, isStartPage } from "../../misc/utilities";
 import { CardPack } from "../../../shop/cardPack";
 import { Customer } from "../../../shop/customer";
 import { CreditCard } from "../../../shop/creditCard";
 import { checkoutModal } from "../../templates/files/modalTemplate";
+import { addToCartTooltip, hideTooltip, showTooltip } from "../../misc/customJQ";
 
 "use strict";
 
@@ -24,8 +25,8 @@ export class CancelButton extends Button {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
                 if (item.id === "cancelPD") {
-                    createHash("");
-                    createHash("cart/" + localStorage.getItem("cart"));
+                    setHashValue("");
+                    setHashValue("cart/" + localStorage.getItem("cart"));
                 }
                 if (item.id === "cancelCCD") {
                     document.getElementById("personalDataHeading").click();
@@ -41,24 +42,35 @@ export class ConfirmButton extends ShopButton {
             item.addEventListener("click", (e) => {
                 let customer: Customer;
                 if (item.id === "confirmPD") {
-                    customer = new Customer(this.shop.Cart.Items);
-                    this.shop.setCustomer(customer);
-
-                    document.getElementById("personalDataHeading").setAttribute("data-target", "#collapsePD")
-                    document.getElementById("creditCardDataHeading").setAttribute("data-target", "#collapseCCD")
-                    document.getElementById("creditCardDataHeading").click();
+                    customer = this.confirmCustomer();
                 }
                 if (item.id === "confirmCCD") {
-                    let creditCard: CreditCard = new CreditCard();
-                    this.shop.Customer.setCreditCard(creditCard);
-
-                    localStorage.setItem("customer", JSON.stringify(this.shop.Customer));
-                    document.getElementById("checkoutFooter").innerText = "";
-                    document.getElementById("checkoutFooter").insertAdjacentHTML("afterbegin", checkoutModal(this.shop.Customer));
-                    this.BHandler.buy();
+                    let creditCard = this.confirmCreditCard();
                 }
             });
         }
+    }
+
+    confirmCustomer(): Customer {
+        const customer = new Customer(this.shop.Cart.Items);
+        this.shop.setCustomer(customer);
+
+        document.getElementById("personalDataHeading").setAttribute("data-target", "#collapsePD")
+        document.getElementById("creditCardDataHeading").setAttribute("data-target", "#collapseCCD")
+        document.getElementById("creditCardDataHeading").click();
+
+        return customer;
+    }
+    confirmCreditCard(): CreditCard {
+        let creditCard: CreditCard = new CreditCard();
+        this.shop.Customer.setCreditCard(creditCard);
+
+        localStorage.setItem("customer", JSON.stringify(this.shop.Customer));
+        document.getElementById("checkoutFooter").innerText = "";
+        document.getElementById("checkoutFooter").insertAdjacentHTML("afterbegin", checkoutModal(this.shop.Customer));
+        this.BHandler.buy();
+
+        return creditCard;
     }
 }
 
@@ -69,7 +81,7 @@ export class CheckoutButton extends ShopButton {
                 alert("Your cart is empty!");
             }
             else {
-                createHash("checkout/");
+                setHashValue("checkout/");
             }
         });
     }
@@ -80,7 +92,7 @@ export class ClearButton extends ShopButton {
         document.getElementById(this.id).addEventListener("click", (e) => {
             localStorage.removeItem("cart");
             this.shop.Cart.Items = [];
-            createHash("cart/");
+            setHashValue("cart/");
         });
     }
 }
@@ -97,7 +109,7 @@ export class DeleteButton extends ShopButton {
                 delete items[`${((<any>del.target).id.split("-del")[0]).replace(/-/gi, " ")}`];
                 localStorage.setItem("cart", JSON.stringify(items));
             }
-            createHash("cart/" + localStorage.getItem("cart"));
+            setHashValue("cart/" + localStorage.getItem("cart"));
         });
     }
 }
@@ -106,7 +118,13 @@ export class EditButton extends Button {
     click = (): void => {
         document.getElementById(this.id).addEventListener("input", (e) => {
             let amount: number;
-            amount = +(<HTMLInputElement>e.target).value;
+            let value = +(<HTMLInputElement>e.target).value;
+            if (value < 101) {
+                amount = value;
+            }
+            else {
+                amount = 100;
+            }
             let cartStorage = JSON.parse(localStorage.getItem("cart"));
 
             let prop = Object.keys(cartStorage);
@@ -114,7 +132,7 @@ export class EditButton extends Button {
 
             localStorage.setItem("cart", JSON.stringify(cartStorage));
 
-            createHash("cart/" + localStorage.getItem("cart"));
+            setHashValue("cart/" + localStorage.getItem("cart"));
         });
     }
 }
@@ -124,11 +142,11 @@ export class ReturnButton extends FilterButton {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
                 if ((<any>getHashValue()).includes("cart/")) {
-                    createHash(localStorage.getItem("lastHash"));
+                    setHashValue(localStorage.getItem("lastHash"));
                 }
                 else {
                     let temp = this.FilterService.getFilters()["cardSet"];
-                    createHash(temp);
+                    setHashValue(temp);
                 }
             });
         }
@@ -143,7 +161,7 @@ export class PreviewButton extends Button {
 
             if (hashValue === undefined || "" || null) {
                 cardSetName = "Classic";
-                createHash("Classic");
+                setHashValue("Classic");
             }
             else if ((<any>hashValue).includes("cart/")) {
                 cardSetName = document.getElementById(this.id).innerText;
@@ -156,56 +174,81 @@ export class PreviewButton extends Button {
                             Showing "Classic" instead.`)
                 cardSetName = "Classic";
             }
-            
-            createHash(`preview/{"cardSet":"${cardSetName}","hero":"Druid"}`);
+
+            setHashValue(`preview/{"cardSet":"${cardSetName}","hero":"Druid"}`);
         });
     }
 }
 
 export class AddToCartButton extends ShopFilterButton {
     click = (): void => {
+        // TODO: bug with hideTooltip(), on every other click event fires almost immediately
+        let timeoutId: number;
         for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
+            addToCartTooltip(item);
             item.addEventListener("click", (e) => {
-                let setName: string;
+                clearTimeout(timeoutId);
+                showTooltip(item);
+
                 const filters: {} = this.FilterService.getFilters();
-                // Cast to <any> to make ".includes()" work
                 const hashValue = <any>getHashValue();
                 const cardSets = <any>config.data.cardSets;
 
-                if (hashValue !== undefined || "" || null) {
-                    if (hashValue.includes("/") && filters["cardSet"] !== undefined && cardSets.includes(filters["cardSet"])) {
-                        setName = filters["cardSet"];
-                    }
-                    else if (!hashValue.includes("/") && cardSets.includes(hashValue)) {
-                        setName = hashValue;
-                    }
-                    else {
-                        setName = "Classic";
-                    }
-                }
-                else {
-                    setName = "Classic";
+                const pack = new CardPack(this.setPackName(hashValue, filters, cardSets));
+                const amount = this.setInputAmount(hashValue);
+
+                this.shop.Cart.fillCart(pack, amount);
+
+                // In order to immediately display the packs on the start-page
+                if (isStartPage()) {
+                    fakeHashChange("item_added");
                 }
 
-                const pack: CardPack = new CardPack(setName);
-
-                let amountOfPacks: number;
-                const inputElements = document.getElementsByClassName("input-amount");
-                if (hashValue !== undefined && hashValue.includes("/")) {
-                    amountOfPacks = +(<HTMLInputElement>inputElements[1]).value;
-                }
-                else {
-                    if (document.querySelector("#start-page span.card-set-name").innerHTML === "" || undefined) {
-                        createHash("Classic");
-                    }
-                    amountOfPacks = +(<HTMLInputElement>inputElements[0]).value;
-                }
-
-                fakeHashchange("item_added");
-
-                this.shop.Cart.fillCart(pack, amountOfPacks);
+                timeoutId = setTimeout(function() {
+                    hideTooltip(item);
+                }, 2000)
             });
         }
+    }
+
+    setPackName(hashValue, filters, cardSets): string {
+        let setName = "Classic";
+        if (hashValue !== undefined || "" || null) {
+            if (hashValue.includes("/") && filters["cardSet"] !== undefined && cardSets.includes(filters["cardSet"])) {
+                setName = filters["cardSet"];
+            }
+            else if (!hashValue.includes("/") && cardSets.includes(hashValue)) {
+                setName = hashValue;
+            }
+        }
+        return setName;
+    }
+
+    setInputAmount(hashValue): number {
+        let amountOfPacks: number;
+        const inputElements = document.getElementsByClassName("input-amount");
+        if (hashValue !== undefined && hashValue.includes("/")) {
+            amountOfPacks = this.checkInputAmount(<HTMLInputElement>inputElements[1]);
+        }
+        else {
+            if (document.querySelector("#start-page span.card-set-name").innerHTML === "" || undefined) {
+                setHashValue("Classic");
+            }
+            amountOfPacks = this.checkInputAmount(<HTMLInputElement>inputElements[0]);
+        }
+        return amountOfPacks;
+    }
+
+    checkInputAmount(input: HTMLInputElement): number {
+        let amountOfPacks: number = null;
+        if (+input.value < 1 || null) {
+            amountOfPacks = 1;
+        }
+        else if (+input.value < 11) {
+            amountOfPacks = +(input).value;
+        }
+        (<any>input).value = amountOfPacks;
+        return amountOfPacks;
     }
 }
 
@@ -213,8 +256,11 @@ export class GotoCartButton extends ShopButton {
     click = (): void => {
         for (let item of <any>document.getElementsByClassName(this.id)) {
             item.addEventListener("click", (e) => {
+                if (document.querySelector("#start-page span.card-set-name").innerHTML === "" || undefined) {
+                    setHashValue("Classic");
+                }
                 localStorage.setItem("lastHash", getHashValue());
-                createHash("cart/" + localStorage.getItem("cart"));
+                setHashValue("cart/" + localStorage.getItem("cart"));
             });
         }
     }
@@ -236,10 +282,10 @@ export class SetCardSetButton extends ShopFilterButton {
                 else {
                     filter["cardSet"] = cardSetName;
                 }
-                createHash(`preview/${JSON.stringify(filter)}`);
+                setHashValue(`preview/${JSON.stringify(filter)}`);
             }
             else {
-                createHash(cardSetName);
+                setHashValue(cardSetName);
             }
         });
     }
@@ -260,7 +306,7 @@ export class SetHeroButton extends ShopFilterButton {
             else {
                 filter["hero"] = heroValue;
             }
-            createHash(`preview/${JSON.stringify(filter)}`);
+            setHashValue(`preview/${JSON.stringify(filter)}`);
         });
     }
 }
@@ -284,7 +330,7 @@ export class SetManaCostButton extends ShopFilterButton {
                 filter["manaCost"] = manaCostValue;
             }
 
-            createHash(`preview/${JSON.stringify(filter)}`);
+            setHashValue(`preview/${JSON.stringify(filter)}`);
         });
     }
 }

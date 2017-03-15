@@ -1,4 +1,6 @@
 import { StorageService } from "./storageService";
+import { config } from '../../config/config';
+import { checkArrayItemInString, setHashValue, getHashValue } from '../misc/utilities';
 import { Shopable } from "../../types/types";
 import { ShoppingCart } from "../../shop/shoppingCart";
 import { CardPack } from "../../shop/cardPack";
@@ -44,15 +46,65 @@ export class StorageResource extends StorageService {
     }
 
     populateCart(cart: ShoppingCart) {
-        let itemStorage: {} = JSON.parse(localStorage.getItem("cart"));
+        let cartObjectString = localStorage.getItem("cart");
+        if (this.validateObject(cartObjectString, config.data.cardSets)) {
+            let itemStorage: {} = JSON.parse(cartObjectString);
 
-        for (let i: number = 0; i < Object.keys(itemStorage).length; i++) {
-            let setName: string = Object.keys(itemStorage)[i];
-            cart.fillCart(new CardPack(setName), +itemStorage[setName]);
+            for (let i: number = 0; i < Object.keys(itemStorage).length; i++) {
+                let setName: string = Object.keys(itemStorage)[i];
+                cart.fillCart(new CardPack(setName), +itemStorage[setName]);
+            }
+        }
+        else {
+            cart.Items = [];
         }
     }
 
     setCart(cart: ShoppingCart) {
         cart.Items = this.storageCartItemsToArray();
+    }
+
+    /** Populates the storage with the passed object-string and adds it to the url on demand */
+    setCartFromString(cartObjectString: string) {
+        setHashValue("cart/");
+
+        if (this.validateObject(cartObjectString, config.data.cardSets)) {
+            if (confirm("Do you really want to set your shopping cart via URL (= address)?")) {
+                cartObjectString = this.validateCartObject(cartObjectString);
+                localStorage.setItem("cart", cartObjectString);
+                setHashValue(`cart/${cartObjectString}`);
+            }
+        }
+    }
+
+    /** Checks if an object-string can be parsed and includes at least one correct key or value. */
+    validateObject(objectString: string, correctProps?: any[]): boolean {
+        let isValidObject = false;
+        try {
+            if (objectString !== (""|| null)) {
+                JSON.parse(objectString);
+                isValidObject = true;
+            }
+        }
+        catch (e) {
+            isValidObject = false;
+        }
+
+        if (isValidObject && correctProps !== (null && undefined)) {
+            isValidObject = checkArrayItemInString(objectString, correctProps);
+        }
+        return isValidObject;
+    }
+
+    /** Checks if an object-string has any properties which don't correspond to shopable products, deletes wrong properties and finally returns the corrected object-string. */
+    validateCartObject(cartObjectString: string) {
+        const cartObject = JSON.parse(cartObjectString);
+
+        for (let item in cartObject) {
+            if (!(<any>config.data.cardSets).includes(item)) {
+                delete cartObject[item];
+            }
+        }
+        return JSON.stringify(cartObject);
     }
 }
