@@ -1,5 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = function (env) {
     return {
@@ -11,33 +13,39 @@ module.exports = function (env) {
             filename: 'bundle.js'
         },
         plugins: [
+            new webpack.ProvidePlugin({
+                $: "jquery",
+                jquery: "jQuery"
+            }),
+            new ExtractTextPlugin('styles.css'),
             new HtmlWebpackPlugin({
                 template: './src/app/index.html',
-                jQuery: 'jquery',
-                $: 'jquery',
-                jquery: 'jquery'
+                inject: 'head'
             })
         ],
         resolve: {
-            extensions: ['.ts', '.js', '.scss']
+            extensions: ['.ts', '.js', '.scss'],
+            alias: {
+            }
         },
         module: {
             rules: [
                 {
                     test: /bootstrap.+\.(jsx|js)$/,
-                    loader: 'imports-loader?jQuery=jquery,$=jquery'
-                },
-                {
+                    use: 'imports-loader?jQuery=jquery,$=jquery'
+                }, {
                     test: /\.ts$/,
-                    loader: 'awesome-typescript-loader?sourceMap'
+                    use: 'awesome-typescript-loader?sourceMap'
                 }, {
                     test: /\.scss$/,
-                    loaders: ['style-loader', 'css-loader?sourceMap', 'sass-loader?sourceMap']
+                    use: ExtractTextPlugin.extract({
+                        fallback: 'style-loader',
+                        use: ['css-loader?sourceMap', 'sass-loader?sourceMap']
+                    })
                 }, {
                     test: /\.(eot|otf|svg|ttf|woff|woff2)$/,
-                    loader: 'file-loader?name=assets/fonts/[name].[ext]'
-                },
-                {
+                    use: 'file-loader?name=[name].[ext]'
+                }, {
                     test: /\.(png|jpg|svg)$/,
                     use: {
                         loader: 'url-loader',
@@ -45,7 +53,7 @@ module.exports = function (env) {
                             limit: 15000,
                             name: '[name].[ext]',
                         },
-                    },
+                    }
                 }]
         },
         devtool: 'source-map',

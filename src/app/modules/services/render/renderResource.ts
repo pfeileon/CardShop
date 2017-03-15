@@ -2,10 +2,10 @@ import { FilterResource } from "../filter/filterResource";
 import { RenderService } from "./renderService";
 import { RenderDetail } from "./renderDetail";
 import { config } from '../../config/config';
-import { getHashValue } from '../misc/utilities';
+import { setHashValue, getHashValue } from '../misc/utilities';
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/fetchResource";
-import { validate } from "../misc/customJQ";
+import { tooltip, validate } from "../misc/customJQ";
 
 'use strict';
 
@@ -53,6 +53,7 @@ export class RenderResource extends RenderService {
         shownCardSetHeader[0].textContent = cardSet;
 
         this.filterResource.refreshFilters("start");
+        tooltip();
     }
 
     /** Adds dynamically generated content to the PreviewPage */
@@ -72,13 +73,15 @@ export class RenderResource extends RenderService {
         shownManaHeader.textContent = filters["manaCost"] || "all";
 
         this.filterResource.refreshFilters("preview");
+        tooltip();
     }
 
     renderCart(shop: CardShop): void {
-        let classList = document.getElementById("checkout-btn").classList;
-        let cartContent = document.getElementById("cart-content");
+        const classList = document.getElementById("checkout-btn").classList;
+        const cartContent = document.getElementById("cart-content");
+        let cartObjectString = localStorage.getItem("cart");
 
-        if (localStorage.getItem("cart") !== (null && undefined)) {
+        if (cartObjectString !== (null && undefined)) {
             cartContent.innerHTML = `
                 <table id="cartContentTable" class="table table-hover">
                 </table>
@@ -87,8 +90,9 @@ export class RenderResource extends RenderService {
             if (!classList.contains("btn-success")) {
                 classList.add("btn-success");
             }
-
-            let cartObject = JSON.parse(localStorage.getItem("cart"));
+            cartObjectString = shop.Cart.SResource.validateCartObject(cartObjectString);
+            setHashValue(`cart/${cartObjectString}`);
+            const cartObject = JSON.parse(cartObjectString);
             this.rDetail.renderCartTable(shop, cartObject);
         }
         else {
@@ -98,6 +102,9 @@ export class RenderResource extends RenderService {
             cartContent.innerHTML = `
                 <div class="well">Your cart is empty!</div>
             `;
+            cartObjectString = getHashValue().split("/")[1];
+            shop.Cart.SResource.setCartFromString(cartObjectString);
+            shop.Cart.SResource.populateCart(shop.Cart);
         }
     }
 
@@ -106,6 +113,7 @@ export class RenderResource extends RenderService {
     }
 
     renderError(shop: CardShop) {
-        document.getElementById("error-page").insertAdjacentHTML("afterbegin", "<h1>Error!</h1>");
+        document.getElementById("error-page").insertAdjacentHTML("afterbegin", "<h1>Error!</h1><a href='#start'>To start-page...</a>");
+        setHashValue("error/");
     }
 }
