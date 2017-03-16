@@ -159,3 +159,15 @@ img.hidden-img {
 .btn-group-justified .filter-btn-group, ul {
     display: inline-block !important;
 }
+
+.cart-gold-btn {
+    background-color: #82CFFD !important;
+    cursor: default !important;
+    &.fixed {
+        background-color: #eeeeee !important;
+    }
+}
+
+.cart-total-btn {
+    cursor: default !important;
+}
