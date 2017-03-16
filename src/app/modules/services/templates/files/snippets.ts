@@ -28,5 +28,7 @@ export const imgBtnRecord = (item) => {
         default:
             link = "";
     }
-    return `<li data-id="${item}" role="button" class="btn btn-default" style="background-image: url('${link}');background-repeat: no-repeat;background-position: center;"><img src="${link}" alt="${item}" style="visibility: hidden;"></li>`;
+    return `<li data-id="${item}" role="button" class="btn btn-default" style="background-image: url('${link}');background-repeat: no-repeat;background-position: center;">
+        <img src="${link}" alt="${item}" class="hidden-img">
+    </li>`;
 }

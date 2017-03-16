@@ -204,7 +204,7 @@ export class AddToCartButton extends ShopFilterButton {
                     fakeHashChange("item_added");
                 }
 
-                timeoutId = setTimeout(function() {
+                timeoutId = setTimeout(function () {
                     hideTooltip(item);
                 }, 2000)
             });
@@ -270,6 +270,9 @@ export class GotoCartButton extends ShopButton {
 export class SetCardSetButton extends ShopFilterButton {
     click = (cardSet: HTMLElement): void => {
         cardSet.addEventListener("click", (e: MouseEvent): void => {
+            if ((<any>e.target).attributes[0] === undefined) {
+                return;
+            }
             const cardSetName: string = (<any>e.target).attributes[0].value;
 
             this.resetBtnClassList(cardSet, e);
@@ -295,6 +298,9 @@ export class SetCardSetButton extends ShopFilterButton {
 export class SetHeroButton extends ShopFilterButton {
     click = (hero: HTMLElement) => {
         hero.addEventListener("click", (e: MouseEvent): void => {
+            if ((<any>e.target).attributes[0] === undefined) {
+                return;
+            }
             const heroValue: string = (<any>e.target).attributes[0].value;
 
             this.resetBtnClassList(hero, e);

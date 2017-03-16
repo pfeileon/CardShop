@@ -146,3 +146,13 @@ article {
     white-space: nowrap;
     overflow-x: auto;
 }
+
+li.sample-pack {
+    background-image: url('${link}');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.hidden-img {
+    visibility: hidden;
+}
