@@ -8,6 +8,7 @@ import { CardPack } from "../../../shop/cardPack";
 import { Customer } from "../../../shop/customer";
 import { CreditCard } from "../../../shop/creditCard";
 import { checkoutModal } from "../../templates/files/modalTemplate";
+import { addToCartTooltip, hideTooltip, showTooltip } from "../../misc/customJQ";
 
 "use strict";
 
@@ -181,8 +182,14 @@ export class PreviewButton extends Button {
 
 export class AddToCartButton extends ShopFilterButton {
     click = (): void => {
+        // TODO: bug with hideTooltip(), on every other click event fires almost immediately
+        let timeoutId: number;
         for (let item of <any>document.getElementsByClassName("add-to-cart-btn")) {
+            addToCartTooltip(item);
             item.addEventListener("click", (e) => {
+                clearTimeout(timeoutId);
+                showTooltip(item);
+
                 const filters: {} = this.FilterService.getFilters();
                 const hashValue = <any>getHashValue();
                 const cardSets = <any>config.data.cardSets;
@@ -196,6 +203,10 @@ export class AddToCartButton extends ShopFilterButton {
                 if (isStartPage()) {
                     fakeHashChange("item_added");
                 }
+
+                timeoutId = setTimeout(function () {
+                    hideTooltip(item);
+                }, 2000)
             });
         }
     }
@@ -259,6 +270,9 @@ export class GotoCartButton extends ShopButton {
 export class SetCardSetButton extends ShopFilterButton {
     click = (cardSet: HTMLElement): void => {
         cardSet.addEventListener("click", (e: MouseEvent): void => {
+            if ((<any>e.target).attributes[0] === undefined) {
+                return;
+            }
             const cardSetName: string = (<any>e.target).attributes[0].value;
 
             this.resetBtnClassList(cardSet, e);
@@ -284,6 +298,9 @@ export class SetCardSetButton extends ShopFilterButton {
 export class SetHeroButton extends ShopFilterButton {
     click = (hero: HTMLElement) => {
         hero.addEventListener("click", (e: MouseEvent): void => {
+            if ((<any>e.target).attributes[0] === undefined) {
+                return;
+            }
             const heroValue: string = (<any>e.target).attributes[0].value;
 
             this.resetBtnClassList(hero, e);
