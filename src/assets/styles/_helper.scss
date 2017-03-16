@@ -31,6 +31,15 @@ article {
     }
 }
 
+.btn-group-justified {
+    margin-left: -3em;
+    max-width: 90%;
+}
+
+.start-slider {
+    max-width: 82%;
+}
+
 .form-row {
     display: table;
     &.personal {
@@ -136,4 +145,14 @@ article {
     width: 100%;
     white-space: nowrap;
     overflow-x: auto;
+}
+
+li.sample-pack {
+    background-image: url('${link}');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.hidden-img {
+    visibility: hidden;
 }

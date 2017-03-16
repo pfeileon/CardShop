@@ -1,6 +1,4 @@
 import { Record, Shopable } from "../../types/types";
-import { config } from '../../config/config';
-import { RenderService } from "./renderService";
 import { cardModal } from "../templates/files/modalTemplate";
 import { CardShop } from "../../shop/cardShop";
 import { FetchResource } from "../fetch/FetchResource";
@@ -106,6 +104,11 @@ export class RenderDetail {
             cartTableCell.innerHTML = inputAmountRecord(cartObject[item]);
             cartTableCell.children[0].id = `input-amount-${Object.keys(cartObject).indexOf(item)}`;
             shop.BHandler.editCartPosition(cartTableCell.children[0].id);
+
+            cartTableCell = cartTableRow.insertCell();
+            cartTableCell.innerHTML = `<span class="btn btn-default active" style="background-color: #eeeeee; cursor:default;">à 10 Gold</span>`;
+            cartTableCell = cartTableRow.insertCell();
+            cartTableCell.innerHTML = `<span class="btn btn-info active" style="background-color: #82CFFD; cursor:default;">${cartObject[item]*10} Gold</span>`;
 
             cartTableCell = cartTableRow.insertCell();
             cartTableCell.innerHTML = deleteRecord(item);

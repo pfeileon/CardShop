@@ -1,6 +1,6 @@
 import { FilterService } from "./filterService";
 import { config } from "../../config/config";
-import { createHash } from "../misc/utilities";
+import { setHashValue } from "../misc/utilities";
 
 "use strict";
 
@@ -54,7 +54,7 @@ export class FilterResource extends FilterService {
 
     checkCardSetFilter(filters: {}): {} {
         if (filters["cardSet"] !== undefined && !(<any>config.data.cardSets).includes(filters["cardSet"])) {
-            createHash(`preview/{"cardSet":"Classic","hero":"Druid"}`);
+            setHashValue(`preview/{"cardSet":"Classic","hero":"Druid"}`);
             filters = this.getFilters();
             alert("Invalid Card Set! Showing Classic instead");
         }
@@ -63,7 +63,7 @@ export class FilterResource extends FilterService {
 
     checkHeroFilter(filters: {}): {} {
         if (filters["hero"] !== undefined && !(<any>config.data.heroes).includes(filters["hero"])) {
-            createHash(`preview/{"cardSet":"${"Classic"}","hero":"Druid"}`);
+            setHashValue(`preview/{"cardSet":"${"Classic"}","hero":"Druid"}`);
             filters = this.getFilters();
             alert("Invalid Hero! Showing Druid instead");
         }
@@ -72,16 +72,21 @@ export class FilterResource extends FilterService {
 
     refreshFilters(state: string) {
         let btnList = document.querySelector(`#${state}-page .cardSet-filter .btn-group-justified`).children[0].children;
-        this.refreshButtons(btnList, this.getCardSetFilter());
+        this.refreshFilterButtons(btnList, this.getCardSetFilter());
+        if (state === "start") {
+            btnList = document.querySelector(`#${state}-page .cardSet-filter .btn-group-justified`).children[1].children;
+            this.refreshFilterButtons(btnList, this.getCardSetFilter());
+        }
+
         if (state === "preview") {
             btnList = document.querySelector("#hero-filter .btn-group-justified").children[0].children;
-            this.refreshButtons(btnList, this.getHeroFilter());
+            this.refreshFilterButtons(btnList, this.getHeroFilter());
             btnList = document.querySelector("#mana-filter .btn-group-justified").children[0].children;
-            this.refreshButtons(btnList, this.getManaFilter());
+            this.refreshFilterButtons(btnList, this.getManaFilter());
         }
     }
 
-    refreshButtons(btnList: HTMLCollection, filter: string) {
+    refreshFilterButtons(btnList: HTMLCollection, filter: string) {
         for (let btn of <any>btnList) {
             if (btn.attributes["data-id"].value === filter) {
                 btn.classList.remove("btn-default");

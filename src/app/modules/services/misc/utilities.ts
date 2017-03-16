@@ -13,7 +13,7 @@ export function iterateList(list: any, doStuff: Callback<HTMLElement, void>): vo
 }
 
 /** Adds an encoded hash-value to the URL */
-export function createHash(filters: string): void {
+export function setHashValue(filters: string): void {
     if (filters !== undefined) {
         window.location.hash = encodeURI(`#${filters}`);
     }
@@ -22,29 +22,34 @@ export function createHash(filters: string): void {
     }
 }
 
+/** Checks if a string contains any item of an array */
+export function checkArrayItemInString(myString, myArray: any[]): boolean {
+    return (myArray).some(element => myString.includes(`${element}`));
+}
+
 /** Returns the string after the hash */
 export function getHashValue(seperator: string = "#", pos: number = 1): string {
     return decodeURI(window.location.hash).split(seperator)[pos];
 }
 
 /** Fakes a hashchange in order to update the content */
-export function fakeHashchange(value = "fake"): void {
+export function fakeHashChange(value = "fake"): void {
     let hashValue: string = getHashValue();
-    createHash(hashValue + value);
-    createHash(hashValue);
+    setHashValue(hashValue + value);
+    setHashValue(hashValue);
 }
 
 /** The Luhn-Algorithm for CreditCard-Validation */
 export function luhnAlgorithm(value: string) {
 
-    let nCheck: number = 0;
-    let nDigit: number = 0;
-    let bEven: boolean = false;
+    let nCheck = 0;
+    let nDigit = 0;
+    let bEven = false;
 
     value = value.replace(/\D/g, "");
 
     for (let n = value.length - 1; n >= 0; n--) {
-        let cDigit: string = value.charAt(n);
+        let cDigit = value.charAt(n);
         nDigit = parseInt(cDigit, 10);
 
         if (bEven) {
