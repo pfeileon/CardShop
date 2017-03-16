@@ -148,11 +148,14 @@ article {
 }
 
 li.sample-pack {
-    background-image: url('${link}');
     background-repeat: no-repeat;
     background-position: center;
 }
 
-.hidden-img {
+img.hidden-img {
     visibility: hidden;
+}
+
+.btn-group-justified .filter-btn-group, ul {
+    display: inline-block !important;
 }
