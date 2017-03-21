@@ -77,6 +77,8 @@ export class ShopButtonHandler extends ButtonHandler {
     selectCardSet(shop: CardShop, cardSet: HTMLElement): void {
         const setCardSetBtn: Buttons.SetCardSetButton = new Buttons.SetCardSetButton("set-card-set-btn", shop);
         setCardSetBtn.click(cardSet);
+        setCardSetBtn.dblclick(cardSet);
+        setCardSetBtn.contextMenu(cardSet);
     }
 
     selectHero(shop: CardShop, hero: HTMLElement): void {

@@ -6,11 +6,11 @@ export const cartButtonTemplate = `<input class="input-amount" type= "number" na
     <button class="goto-cart-btn btn btn-success" type="button" > Goto Cart</button>
 `;
 
-export const btnRecord = (item) => {
+export const btnRecord = (item): string => {
     return `<li data-id="${item}" role="button" class="btn btn-default">${item}</li>`;
 }
 
-export const imgBtnRecord = (item) => {
+export const imgBtnRecord = (item): string => {
     let link;
     switch (item) {
         case "Classic":
@@ -28,7 +28,7 @@ export const imgBtnRecord = (item) => {
         default:
             link = "";
     }
-    return `<li data-id="${item}" role="button" class="btn btn-default" style="background-image: url('${link}');background-repeat: no-repeat;background-position: center;">
-        <img src="${link}" alt="${item}" class="hidden-img">
+    return `<li data-id="${item}" role="button" class="btn btn-default sample-pack" style="background-image: url('${link}')">
+        <img src="${link}" alt="${item}" class="hidden-img" />
     </li>`;
 }
