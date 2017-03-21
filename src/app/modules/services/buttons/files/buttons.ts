@@ -292,6 +292,24 @@ export class SetCardSetButton extends ShopFilterButton {
             }
         });
     }
+    
+    dblclick = (element) => {
+        element.addEventListener("dblclick", (e) => {
+            const btnList: any = document.getElementsByClassName("add-to-cart-btn");
+            if(isStartPage()) {
+                btnList[0].click();
+            }
+            else {
+                btnList[1].click();
+            }
+        });
+    }
+
+    contextMenu = (element) => {
+        element.addEventListener("contextmenu", (e) => {
+            console.log("works");
+        });
+    }
 }
 
 /** Sets the hash according to the selected hero */

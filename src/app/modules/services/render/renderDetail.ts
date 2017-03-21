@@ -19,7 +19,7 @@ const inputPackRecord: Record = (item) => {
 };
 
 const inputAmountRecord: Record = (item) => {
-    return `<input data-id="${item}" class="input-amount btn btn-default" type="number" name ="amount" value="${item}" min="1" max="100" pattern="[0-9]" />`
+    return `<input data-id="${item}" class="input-amount btn btn-default active" type="number" name ="amount" value="${item}" min="1" max="100" pattern="[0-9]" />`
 }
 
 export class RenderDetail {
@@ -91,11 +91,16 @@ export class RenderDetail {
      * EventHandlers are added here (not on start) otherwise they get lost on re-rendering
     */
     renderCartTable(shop: CardShop, cartObject: {}) {
+        let totalPacks = 0;
+        let totalGold = 0;
+        let cartTable;
+        let cartTableRow;
+        let cartTableCell;
         for (let item in cartObject) {
-            let cartTable = <HTMLTableElement>document.getElementById("cartContentTable");
-            let cartTableRow = cartTable.insertRow();
+            cartTable = <HTMLTableElement>document.getElementById("cartContentTable");
+            cartTableRow = cartTable.insertRow();
 
-            let cartTableCell = cartTableRow.insertCell();
+            cartTableCell = cartTableRow.insertCell();
             cartTableCell.innerHTML = inputPackRecord(item);
             cartTableCell.children[0].id = `input-pack-${Object.keys(cartObject).indexOf(item)}`;
             shop.BHandler.toPreview(cartTableCell.children[0].id);
@@ -104,16 +109,30 @@ export class RenderDetail {
             cartTableCell.innerHTML = inputAmountRecord(cartObject[item]);
             cartTableCell.children[0].id = `input-amount-${Object.keys(cartObject).indexOf(item)}`;
             shop.BHandler.editCartPosition(cartTableCell.children[0].id);
+            totalPacks += cartObject[item];
 
             cartTableCell = cartTableRow.insertCell();
-            cartTableCell.innerHTML = `<span class="btn btn-default active" style="background-color: #eeeeee; cursor:default;">à 10 Gold</span>`;
+            cartTableCell.innerHTML = `<span class="cart-gold-btn fixed btn btn-default active">à 10 Gold</span>`;
             cartTableCell = cartTableRow.insertCell();
-            cartTableCell.innerHTML = `<span class="btn btn-info active" style="background-color: #82CFFD; cursor:default;">${cartObject[item]*10} Gold</span>`;
+            cartTableCell.innerHTML = `<span class="cart-gold-btn btn btn-info active">${cartObject[item]*10} Gold</span>`;
+            totalGold += cartObject[item]*10;
 
             cartTableCell = cartTableRow.insertCell();
             cartTableCell.innerHTML = deleteRecord(item);
             shop.BHandler.deleteCartPosition(shop, cartTableCell.children[0].id);
         }
+        cartTableRow = cartTable.insertRow();
+        cartTableRow.classList.add("active");
+        cartTableCell = cartTableRow.insertCell();
+        cartTableCell.innerHTML = `<div class="btn btn-info active cart-total-btn">Total</div>`;
+        cartTableCell = cartTableRow.insertCell();
+        cartTableCell.innerHTML = `<div class="btn btn-info active cart-total-btn">${totalPacks} Packs</div>`;
+        cartTableCell = cartTableRow.insertCell();
+        cartTableCell.innerHTML = "";
+        cartTableCell = cartTableRow.insertCell();
+        cartTableCell.innerHTML = `<div class="btn btn-info active cart-total-btn">${totalGold} Gold</div>`;
+        cartTableCell = cartTableRow.insertCell();
+        cartTableCell.innerHTML = "";
     }
 
     renderCarousel(filteredCardData: {}) {
