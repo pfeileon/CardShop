@@ -8,7 +8,7 @@ import { carousel } from "./carouselTemplate";
 export const previewTemplate = (rService: RenderService, data: {}) => {
     return `<article class="container">
     <header id="previewHeader">
-        <button id="set-return-btn" type="button" class="btn btn-default return-btn">Return</button>
+        <button id="set-return-btn" type="button" class="btn btn-default return-btn">Back to Start</button>
         ${cartButtonTemplate}
         <h1>
             Preview the Cards<br />
