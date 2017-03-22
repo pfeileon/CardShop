@@ -33,11 +33,6 @@ export const startTemplate = (rService: RenderService, data: {}) => {
         
         <button id="preview-card-set-btn" class="btn btn-info" type="button" data-toggle="tooltip" title="Lets you browse all available cards">Preview Card Set</button>
     </section>
-    <h2>Packs in your Cart</h2>
-    <a href="#cart/>
-        "<section id="startMain" class="well start-slider">
-        </section>
-    </a>
 
     <footer id="start-foot">
     </footer>
