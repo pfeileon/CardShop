@@ -13,7 +13,10 @@ export const startTemplate = (rService: RenderService, data: {}) => {
 
     <header id="startHeader">
         ${cartButtonTemplate}
-        <h1>Welcome to the Hearthstone Card Shop</h1>
+        <h1>
+            Welcome to the Hearthstone Card Shop<br />
+            <small>Buy card packs consisting of 5 randomly chosen cards of a set!</small>
+        </h1>
     </header>
 
     <section class="cardSet-filter">
@@ -29,9 +32,6 @@ export const startTemplate = (rService: RenderService, data: {}) => {
         </div>
         
         <button id="preview-card-set-btn" class="btn btn-info" type="button" data-toggle="tooltip" title="Lets you browse all available cards">Preview Card Set</button>
-    </section>
-    <h2>Packs in your Cart</h2>
-    <section id="startMain" class="well start-slider">
     </section>
 
     <footer id="start-foot">

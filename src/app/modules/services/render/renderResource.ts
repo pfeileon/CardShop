@@ -38,8 +38,8 @@ export class RenderResource extends RenderService {
     /** Adds dynamically generated content to the startPageData */
     renderStart(shop: CardShop) {
         let shownCardSetHeader: HTMLCollectionOf<Element> = document.getElementsByClassName("card-set-name");
-
-        this.rDetail.renderItems(shop.Cart.Items);
+        
+        this.rDetail.renderAmountsOfPacks(shop.Cart.SResource.getAmountsOfPacks());
 
         const hashValue = getHashValue();
 

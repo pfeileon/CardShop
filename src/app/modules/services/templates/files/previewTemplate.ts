@@ -12,7 +12,7 @@ export const previewTemplate = (rService: RenderService, data: {}) => {
         ${cartButtonTemplate}
         <h1>
             Preview the Cards<br />
-            <small>These cards can appear in your packs</small>
+            <small>These cards can appear in your packs!</small>
         </h1>
     </header>
 
