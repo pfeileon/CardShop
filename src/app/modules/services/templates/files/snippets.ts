@@ -30,5 +30,6 @@ export const imgBtnRecord = (item): string => {
     }
     return `<li data-id="${item}" role="button" class="btn btn-default sample-pack" style="background-image: url('${link}')">
         <img src="${link}" alt="${item}" class="hidden-img" />
+        <span class="btn btn-info info-text"></span>
     </li>`;
 }
