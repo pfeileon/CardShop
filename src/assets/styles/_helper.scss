@@ -150,6 +150,7 @@ article {
 li.sample-pack {
     background-repeat: no-repeat;
     background-position: center;
+    position: relative;
 }
 
 img.hidden-img {
@@ -170,4 +171,12 @@ img.hidden-img {
 
 .cart-total-btn {
     cursor: default !important;
+}
+
+.info-text {
+    position: absolute; 
+    bottom: 1em; 
+    left: 1em;
+    visibility: visible;
+    pointer-events: none;
 }

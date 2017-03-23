@@ -1,3 +1,4 @@
+import { config } from "../../config/config";
 import { Record, Shopable } from "../../types/types";
 import { cardModal } from "../templates/files/modalTemplate";
 import { CardShop } from "../../shop/cardShop";
@@ -52,37 +53,13 @@ export class RenderDetail {
         }
     }
 
-    /**
-     * Displays the CardPacks in the cart
-     * 
-     * @param {CardPack} pack - The CardPack to be displayed
-    */
-    renderItems(items: Shopable[]): void {
-        // First remove all shown packs
-        document.getElementById("startMain").innerText = "";
-        for (let item of items) {
-            let pack = {};
-            switch (item["setName"]) {
-                case "Classic":
-                    pack["link"] = "packClassic.png";
-                    pack["alt"] = item["setName"];
-                    break;
-                case "The Grand Tournament":
-                    pack["link"] = "packTgt.png";
-                    pack["alt"] = item["setName"];
-                    break;
-                case "Whispers of the Old Gods":
-                    pack["link"] = "packWotog.png";
-                    pack["alt"] = item["setName"];
-                    break;
-                case "Mean Streets of Gadgetzan":
-                    pack["link"] = "packMsog.png";
-                    pack["alt"] = item["setName"];
-                    break;
-                default:
-                    break;
-            }
-            document.getElementById("startMain").insertAdjacentHTML("beforeend", `<img src="${pack["link"]}" alt="${pack["alt"]}" />`);
+    /** Displays the amount of packs in the cart */
+    renderAmountsOfPacks(amounts: number[]) {
+        const infoTexts = document.getElementsByClassName("info-text");
+        let i = 0;
+        for (let info of <any>infoTexts) {
+            info.innerText = "In Cart: " + amounts[i];
+            i++;
         }
     }
 
@@ -114,8 +91,8 @@ export class RenderDetail {
             cartTableCell = cartTableRow.insertCell();
             cartTableCell.innerHTML = `<span class="cart-gold-btn fixed btn btn-default active">à 10 Gold</span>`;
             cartTableCell = cartTableRow.insertCell();
-            cartTableCell.innerHTML = `<span class="cart-gold-btn btn btn-info active">${cartObject[item]*10} Gold</span>`;
-            totalGold += cartObject[item]*10;
+            cartTableCell.innerHTML = `<span class="cart-gold-btn btn btn-info active">${cartObject[item] * 10} Gold</span>`;
+            totalGold += cartObject[item] * 10;
 
             cartTableCell = cartTableRow.insertCell();
             cartTableCell.innerHTML = deleteRecord(item);
@@ -215,5 +192,41 @@ export class RenderDetail {
             x = 5;
         }
         return x;
+    }
+
+    // DEPRECATED
+
+    /**
+     * Displays the CardPacks in the cart
+     * 
+     * @param {Shopable[]} items - The CardPacks to be displayed
+    */
+    renderItems(items: Shopable[]): void {
+        // First remove all shown packs
+        document.getElementById("startMain").innerText = "";
+        for (let item of items) {
+            let pack = {};
+            switch (item["setName"]) {
+                case "Classic":
+                    pack["link"] = "packClassic.png";
+                    pack["alt"] = item["setName"];
+                    break;
+                case "The Grand Tournament":
+                    pack["link"] = "packTgt.png";
+                    pack["alt"] = item["setName"];
+                    break;
+                case "Whispers of the Old Gods":
+                    pack["link"] = "packWotog.png";
+                    pack["alt"] = item["setName"];
+                    break;
+                case "Mean Streets of Gadgetzan":
+                    pack["link"] = "packMsog.png";
+                    pack["alt"] = item["setName"];
+                    break;
+                default:
+                    break;
+            }
+            document.getElementById("startMain").insertAdjacentHTML("beforeend", `<img src="${pack["link"]}" alt="${pack["alt"]}" />`);
+        }
     }
 }
