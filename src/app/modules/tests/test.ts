@@ -6,13 +6,18 @@ export function testFetchAllCards(fResource) {
 }
 
 export function testSqlApi(fService) {
-    let init = {
+    const request = {
+        url: "http://localhost:56538/api/CardShopAPI",
         headers: {
-            "sa": "123user!"
+            "data source": "localhost",
+            "user": "sa",
+            "password": "123user!",
+            mode: "no-cors"
         },
-        method: "GET"
+        method: "GET",
+        mode: "no-cors"
     }
-    fService.query("http://localhost:56538/api/CardShopAPI", init)
+    fService.query(undefined, undefined, request)
         .then(cards => {
             console.log(cards);
         });
