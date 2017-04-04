@@ -81,7 +81,7 @@ export class StorageResource extends StorageService {
     validateObject(objectString: string, correctProps?: any[]): boolean {
         let isValidObject = false;
         try {
-            if (objectString !== (""|| null)) {
+            if (objectString !== ("" || null)) {
                 JSON.parse(objectString);
                 isValidObject = true;
             }
@@ -106,5 +106,28 @@ export class StorageResource extends StorageService {
             }
         }
         return JSON.stringify(cartObject);
+    }
+
+    /** Returns the amounts of packs in the localStorage */
+    getAmountsOfPacks(): number[] {
+        const items = JSON.parse(localStorage.getItem("cart"));
+        let amounts = [];
+        if (items === null) {
+            amounts = [0, 0, 0, 0];
+        }
+        else {
+            let sets = config.data.cardSets;
+            let i = 0;
+            for (let set of sets) {
+                if (items[set] !== undefined) {
+                    amounts[i] = items[set];
+                }
+                else {
+                    amounts[i] = 0;
+                }
+                i++;
+            }
+        }
+        return amounts;
     }
 }

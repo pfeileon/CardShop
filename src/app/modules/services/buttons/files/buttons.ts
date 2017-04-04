@@ -292,11 +292,11 @@ export class SetCardSetButton extends ShopFilterButton {
             }
         });
     }
-    
+
     dblclick = (element) => {
         element.addEventListener("dblclick", (e) => {
             const btnList: any = document.getElementsByClassName("add-to-cart-btn");
-            if(isStartPage()) {
+            if (isStartPage()) {
                 btnList[0].click();
             }
             else {
