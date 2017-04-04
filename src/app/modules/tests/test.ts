@@ -11,11 +11,9 @@ export function testSqlApi(fService) {
         headers: {
             "data source": "localhost",
             "user": "sa",
-            "password": "123user!",
-            mode: "no-cors"
+            "password": "123user!"
         },
-        method: "GET",
-        mode: "no-cors"
+        method: "GET"
     }
     fService.query(undefined, undefined, request)
         .then(cards => {
