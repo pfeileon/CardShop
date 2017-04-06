@@ -12,6 +12,8 @@ import { ShopButtonHandler } from './modules/services/buttons/shopButtonHandler'
 import { StorageResource } from './modules/services/storage/storageResource';
 import { CardShop } from './modules/shop/cardShop';
 
+import { testFetchAllCards, testSqlApi } from './modules/tests/test';
+
 'use strict';
 
 document.addEventListener('DOMContentLoaded', (start) => {
@@ -31,4 +33,7 @@ document.addEventListener('DOMContentLoaded', (start) => {
 
     // Start Application
     shop.start();
+
+    // testFetchAllCards(fResource);
+    testSqlApi(fResource);
 });
